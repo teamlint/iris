@@ -152,7 +152,8 @@ func Decode(vs url.Values, dst interface{}) error {
 		main:       main.Elem(),
 		formValues: vs,
 		opts: &DecoderOptions{
-			TagName: tagName,
+			TagName:           tagName,
+			IgnoreUnknownKeys: true,
 		},
 	}
 	return dec.prepare()
