@@ -494,9 +494,24 @@ func (dec *Decoder) decode() error {
 					return nil
 				}
 			*/
+			if dec.opts.IgnoreUnknownKeys {
+				return nil
+			}
+			num := dec.curr.NumField()
+			for i := 0; i < num; i++ {
+				field := dec.curr.Type().Field(i)
+				tag := field.Tag.Get(dec.opts.TagName)
+				if tag == "-" {
+					// skip this field
+					return nil
+				}
+			}
 			return newError(fmt.Errorf("formam: not supported type for field \"%v\" in path \"%v\"", dec.field, dec.path))
 		}
 	default:
+		if dec.opts.IgnoreUnknownKeys {
+			return nil
+		}
 		return newError(fmt.Errorf("formam: not supported type for field \"%v\" in path \"%v\"", dec.field, dec.path))
 	}
 
@@ -536,6 +551,10 @@ func (dec *Decoder) findStructField() error {
 	}
 	if anon.IsValid() {
 		dec.curr = anon
+		return nil
+	}
+
+	if dec.opts.IgnoreUnknownKeys {
 		return nil
 	}
 
