@@ -88,7 +88,12 @@ type Decoder struct {
 
 // DecoderOptions options for decoding the values
 type DecoderOptions struct {
+	// TagName indicates the tag name for decoding a value by the tag
 	TagName string
+	// PrefUnmarshalText indicates if should to give preference to UnmarshalText over custom type registered
+	PrefUnmarshalText bool
+	// IgnoreUnknownKeys controls the behaviour when the decoder encounters unknown keys in the map. If i is true and an unknown field is encountered, it is ignored. This is similar to how unknown keys are handled by encoding/json. If i is false then Decode will return an error. Note that any valid keys will still be decoded in to the target struct.
+	IgnoreUnknownKeys bool
 }
 
 // RegisterCustomType It is the method responsible for register functions for decoding custom types
@@ -163,6 +168,9 @@ func (dec *Decoder) prepare() error {
 		dec.curr = dec.main
 		if dec.value != "" {
 			if err := dec.begin(); err != nil {
+				if dec.curr.Kind() == reflect.Struct && dec.opts.IgnoreUnknownKeys {
+					continue
+				}
 				return err
 			}
 		}
