@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/kataras/iris"
+	"github.com/teamlint/iris"
 )
 
 func main() {

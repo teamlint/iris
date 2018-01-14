@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
-	"github.com/kataras/iris/sessions"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/mvc"
+	"github.com/teamlint/iris/sessions"
 )
 
 const sessionIDKey = "UserID"

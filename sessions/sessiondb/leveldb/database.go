@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"runtime"
 
-	"github.com/kataras/golog"
-	"github.com/kataras/iris/core/errors"
-	"github.com/kataras/iris/sessions"
+	"github.com/teamlint/golog"
+	"github.com/teamlint/iris/core/errors"
+	"github.com/teamlint/iris/sessions"
 
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/opt"

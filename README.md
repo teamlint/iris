@@ -2,7 +2,7 @@
 
 <img align="right" width="169px" src="https://iris-go.com/images/icon.svg?v=a" title="logo created by @merry.dii" />
 
-[![build status](https://img.shields.io/travis/kataras/iris/master.svg?style=flat-square)](https://travis-ci.org/kataras/iris)<!-- [![release](https://img.shields.io/github/release/kataras/iris.svg?style=flat-square)](https://github.com/kataras/iris/releases)--> [![report card](https://img.shields.io/badge/report%20card-a%2B-ff3333.svg?style=flat-square)](http://goreportcard.com/report/kataras/iris)<!--[![github closed issues](https://img.shields.io/github/issues-closed-raw/kataras/iris.svg?style=flat-square)](https://github.com/kataras/iris/issues?q=is%3Aissue+is%3Aclosed)--> [![chat](https://img.shields.io/badge/community-%20chat-00BCD4.svg?style=flat-square)](https://kataras.rocket.chat/channel/iris) [![view examples](https://img.shields.io/badge/learn%20by-examples-0077b3.svg?style=flat-square)](_examples/) [![release](https://img.shields.io/badge/release%20-v10.0-0077b3.svg?style=flat-square)](https://github.com/kataras/iris/releases)
+[![build status](https://img.shields.io/travis/kataras/iris/master.svg?style=flat-square)](https://travis-ci.org/kataras/iris)<!-- [![release](https://img.shields.io/github/release/kataras/iris.svg?style=flat-square)](https://github.com/teamlint/iris/releases)--> [![report card](https://img.shields.io/badge/report%20card-a%2B-ff3333.svg?style=flat-square)](http://goreportcard.com/report/kataras/iris)<!--[![github closed issues](https://img.shields.io/github/issues-closed-raw/kataras/iris.svg?style=flat-square)](https://github.com/teamlint/iris/issues?q=is%3Aissue+is%3Aclosed)--> [![chat](https://img.shields.io/badge/community-%20chat-00BCD4.svg?style=flat-square)](https://kataras.rocket.chat/channel/iris) [![view examples](https://img.shields.io/badge/learn%20by-examples-0077b3.svg?style=flat-square)](_examples/) [![release](https://img.shields.io/badge/release%20-v10.0-0077b3.svg?style=flat-square)](https://github.com/teamlint/iris/releases)
 
 Iris is a fast, simple yet fully featured and very efficient web framework for Go.
 
@@ -10,7 +10,7 @@ Iris provides a beautifully expressive and easy to use foundation for your next 
 
 Finally, a real expressjs equivalent for the Go Programming Language.
 
-Learn what [others say about Iris](#support) and [star](https://github.com/kataras/iris/stargazers) this github repository to stay [up to date](https://facebook.com/iris.framework).
+Learn what [others say about Iris](#support) and [star](https://github.com/teamlint/iris/stargazers) this github repository to stay [up to date](https://facebook.com/iris.framework).
 
 ## Backers
 
@@ -25,7 +25,7 @@ $ cat example.go
 ```go
 package main
 
-import "github.com/kataras/iris"
+import "github.com/teamlint/iris"
 
 func main() {
     app := iris.New()
@@ -88,7 +88,7 @@ _
 The only requirement is the [Go Programming Language](https://golang.org/dl/)
 
 ```sh
-$ go get -u github.com/kataras/iris
+$ go get -u github.com/teamlint/iris
 ```
 
 Iris takes advantage of the [vendor directory](https://docs.google.com/document/d/1Bz5-UB7g2uPBdOx-rw5t9MxJwkfpx90cqG9AFL0JAYo) feature. You get truly reproducible builds, as this method guards against upstream renames and deletes.
@@ -107,7 +107,7 @@ _Updated at: [Tuesday, 21 November 2017](_benchmarks/README_UNIX.md)_
 ## Support
 
 - [HISTORY](HISTORY.md#mo-01-jenuary-2018--v1000) file is your best friend, it contains information about the latest features and changes
-- Did you happen to find a bug? Post it at [github issues](https://github.com/kataras/iris/issues)
+- Did you happen to find a bug? Post it at [github issues](https://github.com/teamlint/iris/issues)
 - Do you have any questions or need to speak with someone experienced to solve a problem at real-time? Join us to the [community chat](https://chat.iris-go.com)
 - Complete our form-based user experience report by clicking [here](https://docs.google.com/forms/d/e/1FAIpQLSdCxZXPANg_xHWil4kVAdhmh7EBBHQZ_4_xSZVDL-oCC_z5pA/viewform?usp=sf_link) 
 - Do you like the framework? Tweet something about it! The People have spoken:
@@ -155,14 +155,14 @@ _Updated at: [Tuesday, 21 November 2017](_benchmarks/README_UNIX.md)_
 
 For more information about contributing to the Iris project please check the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
-[List of all Contributors](https://github.com/kataras/iris/graphs/contributors)
+[List of all Contributors](https://github.com/teamlint/iris/graphs/contributors)
 
 ## Learn
 
 First of all, the most correct way to begin with a web framework is to learn the basics of the programming language and the standard `http` capabilities, if your web application is a very simple personal project without performance and maintainability requirements you may want to proceed just with the standard packages. After that follow the guidelines:
 
 - Navigate through **100+1** **[examples](_examples)** and some [iris starter kits](#iris-starter-kits) we crafted for you
-- Read the [godocs](https://godoc.org/github.com/kataras/iris) for any details
+- Read the [godocs](https://godoc.org/github.com/teamlint/iris) for any details
 - Prepare a cup of coffee or tea, whatever pleases you the most, and read some [articles](#articles) we found for you
 
 ### Iris starter kits
@@ -189,7 +189,7 @@ First of all, the most correct way to begin with a web framework is to learn the
 7. [Quickstart for Iris with Nanobox](https://guides.nanobox.io/golang/iris/from-scratch)
 8. [A Hasura starter project with a ready to deploy Golang hello-world web app with IRIS](https://hasura.io/hub/project/hasura/hello-golang-iris)
 
-> Did you build something similar? Let us [know](https://github.com/kataras/iris/pulls)!
+> Did you build something similar? Let us [know](https://github.com/teamlint/iris/pulls)!
 
 ### Middleware
 

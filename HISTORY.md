@@ -2,12 +2,12 @@
 
 ### Looking for free and real-time support?
 
-    https://github.com/kataras/iris/issues
+    https://github.com/teamlint/iris/issues
     https://chat.iris-go.com
 
 ### Looking for previous versions?
 
-    https://github.com/kataras/iris/releases
+    https://github.com/teamlint/iris/releases
 
 ### Should I upgrade my Iris?
 
@@ -15,7 +15,7 @@ Developers are not forced to upgrade if they don't really need it. Upgrade whene
 
 > Iris uses the [vendor directory](https://docs.google.com/document/d/1Bz5-UB7g2uPBdOx-rw5t9MxJwkfpx90cqG9AFL0JAYo) feature, so you get truly reproducible builds, as this method guards against upstream renames and deletes.
 
-**How to upgrade**: Open your command-line and execute this command: `go get -u github.com/kataras/iris` or let the automatic updater do that for you.
+**How to upgrade**: Open your command-line and execute this command: `go get -u github.com/teamlint/iris` or let the automatic updater do that for you.
 
 # Mo, 01 Jenuary 2018 | v10.0.0
 
@@ -29,7 +29,7 @@ You can [contact](mailto:Kovalenkodiana8@gmail.com) her for any  design-related 
 
 At this version we have many internal improvements but just two major changes and one big feature, called **hero**.
 
-> The new version adds 75 plus new commits, the PR is located [here](https://github.com/kataras/iris/pull/849) read the internal changes if you are developing a web framework based on Iris. Why 9 was skipped? Because.
+> The new version adds 75 plus new commits, the PR is located [here](https://github.com/teamlint/iris/pull/849) read the internal changes if you are developing a web framework based on Iris. Why 9 was skipped? Because.
 
 ## Hero
 
@@ -41,15 +41,15 @@ Below you will see some screenshots we prepared for you in order to be easier to
 
 ### 1. Path Parameters - Built'n Dependencies
 
-![](https://github.com/kataras/explore/raw/master/iris/hero/hero-1-monokai.png)
+![](https://github.com/teamlint/explore/raw/master/iris/hero/hero-1-monokai.png)
 
 ### 2. Services - Static Dependencies
 
-![](https://github.com/kataras/explore/raw/master/iris/hero/hero-2-monokai.png)
+![](https://github.com/teamlint/explore/raw/master/iris/hero/hero-2-monokai.png)
 
 ### 3. Per-Request - Dynamic Dependencies
 
-![](https://github.com/kataras/explore/raw/master/iris/hero/hero-3-monokai.png)
+![](https://github.com/teamlint/explore/raw/master/iris/hero/hero-3-monokai.png)
 
 `hero funcs` are very easy to understand and when you start using them **you never go back**.
 
@@ -74,10 +74,10 @@ Old examples are here as well. Compare the two different versions of each exampl
 
 | NEW | OLD |
 | -----------|-------------|
-| [Hello world](_examples/mvc/hello-world/main.go) | [OLD Hello world](https://github.com/kataras/iris/blob/v8/_examples/mvc/hello-world/main.go) |
-| [Session Controller](_examples/mvc/session-controller/main.go) | [OLD Session Controller](https://github.com/kataras/iris/blob/v8/_examples/mvc/session-controller/main.go) |
-| [Overview - Plus Repository and Service layers](_examples/mvc/overview) | [OLD Overview - Plus Repository and Service layers](https://github.com/kataras/iris/tree/v8/_examples/mvc/overview) |
-| [Login showcase - Plus Repository and Service layers](_examples/mvc/login) | [OLD Login showcase - Plus Repository and Service layers](https://github.com/kataras/iris/tree/v8/_examples/mvc/login) |
+| [Hello world](_examples/mvc/hello-world/main.go) | [OLD Hello world](https://github.com/teamlint/iris/blob/v8/_examples/mvc/hello-world/main.go) |
+| [Session Controller](_examples/mvc/session-controller/main.go) | [OLD Session Controller](https://github.com/teamlint/iris/blob/v8/_examples/mvc/session-controller/main.go) |
+| [Overview - Plus Repository and Service layers](_examples/mvc/overview) | [OLD Overview - Plus Repository and Service layers](https://github.com/teamlint/iris/tree/v8/_examples/mvc/overview) |
+| [Login showcase - Plus Repository and Service layers](_examples/mvc/login) | [OLD Login showcase - Plus Repository and Service layers](https://github.com/teamlint/iris/tree/v8/_examples/mvc/login) |
 | [Singleton](_examples/mvc/singleton) |  **NEW** |
 | [Websocket Controller](_examples/mvc/websocket) |  **NEW** |
 | [Vue.js Todo MVC](_examples/tutorial/vuejs-todo-mvc) |  **NEW** |
@@ -101,7 +101,7 @@ If you used that old static field you will have to change that single line.
 Usage:
 
 ```go
-import "github.com/kataras/iris"
+import "github.com/teamlint/iris"
 
 func main() {
     app := iris.New()

@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kataras/iris/core/netutil"
+	"github.com/teamlint/iris/core/netutil"
 )
 
 const (

@@ -3,14 +3,14 @@
 package main
 
 import (
-	"github.com/kataras/iris/_examples/mvc/overview/datasource"
-	"github.com/kataras/iris/_examples/mvc/overview/repositories"
-	"github.com/kataras/iris/_examples/mvc/overview/services"
-	"github.com/kataras/iris/_examples/mvc/overview/web/controllers"
-	"github.com/kataras/iris/_examples/mvc/overview/web/middleware"
+	"github.com/teamlint/iris/_examples/mvc/overview/datasource"
+	"github.com/teamlint/iris/_examples/mvc/overview/repositories"
+	"github.com/teamlint/iris/_examples/mvc/overview/services"
+	"github.com/teamlint/iris/_examples/mvc/overview/web/controllers"
+	"github.com/teamlint/iris/_examples/mvc/overview/web/middleware"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/mvc"
 )
 
 func main() {

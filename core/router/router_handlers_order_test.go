@@ -9,10 +9,10 @@ package router_test
 import (
 	"testing"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/context"
 
-	"github.com/kataras/iris/httptest"
+	"github.com/teamlint/iris/httptest"
 )
 
 // test registering of below handlers

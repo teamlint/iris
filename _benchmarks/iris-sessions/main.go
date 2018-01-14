@@ -3,9 +3,9 @@ package main
 import (
 	"time"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/sessions"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/context"
+	"github.com/teamlint/iris/sessions"
 )
 
 var sess = sessions.New(sessions.Config{

@@ -5,10 +5,10 @@ package main
 // with bindings or without).
 
 import (
-	"github.com/kataras/iris/_benchmarks/iris-mvc/controllers"
+	"github.com/teamlint/iris/_benchmarks/iris-mvc/controllers"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/mvc"
 )
 
 func main() {

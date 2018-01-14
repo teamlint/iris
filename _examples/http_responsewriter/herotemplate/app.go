@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"log"
 
-	"github.com/kataras/iris/_examples/http_responsewriter/herotemplate/template"
+	"github.com/teamlint/iris/_examples/http_responsewriter/herotemplate/template"
 
-	"github.com/kataras/iris"
+	"github.com/teamlint/iris"
 )
 
 // $ go get -u github.com/shiyanhui/hero/hero

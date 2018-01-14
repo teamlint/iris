@@ -6,8 +6,8 @@ Example code:
 		 import (
 		 	"time"
 
-		 	"github.com/kataras/iris"
-		 	"github.com/kataras/iris/cache"
+		 	"github.com/teamlint/iris"
+		 	"github.com/teamlint/iris/cache"
 		 )
 
 		 func main(){
@@ -27,8 +27,8 @@ package cache
 import (
 	"time"
 
-	"github.com/kataras/iris/cache/client"
-	"github.com/kataras/iris/context"
+	"github.com/teamlint/iris/cache/client"
+	"github.com/teamlint/iris/context"
 )
 
 // Cache accepts the cache expiration duration
@@ -51,7 +51,7 @@ func Cache(expiration time.Duration) *client.Handler {
 //
 // it returns a context.Handler which can be used as a middleware, for more options use the `Cache`.
 //
-// Examples can be found at: https://github.com/kataras/iris/tree/master/_examples/#caching
+// Examples can be found at: https://github.com/teamlint/iris/tree/master/_examples/#caching
 func Handler(expiration time.Duration) context.Handler {
 	h := Cache(expiration).ServeHTTP
 	return h

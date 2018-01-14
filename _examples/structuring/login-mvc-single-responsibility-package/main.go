@@ -3,11 +3,11 @@ package main
 import (
 	"time"
 
-	"github.com/kataras/iris/_examples/structuring/login-mvc-single-responsibility-package/user"
+	"github.com/teamlint/iris/_examples/structuring/login-mvc-single-responsibility-package/user"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
-	"github.com/kataras/iris/sessions"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/mvc"
+	"github.com/teamlint/iris/sessions"
 )
 
 func main() {

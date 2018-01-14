@@ -7,8 +7,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/core/netutil"
+	"github.com/teamlint/iris/context"
+	"github.com/teamlint/iris/core/netutil"
 )
 
 const (

@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/kataras/iris/_examples/tutorial/vuejs-todo-mvc/src/todo"
-	"github.com/kataras/iris/_examples/tutorial/vuejs-todo-mvc/src/web/controllers"
+	"github.com/teamlint/iris/_examples/tutorial/vuejs-todo-mvc/src/todo"
+	"github.com/teamlint/iris/_examples/tutorial/vuejs-todo-mvc/src/web/controllers"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/sessions"
-	"github.com/kataras/iris/websocket"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/sessions"
+	"github.com/teamlint/iris/websocket"
 
-	"github.com/kataras/iris/mvc"
+	"github.com/teamlint/iris/mvc"
 )
 
 func main() {

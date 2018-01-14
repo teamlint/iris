@@ -6,12 +6,12 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/kataras/golog"
+	"github.com/teamlint/golog"
 
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/core/errors"
-	"github.com/kataras/iris/core/netutil"
-	"github.com/kataras/iris/core/router/node"
+	"github.com/teamlint/iris/context"
+	"github.com/teamlint/iris/core/errors"
+	"github.com/teamlint/iris/core/netutil"
+	"github.com/teamlint/iris/core/router/node"
 )
 
 // RequestHandler the middle man between acquiring a context and releasing it.

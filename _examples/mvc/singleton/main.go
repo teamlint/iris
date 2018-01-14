@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync/atomic"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/mvc"
 )
 
 func main() {

@@ -5,8 +5,8 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/kataras/survey/core"
-	"github.com/kataras/survey/terminal"
+	"github.com/teamlint/survey/core"
+	"github.com/teamlint/survey/terminal"
 )
 
 // Confirm is a regular text input that accept yes/no answers. Response type is a bool.

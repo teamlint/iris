@@ -3,7 +3,7 @@ package survey
 import (
 	"errors"
 
-	"github.com/kataras/survey/core"
+	"github.com/teamlint/survey/core"
 )
 
 // PageSize is the default maximum number of items to show in select/multiselect prompts

@@ -1,9 +1,9 @@
 package router
 
 import (
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/core/errors"
-	"github.com/kataras/iris/core/router/macro"
+	"github.com/teamlint/iris/context"
+	"github.com/teamlint/iris/core/errors"
+	"github.com/teamlint/iris/core/router/macro"
 )
 
 // Party is here to separate the concept of
@@ -19,7 +19,7 @@ type Party interface {
 	// Macros returns the macro map which is responsible
 	// to register custom macro functions for all routes.
 	//
-	// Learn more at:  https://github.com/kataras/iris/tree/master/_examples/routing/dynamic-path
+	// Learn more at:  https://github.com/teamlint/iris/tree/master/_examples/routing/dynamic-path
 	Macros() *macro.Map
 
 	// Party groups routes which may have the same prefix and share same handlers,
@@ -172,7 +172,7 @@ type Party interface {
 	//
 	// Returns the GET *Route.
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/file-server/embedding-files-into-app
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/file-server/embedding-files-into-app
 	StaticEmbedded(requestPath string, vdir string, assetFn func(name string) ([]byte, error), namesFn func() []string) *Route
 
 	// Favicon serves static favicon

@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/garyburd/redigo/redis"
-	"github.com/kataras/iris/core/errors"
+	"github.com/teamlint/iris/core/errors"
 )
 
 var (

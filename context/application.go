@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/kataras/golog"
+	"github.com/teamlint/golog"
 )
 
 // Application is the context's owner.

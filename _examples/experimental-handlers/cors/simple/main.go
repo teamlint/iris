@@ -4,7 +4,7 @@ package main
 // $ go run main.go
 
 import (
-	"github.com/kataras/iris"
+	"github.com/teamlint/iris"
 
 	"github.com/iris-contrib/middleware/cors"
 )

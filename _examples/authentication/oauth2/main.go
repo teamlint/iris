@@ -24,9 +24,9 @@ import (
 	"os"
 	"sort"
 
-	"github.com/kataras/iris"
+	"github.com/teamlint/iris"
 
-	"github.com/kataras/iris/sessions"
+	"github.com/teamlint/iris/sessions"
 
 	"github.com/gorilla/securecookie" // optionally, used for session's encoder/decoder
 

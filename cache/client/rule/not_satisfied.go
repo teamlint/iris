@@ -1,7 +1,7 @@
 package rule
 
 import (
-	"github.com/kataras/iris/context"
+	"github.com/teamlint/iris/context"
 )
 
 type notSatisfiedRule struct{}

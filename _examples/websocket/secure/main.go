@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/kataras/iris"
+	"github.com/teamlint/iris"
 
-	"github.com/kataras/iris/websocket"
+	"github.com/teamlint/iris/websocket"
 )
 
 type clientPage struct {

@@ -8,11 +8,11 @@ import (
 	"runtime"
 
 	"github.com/BurntSushi/toml"
-	"github.com/kataras/golog"
+	"github.com/teamlint/golog"
 	"gopkg.in/yaml.v2"
 
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/core/errors"
+	"github.com/teamlint/iris/context"
+	"github.com/teamlint/iris/core/errors"
 )
 
 const globalConfigurationKeyword = "~"
@@ -215,7 +215,7 @@ var WithGlobalConfiguration = func(app *Application) {
 //
 // See `Configuration#IgnoreServerErrors []string` too.
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/http-listening/listen-addr/omit-server-errors
+// Example: https://github.com/teamlint/iris/tree/master/_examples/http-listening/listen-addr/omit-server-errors
 func WithoutServerError(errors ...error) Configurator {
 	return func(app *Application) {
 		if len(errors) == 0 {
@@ -391,7 +391,7 @@ type Configuration struct {
 	//
 	// See `WithoutServerError(...)` function too.
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/http-listening/listen-addr/omit-server-errors
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/http-listening/listen-addr/omit-server-errors
 	//
 	// Defaults to an empty slice.
 	IgnoreServerErrors []string `json:"ignoreServerErrors,omitempty" yaml:"IgnoreServerErrors" toml:"IgnoreServerErrors"`
@@ -421,7 +421,7 @@ type Configuration struct {
 	DisablePathCorrection bool `json:"disablePathCorrection,omitempty" yaml:"DisablePathCorrection" toml:"DisablePathCorrection"`
 
 	// EnablePathEscape when is true then its escapes the path, the named parameters (if any).
-	// Change to false it if you want something like this https://github.com/kataras/iris/issues/135 to work
+	// Change to false it if you want something like this https://github.com/teamlint/iris/issues/135 to work
 	//
 	// When do you need to Disable(false) it:
 	// accepts parameters with slash '/'
@@ -489,7 +489,7 @@ type Configuration struct {
 	// Context values' keys for various features.
 	//
 	// TranslateLanguageContextKey & TranslateFunctionContextKey are used by i18n handlers/middleware
-	// currently we have only one: https://github.com/kataras/iris/tree/master/middleware/i18n.
+	// currently we have only one: https://github.com/teamlint/iris/tree/master/middleware/i18n.
 	//
 	// Defaults to "iris.translate" and "iris.language"
 	TranslateFunctionContextKey string `json:"translateFunctionContextKey,omitempty" yaml:"TranslateFunctionContextKey" toml:"TranslateFunctionContextKey"`

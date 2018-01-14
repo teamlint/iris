@@ -1,18 +1,18 @@
 # Contributing
 
-First of all read our [Code of Conduct](https://github.com/kataras/iris/blob/master/CODE_OF_CONDUCT.md).
+First of all read our [Code of Conduct](https://github.com/teamlint/iris/blob/master/CODE_OF_CONDUCT.md).
 
 ## PR
 
-1. Open a new [issue](https://github.com/kataras/iris/issues/new)
+1. Open a new [issue](https://github.com/teamlint/iris/issues/new)
     * Write version of your local Iris.
     * Write version of your local Go programming language.
     * Describe your problem, what did you expect to see and what you see instead.
         * If it's a feature request, describe your idea as better as you can
           * optionally, navigate to the [chat](https://kataras.rocket.chat/channel/iris) to push other members to participate and share their thoughts about your brilliant idea.
-2. Fork the [repository](https://github.com/kataras/iris).
+2. Fork the [repository](https://github.com/teamlint/iris).
 3. Make your changes.
-4. Compare & Push the PR from [here](https://github.com/kataras/iris/compare).
+4. Compare & Push the PR from [here](https://github.com/teamlint/iris/compare).
 
 ## Donate
 
@@ -39,7 +39,7 @@ We need your help with translations into your native language.
 
 Iris needs your help, please think about contributing to the translation of the [README](README.md) and https://iris-go.com, you will be rewarded.
 
-Instructions can be found at: https://github.com/kataras/iris/issues/796
+Instructions can be found at: https://github.com/teamlint/iris/issues/796
 
 ## Share
 
@@ -71,9 +71,9 @@ Many young people are choosing Iris for their postgraduate studies as well.
 
 ## Documentation
 
-We're preparing the new version of the [Build A Better Web, Together](https://github.com/kataras/build-a-better-web-together) Go book, which is a type of documentation of Iris web framework as well.
+We're preparing the new version of the [Build A Better Web, Together](https://github.com/teamlint/build-a-better-web-together) Go book, which is a type of documentation of Iris web framework as well.
 
-If you want to be part of this and you've time for collaboration, please open a new [issue](https://github.com/kataras/build-a-better-web-together/issues/new) and write some words about yourself and your overall experience at tech. At the end of the day you will be granded with `write access` in order to push your sections without our approval at all.
+If you want to be part of this and you've time for collaboration, please open a new [issue](https://github.com/teamlint/build-a-better-web-together/issues/new) and write some words about yourself and your overall experience at tech. At the end of the day you will be granded with `write access` in order to push your sections without our approval at all.
 
 All new contributors of that book will receive prizes!
 

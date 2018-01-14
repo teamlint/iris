@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/middleware/basicauth"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/middleware/basicauth"
 )
 
 func newApp() *iris.Application {

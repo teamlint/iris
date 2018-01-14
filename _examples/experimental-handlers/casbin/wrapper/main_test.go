@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/iris-contrib/httpexpect"
-	"github.com/kataras/iris/httptest"
+	"github.com/teamlint/iris/httptest"
 )
 
 func TestCasbinWrapper(t *testing.T) {

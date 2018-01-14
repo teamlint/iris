@@ -4,7 +4,7 @@ os:
   - osx
 go:
   - go1.9
-go_import_path: github.com/kataras/iris
+go_import_path: github.com/teamlint/iris
 install:
   - go get ./... # for iris-contrib/httpexpect, kataras/golog
 script:

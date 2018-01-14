@@ -4,7 +4,7 @@ import (
 	stdContext "context"
 	"time"
 
-	"github.com/kataras/iris"
+	"github.com/teamlint/iris"
 )
 
 // Before continue:

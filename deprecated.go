@@ -3,13 +3,13 @@ package iris
 import (
 	"fmt"
 
-	"github.com/kataras/iris/core/router"
-	"github.com/kataras/iris/mvc"
+	"github.com/teamlint/iris/core/router"
+	"github.com/teamlint/iris/mvc"
 )
 
 // Controller method is DEPRECATED, use the "mvc" subpackage instead, i.e
-// import "github.com/kataras/iris/mvc" and read its docs among with its new features at:
-// https://github.com/kataras/iris/blob/master/HISTORY.md#mo-01-jenuary-2018--v1000
+// import "github.com/teamlint/iris/mvc" and read its docs among with its new features at:
+// https://github.com/teamlint/iris/blob/master/HISTORY.md#mo-01-jenuary-2018--v1000
 func (app *Application) Controller(relPath string, c interface{}, _ ...interface{}) []*router.Route {
 	name := mvc.NameOf(c)
 
@@ -18,7 +18,7 @@ func (app *Application) Controller(relPath string, c interface{}, _ ...interface
         PREVIOUSLY YOU USED TO CODE IT LIKE THIS:
         
             import (
-                "github.com/kataras/iris"
+                "github.com/teamlint/iris"
                 // ...
             )
         
@@ -27,8 +27,8 @@ func (app *Application) Controller(relPath string, c interface{}, _ ...interface
         NOW YOU SHOULD CODE IT LIKE THIS:
         
             import (
-                "github.com/kataras/iris"
-                "github.com/kataras/iris/mvc"
+                "github.com/teamlint/iris"
+                "github.com/teamlint/iris/mvc"
                 // ...
             )
         
@@ -50,6 +50,6 @@ func (app *Application) Controller(relPath string, c interface{}, _ ...interface
         this is the reason you see more lines for a simple controller.
         
         Please read more about the newest, amazing, features by navigating below
-        https://github.com/kataras/iris/blob/master/HISTORY.md#mo-01-jenuary-2018--v1000`, // v10.0.0, we skip the number 9.
+        https://github.com/teamlint/iris/blob/master/HISTORY.md#mo-01-jenuary-2018--v1000`, // v10.0.0, we skip the number 9.
 		relPath, name, name, relPath, name))
 }

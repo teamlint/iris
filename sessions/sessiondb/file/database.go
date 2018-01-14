@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/kataras/golog"
-	"github.com/kataras/iris/core/errors"
-	"github.com/kataras/iris/sessions"
+	"github.com/teamlint/golog"
+	"github.com/teamlint/iris/core/errors"
+	"github.com/teamlint/iris/sessions"
 )
 
 // DefaultFileMode used as the default database's "fileMode"

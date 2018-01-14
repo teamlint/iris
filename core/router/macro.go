@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/core/errors"
-	"github.com/kataras/iris/core/router/macro"
-	"github.com/kataras/iris/core/router/macro/interpreter/ast"
+	"github.com/teamlint/iris/context"
+	"github.com/teamlint/iris/core/errors"
+	"github.com/teamlint/iris/core/router/macro"
+	"github.com/teamlint/iris/core/router/macro/interpreter/ast"
 )
 
 // defaultMacros returns a new macro map which

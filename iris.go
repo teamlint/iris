@@ -10,26 +10,26 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kataras/golog"
+	"github.com/teamlint/golog"
 
 	// context for the handlers
-	"github.com/kataras/iris/context"
+	"github.com/teamlint/iris/context"
 	// core packages, needed to build the application
-	"github.com/kataras/iris/core/errors"
-	"github.com/kataras/iris/core/host"
-	"github.com/kataras/iris/core/maintenance"
-	"github.com/kataras/iris/core/netutil"
-	"github.com/kataras/iris/core/router"
+	"github.com/teamlint/iris/core/errors"
+	"github.com/teamlint/iris/core/host"
+	"github.com/teamlint/iris/core/maintenance"
+	"github.com/teamlint/iris/core/netutil"
+	"github.com/teamlint/iris/core/router"
 	// handlerconv conversions
-	"github.com/kataras/iris/core/handlerconv"
+	"github.com/teamlint/iris/core/handlerconv"
 	// cache conversions
-	"github.com/kataras/iris/cache"
+	"github.com/teamlint/iris/cache"
 	// view
-	"github.com/kataras/iris/view"
+	"github.com/teamlint/iris/view"
 	// middleware used in Default method
 
-	requestLogger "github.com/kataras/iris/middleware/logger"
-	"github.com/kataras/iris/middleware/recover"
+	requestLogger "github.com/teamlint/iris/middleware/logger"
+	"github.com/teamlint/iris/middleware/recover"
 )
 
 var (
@@ -230,7 +230,7 @@ func (app *Application) ConfigurationReadOnly() context.ConfigurationReadOnly {
 // Setting one or more outputs: app.Logger().SetOutput(io.Writer...)
 // Adding one or more outputs : app.Logger().AddOutput(io.Writer...)
 //
-// Adding custom levels requires import of the `github.com/kataras/golog` package:
+// Adding custom levels requires import of the `github.com/teamlint/golog` package:
 //	First we create our level to a golog.Level
 //	in order to be used in the Log functions.
 //	var SuccessLevel golog.Level = 6
@@ -309,7 +309,7 @@ var (
 	// embedded into executable files.
 	//
 	//
-	// Examples: https://github.com/kataras/iris/tree/master/_examples/file-server
+	// Examples: https://github.com/teamlint/iris/tree/master/_examples/file-server
 	StaticEmbeddedHandler = router.StaticEmbeddedHandler
 	// Gzip is a middleware which enables writing
 	// using gzip compression, if client supports.
@@ -328,7 +328,7 @@ var (
 	// Cache is a middleware providing cache functionalities
 	// to the next handlers, can be used as: `app.Get("/", iris.Cache, aboutHandler)`.
 	//
-	// Examples can be found at: https://github.com/kataras/iris/tree/master/_examples/#caching
+	// Examples can be found at: https://github.com/teamlint/iris/tree/master/_examples/#caching
 	Cache = cache.Handler
 )
 
@@ -338,7 +338,7 @@ var (
 // it's a helper function which just makes some checks based on the `IndexNames` and `AssetValidators`
 // before the assetHandler call.
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/file-server/single-page-application
+// Example: https://github.com/teamlint/iris/tree/master/_examples/file-server/single-page-application
 func (app *Application) SPA(assetHandler context.Handler) *router.SPABuilder {
 	s := router.NewSPABuilder(assetHandler)
 	app.APIBuilder.HandleMany("GET HEAD", "/{f:path}", s.Handler)
@@ -470,7 +470,7 @@ type Runner func(*Application) error
 // Via host configurators you can configure the back-end host supervisor,
 // i.e to add events for shutdown, serve or error.
 // An example of this use case can be found at:
-// https://github.com/kataras/iris/blob/master/_examples/http-listening/notify-on-shutdown/main.go
+// https://github.com/teamlint/iris/blob/master/_examples/http-listening/notify-on-shutdown/main.go
 // Look at the `ConfigureHost` too.
 //
 // See `Run` for more.
@@ -492,7 +492,7 @@ func Listener(l net.Listener, hostConfigs ...host.Configurator) Runner {
 // Via host configurators you can configure the back-end host supervisor,
 // i.e to add events for shutdown, serve or error.
 // An example of this use case can be found at:
-// https://github.com/kataras/iris/blob/master/_examples/http-listening/notify-on-shutdown/main.go
+// https://github.com/teamlint/iris/blob/master/_examples/http-listening/notify-on-shutdown/main.go
 // Look at the `ConfigureHost` too.
 //
 // See `Run` for more.
@@ -516,7 +516,7 @@ func Server(srv *http.Server, hostConfigs ...host.Configurator) Runner {
 // Via host configurators you can configure the back-end host supervisor,
 // i.e to add events for shutdown, serve or error.
 // An example of this use case can be found at:
-// https://github.com/kataras/iris/blob/master/_examples/http-listening/notify-on-shutdown/main.go
+// https://github.com/teamlint/iris/blob/master/_examples/http-listening/notify-on-shutdown/main.go
 // Look at the `ConfigureHost` too.
 //
 // See `Run` for more.
@@ -542,7 +542,7 @@ func Addr(addr string, hostConfigs ...host.Configurator) Runner {
 // Via host configurators you can configure the back-end host supervisor,
 // i.e to add events for shutdown, serve or error.
 // An example of this use case can be found at:
-// https://github.com/kataras/iris/blob/master/_examples/http-listening/notify-on-shutdown/main.go
+// https://github.com/teamlint/iris/blob/master/_examples/http-listening/notify-on-shutdown/main.go
 // Look at the `ConfigureHost` too.
 //
 // See `Run` for more.
@@ -582,7 +582,7 @@ func TLS(addr string, certFile, keyFile string, hostConfigs ...host.Configurator
 // Via host configurators you can configure the back-end host supervisor,
 // i.e to add events for shutdown, serve or error.
 // An example of this use case can be found at:
-// https://github.com/kataras/iris/blob/master/_examples/http-listening/notify-on-shutdown/main.go
+// https://github.com/teamlint/iris/blob/master/_examples/http-listening/notify-on-shutdown/main.go
 // Look at the `ConfigureHost` too.
 //
 // Usage:

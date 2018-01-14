@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/kataras/iris/core/errors"
-	"github.com/kataras/iris/core/memstore"
+	"github.com/teamlint/iris/core/errors"
+	"github.com/teamlint/iris/core/memstore"
 )
 
 type (

@@ -105,19 +105,19 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/kataras/golog"
+  name = "github.com/teamlint/golog"
   packages = ["."]
   revision = "2ed680e7b1f34147164fa8073373e14fce02ac30"
 
 [[projects]]
   branch = "master"
-  name = "github.com/kataras/pio"
+  name = "github.com/teamlint/pio"
   packages = [".","terminal"]
   revision = "825e39f34365e7db2c9fbc3692c16220e3bd7418"
 
 [[projects]]
   branch = "master"
-  name = "github.com/kataras/survey"
+  name = "github.com/teamlint/survey"
   packages = ["."]
   revision = "20e139a6d2469769ae88e0a3579ba5df71839ca7"
 

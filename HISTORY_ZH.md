@@ -2,12 +2,12 @@
 
 ### 想得到免费即时的支持?
 
-    https://github.com/kataras/iris/issues
+    https://github.com/teamlint/iris/issues
     https://chat.iris-go.com
 
 ### 获取历史版本?
 
-    https://github.com/kataras/iris/releases
+    https://github.com/teamlint/iris/releases
 
 ### 我是否应该升级 Iris?
 
@@ -15,7 +15,7 @@
 
 > Iris 使用 Golang 的 [vendor directory](https://docs.google.com/document/d/1Bz5-UB7g2uPBdOx-rw5t9MxJwkfpx90cqG9AFL0JAYo) 特性, 避免依赖包的更改带来影响。
 
-**如何升级**: 打开命令行执行以下命令: `go get -u github.com/kataras/iris` 或者等待自动更新。
+**如何升级**: 打开命令行执行以下命令: `go get -u github.com/teamlint/iris` 或者等待自动更新。
 
 # 2018 元旦 | v10.0.0 版本发布
 
@@ -41,15 +41,15 @@
 
 ### 1. 路径参数 - 构建依赖
 
-![](https://github.com/kataras/explore/raw/master/iris/hero/hero-1-monokai.png)
+![](https://github.com/teamlint/explore/raw/master/iris/hero/hero-1-monokai.png)
 
 ### 2. 服务 - 静态依赖
 
-![](https://github.com/kataras/explore/raw/master/iris/hero/hero-2-monokai.png)
+![](https://github.com/teamlint/explore/raw/master/iris/hero/hero-2-monokai.png)
 
 ### 3. 请求之前 - 动态依赖
 
-![](https://github.com/kataras/explore/raw/master/iris/hero/hero-3-monokai.png)
+![](https://github.com/teamlint/explore/raw/master/iris/hero/hero-3-monokai.png)
 
 `hero funcs` 非常容易理解，当你用过之后 **在也回不去了**.
 
@@ -74,10 +74,10 @@ With this version you can register **any controller's methods as routes manually
 
 | NEW | OLD |
 | -----------|-------------|
-| [Hello world](_examples/mvc/hello-world/main.go) | [OLD Hello world](https://github.com/kataras/iris/blob/v8/_examples/mvc/hello-world/main.go) |
-| [Session Controller](_examples/mvc/session-controller/main.go) | [OLD Session Controller](https://github.com/kataras/iris/blob/v8/_examples/mvc/session-controller/main.go) |
-| [Overview - Plus Repository and Service layers](_examples/mvc/overview) | [OLD Overview - Plus Repository and Service layers](https://github.com/kataras/iris/tree/v8/_examples/mvc/overview) |
-| [Login showcase - Plus Repository and Service layers](_examples/mvc/login) | [OLD Login showcase - Plus Repository and Service layers](https://github.com/kataras/iris/tree/v8/_examples/mvc/login) |
+| [Hello world](_examples/mvc/hello-world/main.go) | [OLD Hello world](https://github.com/teamlint/iris/blob/v8/_examples/mvc/hello-world/main.go) |
+| [Session Controller](_examples/mvc/session-controller/main.go) | [OLD Session Controller](https://github.com/teamlint/iris/blob/v8/_examples/mvc/session-controller/main.go) |
+| [Overview - Plus Repository and Service layers](_examples/mvc/overview) | [OLD Overview - Plus Repository and Service layers](https://github.com/teamlint/iris/tree/v8/_examples/mvc/overview) |
+| [Login showcase - Plus Repository and Service layers](_examples/mvc/login) | [OLD Login showcase - Plus Repository and Service layers](https://github.com/teamlint/iris/tree/v8/_examples/mvc/login) |
 | [Singleton](_examples/mvc/singleton) |  **新增** |
 | [Websocket Controller](_examples/mvc/websocket) |  **新增** |
 | [Vue.js Todo MVC](_examples/tutorial/vuejs-todo-mvc) |  **新增** |
@@ -101,7 +101,7 @@ func WithPostMaxMemory(limit int64) Configurator
 使用方式：
 
 ```go
-import "github.com/kataras/iris"
+import "github.com/teamlint/iris"
 
 func main() {
     app := iris.New()

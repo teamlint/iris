@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kataras/iris"
+	"github.com/teamlint/iris"
 )
 
 func logger(app *iris.Application) *bytes.Buffer {

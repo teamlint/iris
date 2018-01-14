@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kataras/iris/cache"
-	"github.com/kataras/iris/cache/client/rule"
+	"github.com/teamlint/iris/cache"
+	"github.com/teamlint/iris/cache/client/rule"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/core/errors"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/context"
+	"github.com/teamlint/iris/core/errors"
 
 	"github.com/iris-contrib/httpexpect"
-	"github.com/kataras/iris/httptest"
+	"github.com/teamlint/iris/httptest"
 )
 
 var (

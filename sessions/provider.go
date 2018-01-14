@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kataras/iris/core/memstore"
+	"github.com/teamlint/iris/core/memstore"
 )
 
 type (

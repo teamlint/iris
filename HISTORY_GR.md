@@ -2,12 +2,12 @@
 
 ### Ψάχνετε για δωρεάν υποστήριξη σε πραγματικό χρόνο;
 
-    https://github.com/kataras/iris/issues
+    https://github.com/teamlint/iris/issues
     https://chat.iris-go.com
 
 ### Ψάχνετε για προηγούμενες εκδόσεις;
 
-    https://github.com/kataras/iris/releases
+    https://github.com/teamlint/iris/releases
 
 ### Πρέπει να αναβαθμίσω το Iris μου;
 
@@ -15,7 +15,7 @@
 
 > Το Iris εκμεταλλεύεται τη λεγόμενη λειτουργία [vendor directory](https://docs.google.com/document/d/1Bz5-UB7g2uPBdOx-rw5t9MxJwkfpx90cqG9AFL0JAYo). Παίρνετε πλήρως αναπαραγωγίσιμα builds, καθώς αυτή η μέθοδος προστατεύει από τις upstream μετονομασίες και διαγραφές.
 
-**Πώς να αναβαθμίσετε**: Ανοίξτε την γραμμή εντολών σας και εκτελέστε αυτήν την εντολή: `go get -u github.com/kataras/iris`  ή αφήστε το αυτόματο updater να το κάνει αυτό για σας.
+**Πώς να αναβαθμίσετε**: Ανοίξτε την γραμμή εντολών σας και εκτελέστε αυτήν την εντολή: `go get -u github.com/teamlint/iris`  ή αφήστε το αυτόματο updater να το κάνει αυτό για σας.
 
 # Mo, 01 Jenuary 2018 | v10.0.0
 
@@ -29,7 +29,7 @@
 
 Σε αυτή την έκδοση έχουμε πολλές εσωτερικές βελτιώσεις αλλά μόνο δύο μεγάλες αλλαγές και ένα μεγάλο χαρακτηριστικό, που ονομάζεται **hero**.
 
-> Η νέα έκδοση προσθέτει 75 καινούρια commits, το PR βρίσκεται [εδώ](https://github.com/kataras/iris/pull/849). Παρακαλώ διαβάστε τις εσωτερικές αλλαγές αν σχεδιάζετε ένα web framework που βασίζεται στο Iris. Γιατί η έκδοση 9 παραλείφθηκε; Έτσι.
+> Η νέα έκδοση προσθέτει 75 καινούρια commits, το PR βρίσκεται [εδώ](https://github.com/teamlint/iris/pull/849). Παρακαλώ διαβάστε τις εσωτερικές αλλαγές αν σχεδιάζετε ένα web framework που βασίζεται στο Iris. Γιατί η έκδοση 9 παραλείφθηκε; Έτσι.
 
 ## Hero
 
@@ -41,15 +41,15 @@
 
 ### 1. Παράμετροι διαδρομής - Ενσωματωμένες Εξαρτήσεις (Built'n Dependencies)
 
-![](https://github.com/kataras/explore/raw/master/iris/hero/hero-1-monokai.png)
+![](https://github.com/teamlint/explore/raw/master/iris/hero/hero-1-monokai.png)
 
 ### 2. Υπηρεσίες - Στατικές Eξαρτήσεις (Static Dependencies)
 
-![](https://github.com/kataras/explore/raw/master/iris/hero/hero-2-monokai.png)
+![](https://github.com/teamlint/explore/raw/master/iris/hero/hero-2-monokai.png)
 
 ### 3. Ανά Αίτηση - Δυναμικές Eξαρτήσεις (Dynamic Dependencies)
 
-![](https://github.com/kataras/explore/raw/master/iris/hero/hero-3-monokai.png)
+![](https://github.com/teamlint/explore/raw/master/iris/hero/hero-3-monokai.png)
 
 Είναι πραγματικά πολύ εύκολο να καταλάβεις πως δουλεύουν τα `hero funcs` και όταν αρχίσεις να τα χρησιμοποιείς **δεν γυρίζεις ποτέ πίσω**.
 
@@ -72,10 +72,10 @@
 
 | ΤΩΡΑ | ΠΡΙΝ |
 | -----------|-------------|
-| [Hello world](_examples/mvc/hello-world/main.go) | [ΠΑΛΙΟ Hello world](https://github.com/kataras/iris/blob/v8/_examples/mvc/hello-world/main.go) |
-| [Session Controller](_examples/mvc/session-controller/main.go) | [ΠΑΛΙΟ Session Controller](https://github.com/kataras/iris/blob/v8/_examples/mvc/session-controller/main.go) |
-| [Overview - Plus Repository and Service layers](_examples/mvc/overview) | [ΠΑΛΙΟ Overview - Plus Repository and Service layers](https://github.com/kataras/iris/tree/v8/_examples/mvc/overview) |
-| [Login showcase - Plus Repository and Service layers](_examples/mvc/login) | [ΠΑΛΙΟ Login showcase - Plus Repository and Service layers](https://github.com/kataras/iris/tree/v8/_examples/mvc/login) |
+| [Hello world](_examples/mvc/hello-world/main.go) | [ΠΑΛΙΟ Hello world](https://github.com/teamlint/iris/blob/v8/_examples/mvc/hello-world/main.go) |
+| [Session Controller](_examples/mvc/session-controller/main.go) | [ΠΑΛΙΟ Session Controller](https://github.com/teamlint/iris/blob/v8/_examples/mvc/session-controller/main.go) |
+| [Overview - Plus Repository and Service layers](_examples/mvc/overview) | [ΠΑΛΙΟ Overview - Plus Repository and Service layers](https://github.com/teamlint/iris/tree/v8/_examples/mvc/overview) |
+| [Login showcase - Plus Repository and Service layers](_examples/mvc/login) | [ΠΑΛΙΟ Login showcase - Plus Repository and Service layers](https://github.com/teamlint/iris/tree/v8/_examples/mvc/login) |
 | [Singleton](_examples/mvc/singleton) |  **NEO** |
 | [Websocket Controller](_examples/mvc/websocket) |  **NEO** |
 | [Vue.js Todo MVC](_examples/tutorial/vuejs-todo-mvc) |  **NEO** |
@@ -97,7 +97,7 @@ func WithPostMaxMemory(limit int64) Configurator
 Αν χρησημοποιούσατε την παλιά στατική μεταβλητή θα χρειαστεί να κάνετε μια αλλαγή σε εκείνη τη γραμμή του κώδικα.
 
 ```go
-import "github.com/kataras/iris"
+import "github.com/teamlint/iris"
 
 func main() {
     app := iris.New()

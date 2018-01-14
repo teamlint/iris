@@ -3,7 +3,7 @@ package core
 import (
 	"strings"
 
-	"github.com/kataras/survey/terminal"
+	"github.com/teamlint/survey/terminal"
 )
 
 type Renderer struct {

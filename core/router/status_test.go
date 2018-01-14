@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/context"
 
-	"github.com/kataras/iris/httptest"
+	"github.com/teamlint/iris/httptest"
 )
 
 var defaultErrHandler = func(ctx context.Context) {

@@ -3,9 +3,9 @@
 package iris
 
 import (
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/core/host"
-	"github.com/kataras/iris/core/router"
+	"github.com/teamlint/iris/context"
+	"github.com/teamlint/iris/core/host"
+	"github.com/teamlint/iris/core/router"
 )
 
 type (

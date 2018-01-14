@@ -7,10 +7,10 @@ import (
 	"io/ioutil"
 	"net/url"
 
-	"github.com/kataras/iris/core/maintenance/client"
-	"github.com/kataras/iris/core/maintenance/encoding"
+	"github.com/teamlint/iris/core/maintenance/client"
+	"github.com/teamlint/iris/core/maintenance/encoding"
 
-	"github.com/kataras/survey"
+	"github.com/teamlint/survey"
 )
 
 // question describes the question which will be used

@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/kataras/survey/core"
-	"github.com/kataras/survey/terminal"
+	"github.com/teamlint/survey/core"
+	"github.com/teamlint/survey/terminal"
 )
 
 /*

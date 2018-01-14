@@ -1,6 +1,6 @@
 package main
 
-import "github.com/kataras/iris"
+import "github.com/teamlint/iris"
 
 // $ go get -u github.com/jteeuwen/go-bindata/...
 // $ go-bindata ./public/...

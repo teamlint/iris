@@ -5,13 +5,13 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/core/router"
-	"github.com/kataras/iris/core/router/macro"
-	"github.com/kataras/iris/hero"
-	"github.com/kataras/iris/hero/di"
+	"github.com/teamlint/iris/context"
+	"github.com/teamlint/iris/core/router"
+	"github.com/teamlint/iris/core/router/macro"
+	"github.com/teamlint/iris/hero"
+	"github.com/teamlint/iris/hero/di"
 
-	"github.com/kataras/golog"
+	"github.com/teamlint/golog"
 )
 
 // BaseController is the optional controller interface, if it's

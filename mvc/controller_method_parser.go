@@ -7,8 +7,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/kataras/iris/core/router"
-	"github.com/kataras/iris/core/router/macro/interpreter/ast"
+	"github.com/teamlint/iris/core/router"
+	"github.com/teamlint/iris/core/router/macro/interpreter/ast"
 )
 
 const (

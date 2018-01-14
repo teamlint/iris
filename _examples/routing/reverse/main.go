@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/core/router"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/core/router"
 )
 
 func main() {

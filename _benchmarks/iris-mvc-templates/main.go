@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/kataras/iris/_benchmarks/iris-mvc-templates/controllers"
+	"github.com/teamlint/iris/_benchmarks/iris-mvc-templates/controllers"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/mvc"
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/context"
+	"github.com/teamlint/iris/mvc"
 )
 
 const (
@@ -13,7 +13,7 @@ const (
 	// in order to reduce the size in the repository.
 	// Change the "C\\mygopath" to your own GOPATH.
 	// publicDir = "C:\\mygopath\\src\\github.com\\kataras\\iris\\_benchmarks\\netcore-mvc-templates\\wwwroot"
-	publicDir = "/home/kataras/mygopath/src/github.com/kataras/iris/_benchmarks/netcore-mvc-templates/wwwroot"
+	publicDir = "/home/kataras/mygopath/src/github.com/teamlint/iris/_benchmarks/netcore-mvc-templates/wwwroot"
 )
 
 func main() {

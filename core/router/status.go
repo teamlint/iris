@@ -4,7 +4,7 @@ import (
 	"net/http" // just for status codes
 	"sync"
 
-	"github.com/kataras/iris/context"
+	"github.com/teamlint/iris/context"
 )
 
 // ErrorCodeHandler is the entry

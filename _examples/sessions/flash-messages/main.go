@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/kataras/iris"
+	"github.com/teamlint/iris"
 
-	"github.com/kataras/iris/sessions"
+	"github.com/teamlint/iris/sessions"
 )
 
 func main() {

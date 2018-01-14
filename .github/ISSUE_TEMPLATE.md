@@ -1,8 +1,8 @@
 Examples for the Iris project can be found at
-<https://github.com/kataras/iris/tree/master/_examples>.
+<https://github.com/teamlint/iris/tree/master/_examples>.
 
 Documentation for the Iris project can be found at
-<https://godoc.org/github.com/kataras/iris>.
+<https://godoc.org/github.com/teamlint/iris>.
 
 Love iris? Please consider supporting our collective:
 👉  https://opencollective.com/iris/donate

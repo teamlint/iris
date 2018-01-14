@@ -6,7 +6,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/kataras/iris/core/memstore"
+	"github.com/teamlint/iris/core/memstore"
 )
 
 func init() {
