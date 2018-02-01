@@ -468,7 +468,7 @@ func (dec *Decoder) decode() error {
 			var t time.Time
 			var err error
 			for _, layout := range timeFormat {
-				t, err = time.Parse(layout, dec.value)
+				t, err = time.ParseInLocation(layout, dec.value, time.Now().Location())
 				if err == nil {
 					break
 				}
