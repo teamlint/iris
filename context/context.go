@@ -15,7 +15,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -25,8 +24,8 @@ import (
 	"github.com/fatih/structs"
 	"github.com/json-iterator/go"
 	"github.com/microcosm-cc/bluemonday"
-	"github.com/russross/blackfriday"
 	"github.com/teamlint/iris/contrib/formbinder"
+	"gopkg.in/russross/blackfriday.v2"
 	"gopkg.in/yaml.v2"
 
 	"github.com/teamlint/iris/core/errors"
@@ -53,16 +52,16 @@ type (
 		Decode(data []byte) error
 	}
 
-	// Unmarshaler is the interface implemented by types that can unmarshal any raw data
-	// TIP INFO: Any v object which implements the BodyDecoder can be override the unmarshaler.
+	// Unmarshaler is the interface implemented by types that can unmarshal any raw data.
+	// TIP INFO: Any pointer to a value which implements the BodyDecoder can be override the unmarshaler.
 	Unmarshaler interface {
-		Unmarshal(data []byte, v interface{}) error
+		Unmarshal(data []byte, outPtr interface{}) error
 	}
 
 	// UnmarshalerFunc a shortcut for the Unmarshaler interface
 	//
 	// See 'Unmarshaler' and 'BodyDecoder' for more.
-	UnmarshalerFunc func(data []byte, v interface{}) error
+	UnmarshalerFunc func(data []byte, outPtr interface{}) error
 )
 
 // Unmarshal parses the X-encoded data and stores the result in the value pointed to by v.
@@ -310,7 +309,21 @@ type Context interface {
 	//
 	// Note: Custom context should override this method in order to be able to pass its own context.Context implementation.
 	Next()
-	// NextHandler returns(but it is NOT executes) the next handler from the handlers chain.
+	// NextOr checks if chain has a next handler, if so then it executes it
+	// otherwise it sets a new chain assigned to this Context based on the given handler(s)
+	// and executes its first handler.
+	//
+	// Returns true if next handler exists and executed, otherwise false.
+	//
+	// Note that if no next handler found and handlers are missing then
+	// it sends a Status Not Found (404) to the client and it stops the execution.
+	NextOr(handlers ...Handler) bool
+	// NextOrNotFound checks if chain has a next handler, if so then it executes it
+	// otherwise it sends a Status Not Found (404) to the client and stops the execution.
+	//
+	// Returns true if next handler exists and executed, otherwise false.
+	NextOrNotFound() bool
+	// NextHandler returns (it doesn't execute) the next handler from the handlers chain.
 	//
 	// Use .Skip() to skip this handler if needed to execute the next of this returning handler.
 	NextHandler() Handler
@@ -366,6 +379,8 @@ type Context interface {
 	// Subdomain returns the subdomain of this request, if any.
 	// Note that this is a fast method which does not cover all cases.
 	Subdomain() (subdomain string)
+	// IsWWW returns true if the current subdomain (if any) is www.
+	IsWWW() bool
 	// RemoteAddr tries to parse and return the real client's request IP.
 	//
 	// Based on allowed headers names that can be modified from Configuration.RemoteAddrHeaders.
@@ -594,16 +609,16 @@ type Context interface {
 	// should be called before reading the request body from the client.
 	SetMaxRequestBodySize(limitOverBytes int64)
 
-	// UnmarshalBody reads the request's body and binds it to a value or pointer of any type
+	// UnmarshalBody reads the request's body and binds it to a value or pointer of any type.
 	// Examples of usage: context.ReadJSON, context.ReadXML.
-	UnmarshalBody(v interface{}, unmarshaler Unmarshaler) error
-	// ReadJSON reads JSON from request's body and binds it to a value of any json-valid type.
-	ReadJSON(jsonObject interface{}) error
-	// ReadXML reads XML from request's body and binds it to a value of any xml-valid type.
-	ReadXML(xmlObject interface{}) error
+	UnmarshalBody(outPtr interface{}, unmarshaler Unmarshaler) error
+	// ReadJSON reads JSON from request's body and binds it to a pointer of a value of any json-valid type.
+	ReadJSON(jsonObjectPtr interface{}) error
+	// ReadXML reads XML from request's body and binds it to a pointer of a value of any xml-valid type.
+	ReadXML(xmlObjectPtr interface{}) error
 	// ReadForm binds the formObject  with the form data
 	// it supports any kind of struct.
-	ReadForm(formObject interface{}) error
+	ReadForm(formObjectPtr interface{}) error
 
 	//  +------------------------------------------------------------+
 	//  | Body (raw) Writers                                         |
@@ -637,6 +652,39 @@ type Context interface {
 	//
 	// Returns the number of bytes written and any write error encountered.
 	WriteString(body string) (int, error)
+
+	// SetLastModified sets the "Last-Modified" based on the "modtime" input.
+	// If "modtime" is zero then it does nothing.
+	//
+	// It's mostly internally on core/router and context packages.
+	//
+	// Note that modtime.UTC() is being used instead of just modtime, so
+	// you don't have to know the internals in order to make that works.
+	SetLastModified(modtime time.Time)
+	// CheckIfModifiedSince checks if the response is modified since the "modtime".
+	// Note that it has nothing to do with server-side caching.
+	// It does those checks by checking if the "If-Modified-Since" request header
+	// sent by client or a previous server response header
+	// (e.g with WriteWithExpiration or StaticEmbedded or Favicon etc.)
+	// is a valid one and it's before the "modtime".
+	//
+	// A check for !modtime && err == nil is necessary to make sure that
+	// it's not modified since, because it may return false but without even
+	// had the chance to check the client-side (request) header due to some errors,
+	// like the HTTP Method is not "GET" or "HEAD" or if the "modtime" is zero
+	// or if parsing time from the header failed.
+	//
+	// It's mostly used internally, e.g. `context#WriteWithExpiration`.
+	//
+	// Note that modtime.UTC() is being used instead of just modtime, so
+	// you don't have to know the internals in order to make that works.
+	CheckIfModifiedSince(modtime time.Time) (bool, error)
+	// WriteNotModified sends a 304 "Not Modified" status code to the client,
+	// it makes sure that the content type, the content length headers
+	// and any "ETag" are removed before the response sent.
+	//
+	// It's mostly used internally on core/router/fs.go and context methods.
+	WriteNotModified()
 	// WriteWithExpiration like Write but it sends with an expiration datetime
 	// which is refreshed every package-level `StaticCacheDuration` field.
 	WriteWithExpiration(body []byte, modtime time.Time) (int, error)
@@ -870,6 +918,9 @@ type Context interface {
 	// It's for extreme use cases, 99% of the times will never be useful for you.
 	Exec(method string, path string)
 
+	// RouteExists checks if a route exists
+	RouteExists(method string, path string) bool
+
 	// Application returns the iris app instance which belongs to this context.
 	// Worth to notice that this function returns an interface
 	// of the Application, which contains methods that are safe
@@ -889,18 +940,6 @@ type Context interface {
 
 var _ Context = (*context)(nil)
 
-// Next calls all the next handler from the handlers chain,
-// it should be used inside a middleware.
-func Next(ctx Context) {
-	if ctx.IsStopped() {
-		return
-	}
-	if n, handlers := ctx.HandlerIndex(-1)+1, ctx.Handlers(); n < len(handlers) {
-		ctx.HandlerIndex(n)
-		handlers[n](ctx)
-	}
-}
-
 // Do calls the SetHandlers(handlers)
 // and executes the first handler,
 // handlers should not be empty.
@@ -919,6 +958,35 @@ func Do(ctx Context, handlers Handlers) {
 var LimitRequestBodySize = func(maxRequestBodySizeBytes int64) Handler {
 	return func(ctx Context) {
 		ctx.SetMaxRequestBodySize(maxRequestBodySizeBytes)
+		ctx.Next()
+	}
+}
+
+// Cache304 sends a `StatusNotModified` (304) whenever
+// the "If-Modified-Since" request header (time) is before the
+// time.Now() + expiresEvery (always compared to their UTC values).
+// Use this `context#Cache304` instead of the "github.com/kataras/iris/cache" or iris.Cache
+// for better performance.
+// Clients that are compatible with the http RCF (all browsers are and tools like postman)
+// will handle the caching.
+// The only disadvantage of using that instead of server-side caching
+// is that this method will send a 304 status code instead of 200,
+// So, if you use it side by side with other micro services
+// you have to check for that status code as well for a valid response.
+//
+// Developers are free to extend this method's behavior
+// by watching system directories changes manually and use of the `ctx.WriteWithExpiration`
+// with a "modtime" based on the file modified date,
+// simillary to the `StaticWeb`(StaticWeb sends an OK(200) and browser disk caching instead of 304).
+var Cache304 = func(expiresEvery time.Duration) Handler {
+	return func(ctx Context) {
+		now := time.Now()
+		if modified, err := ctx.CheckIfModifiedSince(now.Add(-expiresEvery)); !modified && err == nil {
+			ctx.WriteNotModified()
+			return
+		}
+
+		ctx.SetLastModified(now)
 		ctx.Next()
 	}
 }
@@ -990,6 +1058,21 @@ func (ctx *context) BeginRequest(w http.ResponseWriter, r *http.Request) {
 	ctx.writer.BeginResponse(w)
 }
 
+// StatusCodeNotSuccessful defines if a specific "statusCode" is not
+// a valid status code for a successful response.
+// It defaults to < 200 || >= 400
+//
+// Read more at `iris#DisableAutoFireStatusCode`, `iris/core/router#ErrorCodeHandler`
+// and `iris/core/router#OnAnyErrorCode` for relative information.
+//
+// Do NOT change it.
+//
+// It's exported for extreme situations--special needs only, when the Iris server and the client
+// is not following the RFC: https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+var StatusCodeNotSuccessful = func(statusCode int) bool {
+	return statusCode < 200 || statusCode >= 400
+}
+
 // EndRequest is executing once after a response to the request was sent and this context is useless or released.
 //
 // To follow the iris' flow, developer should:
@@ -997,7 +1080,7 @@ func (ctx *context) BeginRequest(w http.ResponseWriter, r *http.Request) {
 // 2. release the response writer
 // and any other optional steps, depends on dev's application type.
 func (ctx *context) EndRequest() {
-	if ctx.GetStatusCode() >= 400 &&
+	if StatusCodeNotSuccessful(ctx.GetStatusCode()) &&
 		!ctx.Application().ConfigurationReadOnly().GetDisableAutoFireStatusCode() {
 		// author's note:
 		// if recording, the error handler can handle
@@ -1157,22 +1240,75 @@ func (ctx *context) HandlerName() string {
 	return HandlerName(ctx.handlers[ctx.currentHandlerIndex])
 }
 
-// Do sets the handler index to zero, executes the first handler
-// and the rest of the Handlers if ctx.Next() was called.
-// func (ctx *context) Do() {
-// 	ctx.currentHandlerIndex = 0
-// 	ctx.handlers[0](ctx) // it calls this *context
-// } // -> replaced with inline on router.go
+// Next is the function that executed when `ctx.Next()` is called.
+// It can be changed to a customized one if needed (very advanced usage).
+//
+// See `DefaultNext` for more information about this and why it's exported like this.
+var Next = DefaultNext ///TODO: add an example for this usecase, i.e describe handlers and skip only file handlers.
+
+// DefaultNext is the default function that executed on each middleware if `ctx.Next()`
+// is called.
+//
+// DefaultNext calls the next handler from the handlers chain by registration order,
+// it should be used inside a middleware.
+//
+// It can be changed to a customized one if needed (very advanced usage).
+//
+// Developers are free to customize the whole or part of the Context's implementation
+// by implementing a new `context.Context` (see https://github.com/kataras/iris/tree/master/_examples/routing/custom-context)
+// or by just override the `context.Next` package-level field, `context.DefaultNext` is exported
+// in order to be able for developers to merge your customized version one with the default behavior as well.
+func DefaultNext(ctx Context) {
+	if ctx.IsStopped() {
+		return
+	}
+	if n, handlers := ctx.HandlerIndex(-1)+1, ctx.Handlers(); n < len(handlers) {
+		ctx.HandlerIndex(n)
+		handlers[n](ctx)
+	}
+}
 
 // Next calls all the next handler from the handlers chain,
 // it should be used inside a middleware.
 //
-// Note: Custom context should override this method in order to be able to pass its own context.context implementation.
+// Note: Custom context should override this method in order to be able to pass its own context.Context implementation.
 func (ctx *context) Next() { // or context.Next(ctx)
 	Next(ctx)
 }
 
-// NextHandler returns, but it doesn't executes, the next handler from the handlers chain.
+// NextOr checks if chain has a next handler, if so then it executes it
+// otherwise it sets a new chain assigned to this Context based on the given handler(s)
+// and executes its first handler.
+//
+// Returns true if next handler exists and executed, otherwise false.
+//
+// Note that if no next handler found and handlers are missing then
+// it sends a Status Not Found (404) to the client and it stops the execution.
+func (ctx *context) NextOr(handlers ...Handler) bool {
+	if next := ctx.NextHandler(); next != nil {
+		next(ctx)
+		ctx.Skip() // skip this handler from the chain.
+		return true
+	}
+
+	if len(handlers) == 0 {
+		ctx.NotFound()
+		ctx.StopExecution()
+		return false
+	}
+
+	ctx.Do(handlers)
+
+	return false
+}
+
+// NextOrNotFound checks if chain has a next handler, if so then it executes it
+// otherwise it sends a Status Not Found (404) to the client and stops the execution.
+//
+// Returns true if next handler exists and executed, otherwise false.
+func (ctx *context) NextOrNotFound() bool { return ctx.NextOr() }
+
+// NextHandler returns (it doesn't execute) the next handler from the handlers chain.
 //
 // Use .Skip() to skip this handler if needed to execute the next of this returning handler.
 func (ctx *context) NextHandler() Handler {
@@ -1311,11 +1447,16 @@ func (ctx *context) RequestPath(escape bool) string {
 // 	return false
 // } no, it will not work because map is a random peek data structure.
 
-// Host returns the host part of the current url.
+// Host returns the host part of the current URI.
 func (ctx *context) Host() string {
-	h := ctx.request.URL.Host
+	return GetHost(ctx.request)
+}
+
+// GetHost returns the host part of the current URI.
+func GetHost(r *http.Request) string {
+	h := r.URL.Host
 	if h == "" {
-		h = ctx.request.Host
+		h = r.Host
 	}
 	return h
 }
@@ -1338,6 +1479,20 @@ func (ctx *context) Subdomain() (subdomain string) {
 	return
 }
 
+// IsWWW returns true if the current subdomain (if any) is www.
+func (ctx *context) IsWWW() bool {
+	host := ctx.Host()
+	if index := strings.IndexByte(host, '.'); index > 0 {
+		// if it has a subdomain and it's www then return true.
+		if subdomain := host[0:index]; !strings.Contains(ctx.Application().ConfigurationReadOnly().GetVHost(), subdomain) {
+			return subdomain == "www"
+		}
+	}
+	return false
+}
+
+const xForwardedForHeaderKey = "X-Forwarded-For"
+
 // RemoteAddr tries to parse and return the real client's request IP.
 //
 // Based on allowed headers names that can be modified from Configuration.RemoteAddrHeaders.
@@ -1349,14 +1504,13 @@ func (ctx *context) Subdomain() (subdomain string) {
 //      `Configuration.WithRemoteAddrHeader(...)`,
 //      `Configuration.WithoutRemoteAddrHeader(...)` for more.
 func (ctx *context) RemoteAddr() string {
-
 	remoteHeaders := ctx.Application().ConfigurationReadOnly().GetRemoteAddrHeaders()
 
 	for headerName, enabled := range remoteHeaders {
 		if enabled {
 			headerValue := ctx.GetHeader(headerName)
 			// exception needed for 'X-Forwarded-For' only , if enabled.
-			if headerName == "X-Forwarded-For" {
+			if headerName == xForwardedForHeaderKey {
 				idx := strings.IndexByte(headerValue, ',')
 				if idx >= 0 {
 					headerValue = headerValue[0:idx]
@@ -1447,8 +1601,7 @@ func (ctx *context) ContentType(cType string) {
 	// if doesn't contain a charset already then append it
 	if !strings.Contains(cType, "charset") {
 		if cType != ContentBinaryHeaderValue {
-			charset := ctx.Application().ConfigurationReadOnly().GetCharset()
-			cType += "; charset=" + charset
+			cType += "; charset=" + ctx.Application().ConfigurationReadOnly().GetCharset()
 		}
 	}
 
@@ -1834,6 +1987,7 @@ func (ctx *context) UploadFormFiles(destDirectory string, before ...func(Context
 					n += n0
 				}
 			}
+			return n, nil
 		}
 	}
 
@@ -1902,7 +2056,7 @@ func (ctx *context) SetMaxRequestBodySize(limitOverBytes int64) {
 
 // UnmarshalBody reads the request's body and binds it to a value or pointer of any type
 // Examples of usage: context.ReadJSON, context.ReadXML.
-func (ctx *context) UnmarshalBody(v interface{}, unmarshaler Unmarshaler) error {
+func (ctx *context) UnmarshalBody(outPtr interface{}, unmarshaler Unmarshaler) error {
 	if ctx.request.Body == nil {
 		return errors.New("unmarshal: empty body")
 	}
@@ -1922,18 +2076,19 @@ func (ctx *context) UnmarshalBody(v interface{}, unmarshaler Unmarshaler) error 
 	// in this case the v should be a pointer also,
 	// but this is up to the user's custom Decode implementation*
 	//
-	// See 'BodyDecoder' for more
-	if decoder, isDecoder := v.(BodyDecoder); isDecoder {
+	// See 'BodyDecoder' for more.
+	if decoder, isDecoder := outPtr.(BodyDecoder); isDecoder {
 		return decoder.Decode(rawData)
 	}
 
-	// check if v is already a pointer, if yes then pass as it's
-	if reflect.TypeOf(v).Kind() == reflect.Ptr {
-		return unmarshaler.Unmarshal(rawData, v)
-	}
-	// finally, if the v doesn't contains a self-body decoder and it's not a pointer
-	// use the custom unmarshaler to bind the body
-	return unmarshaler.Unmarshal(rawData, &v)
+	// // check if v is already a pointer, if yes then pass as it's
+	// if reflect.TypeOf(v).Kind() == reflect.Ptr {
+	// 	return unmarshaler.Unmarshal(rawData, v)
+	// } <- no need for that, ReadJSON is documented enough to receive a pointer,
+	// we don't need to reduce the performance here by using the reflect.TypeOf method.
+
+	// f the v doesn't contains a self-body decoder use the custom unmarshaler to bind the body.
+	return unmarshaler.Unmarshal(rawData, outPtr)
 }
 
 func (ctx *context) shouldOptimize() bool {
@@ -2027,29 +2182,111 @@ var (
 	varyHeaderKey               = "Vary"
 )
 
-// staticCachePassed checks the IfModifiedSince header and
-// returns true if (client-side) duration has expired
-func (ctx *context) staticCachePassed(modtime time.Time) bool {
-	if t, err := time.Parse(ctx.Application().ConfigurationReadOnly().GetTimeFormat(), ctx.GetHeader(ifModifiedSinceHeaderKey)); err == nil && modtime.Before(t.Add(StaticCacheDuration)) {
-		ctx.writer.Header().Del(contentTypeHeaderKey)
-		ctx.writer.Header().Del(contentLengthHeaderKey)
-		ctx.StatusCode(http.StatusNotModified)
-		return true
+var unixEpochTime = time.Unix(0, 0)
+
+// IsZeroTime reports whether t is obviously unspecified (either zero or Unix()=0).
+func IsZeroTime(t time.Time) bool {
+	return t.IsZero() || t.Equal(unixEpochTime)
+}
+
+// ParseTime parses a time header (such as the Date: header),
+// trying each forth formats (or three if Application's configuration's TimeFormat is defaulted)
+// that are allowed by HTTP/1.1:
+// Application's configuration's TimeFormat or/and http.TimeFormat,
+// time.RFC850, and time.ANSIC.
+//
+// Look `context#FormatTime` for the opossite operation (Time to string).
+var ParseTime = func(ctx Context, text string) (t time.Time, err error) {
+	t, err = time.Parse(ctx.Application().ConfigurationReadOnly().GetTimeFormat(), text)
+	if err != nil {
+		return http.ParseTime(text)
 	}
-	return false
+
+	return
+}
+
+// FormatTime returns a textual representation of the time value formatted
+// according to the Application's configuration's TimeFormat field
+// which defines the format.
+//
+// Look `context#ParseTime` for the opossite operation (string to Time).
+var FormatTime = func(ctx Context, t time.Time) string {
+	return t.Format(ctx.Application().ConfigurationReadOnly().GetTimeFormat())
+}
+
+// SetLastModified sets the "Last-Modified" based on the "modtime" input.
+// If "modtime" is zero then it does nothing.
+//
+// It's mostly internally on core/router and context packages.
+func (ctx *context) SetLastModified(modtime time.Time) {
+	if !IsZeroTime(modtime) {
+		ctx.Header(lastModifiedHeaderKey, FormatTime(ctx, modtime.UTC())) // or modtime.UTC()?
+	}
+}
+
+// CheckIfModifiedSince checks if the response is modified since the "modtime".
+// Note that it has nothing to do with server-side caching.
+// It does those checks by checking if the "If-Modified-Since" request header
+// sent by client or a previous server response header
+// (e.g with WriteWithExpiration or StaticEmbedded or Favicon etc.)
+// is a valid one and it's before the "modtime".
+//
+// A check for !modtime && err == nil is necessary to make sure that
+// it's not modified since, because it may return false but without even
+// had the chance to check the client-side (request) header due to some errors,
+// like the HTTP Method is not "GET" or "HEAD" or if the "modtime" is zero
+// or if parsing time from the header failed.
+//
+// It's mostly used internally, e.g. `context#WriteWithExpiration`.
+func (ctx *context) CheckIfModifiedSince(modtime time.Time) (bool, error) {
+	if method := ctx.Method(); method != http.MethodGet && method != http.MethodHead {
+		return false, errors.New("skip: method")
+	}
+	ims := ctx.GetHeader(ifModifiedSinceHeaderKey)
+	if ims == "" || IsZeroTime(modtime) {
+		return false, errors.New("skip: zero time")
+	}
+	t, err := ParseTime(ctx, ims)
+	if err != nil {
+		return false, errors.New("skip: " + err.Error())
+	}
+	// sub-second precision, so
+	// use mtime < t+1s instead of mtime <= t to check for unmodified.
+	if modtime.UTC().Before(t.Add(1 * time.Second)) {
+		return false, nil
+	}
+	return true, nil
+}
+
+// WriteNotModified sends a 304 "Not Modified" status code to the client,
+// it makes sure that the content type, the content length headers
+// and any "ETag" are removed before the response sent.
+//
+// It's mostly used internally on core/router/fs.go and context methods.
+func (ctx *context) WriteNotModified() {
+	// RFC 7232 section 4.1:
+	// a sender SHOULD NOT generate representation metadata other than the
+	// above listed fields unless said metadata exists for the purpose of
+	// guiding cache updates (e.g.," Last-Modified" might be useful if the
+	// response does not have an ETag field).
+	h := ctx.ResponseWriter().Header()
+	delete(h, contentTypeHeaderKey)
+	delete(h, contentLengthHeaderKey)
+	if h.Get("Etag") != "" {
+		delete(h, lastModifiedHeaderKey)
+	}
+	ctx.StatusCode(http.StatusNotModified)
 }
 
 // WriteWithExpiration like Write but it sends with an expiration datetime
 // which is refreshed every package-level `StaticCacheDuration` field.
 func (ctx *context) WriteWithExpiration(body []byte, modtime time.Time) (int, error) {
-
-	if ctx.staticCachePassed(modtime) {
+	if modified, err := ctx.CheckIfModifiedSince(modtime); !modified && err == nil {
+		ctx.WriteNotModified()
 		return 0, nil
 	}
 
-	modtimeFormatted := modtime.UTC().Format(ctx.Application().ConfigurationReadOnly().GetTimeFormat())
-	ctx.Header(lastModifiedHeaderKey, modtimeFormatted)
-
+	ctx.SetLastModified(modtime)
 	return ctx.writer.Write(body)
 }
 
@@ -2639,16 +2876,13 @@ const (
 // You can define your own "Content-Type" header also, after this function call
 // Doesn't implements resuming (by range), use ctx.SendFile instead
 func (ctx *context) ServeContent(content io.ReadSeeker, filename string, modtime time.Time, gzipCompression bool) error {
-	if t, err := time.Parse(ctx.Application().ConfigurationReadOnly().GetTimeFormat(), ctx.GetHeader(ifModifiedSinceHeaderKey)); err == nil && modtime.Before(t.Add(1*time.Second)) {
-		ctx.writer.Header().Del(contentTypeHeaderKey)
-		ctx.writer.Header().Del(contentLengthHeaderKey)
-		ctx.StatusCode(http.StatusNotModified)
+	if modified, err := ctx.CheckIfModifiedSince(modtime); !modified && err == nil {
+		ctx.WriteNotModified()
 		return nil
 	}
 
 	ctx.ContentType(filename)
-	ctx.writer.Header().Set(lastModifiedHeaderKey, modtime.UTC().Format(ctx.Application().ConfigurationReadOnly().GetTimeFormat()))
-	ctx.StatusCode(http.StatusOK)
+	ctx.SetLastModified(modtime)
 	var out io.Writer
 	if gzipCompression && ctx.ClientSupportsGzip() {
 		ctx.writer.Header().Add(varyHeaderKey, acceptEncodingHeaderKey)
@@ -2661,7 +2895,7 @@ func (ctx *context) ServeContent(content io.ReadSeeker, filename string, modtime
 		out = ctx.writer
 	}
 	_, err := io.Copy(out, content)
-	return errServeContent.With(err)
+	return errServeContent.With(err) ///TODO: add an int64 as return value for the content length written like other writers or let it as it's in order to keep the stable api?
 }
 
 // ServeFile serves a view file, to send a file ( zip for example) to the client you should use the SendFile(serverfilename,clientfilename)
@@ -2912,7 +3146,7 @@ func (ctx *context) Exec(method string, path string) {
 
 		// backup the request path information
 		backupPath := ctx.Path()
-		bakcupMethod := ctx.Method()
+		backupMethod := ctx.Method()
 		// don't backupValues := ctx.Values().ReadOnly()
 
 		// [sessions stays]
@@ -2935,7 +3169,7 @@ func (ctx *context) Exec(method string, path string) {
 		// set the request back to its previous state
 		req.RequestURI = backupPath
 		req.URL.Path = backupPath
-		req.Method = bakcupMethod
+		req.Method = backupMethod
 
 		// don't fill the values in order to be able to communicate from and to.
 		// // fill the values as they were before
@@ -2943,6 +3177,11 @@ func (ctx *context) Exec(method string, path string) {
 		// 	ctx.Values().Set(key, value)
 		// })
 	}
+}
+
+// RouteExists checks if a route exists
+func (ctx *context) RouteExists(method string, path string) bool {
+	return ctx.Application().RouteExists(method, path, ctx)
 }
 
 // Application returns the iris app instance which belongs to this context.

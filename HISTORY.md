@@ -17,7 +17,66 @@ Developers are not forced to upgrade if they don't really need it. Upgrade whene
 
 **How to upgrade**: Open your command-line and execute this command: `go get -u github.com/teamlint/iris` or let the automatic updater do that for you.
 
-# Mo, 15 Jenuary 2018 | v10.0.1
+# Th, 15 February 2018 | v10.2.1
+
+Fix subdomains' `StaticEmbedded` & `StaticWeb` not found errors, as reported by [@speedwheel](https://github.com/speedwheel) via [facebook page's chat](https://facebook.com/iris.framework).
+
+# Th, 08 February 2018 | v10.2.0
+
+A new minor version family because it contains a **BREAKING CHANGE** and a new `Party#Reset` function.
+
+### Party#Done behavior change & new Party#DoneGlobal introduced
+
+As correctly pointed out by @likakuli at https://github.com/kataras/iris/issues/901, the old `Done` registered
+handlers globally instead of party's and its children routes, this was not by accident because `Done` was introduced
+before the `UseGlobal` idea and it didn't change for the shake of stability. Now it's time to move on, the new `Done` should be called before the routes that they care about those done handlers and the **new** `DoneGlobal` works like the old `Done`; order doesn't matter and it appends those done handlers
+to the current registered routes and the future, globally (to all subdomains, parties every route in the Application).
+
+The [routing/writing-a-middleware](_examples/routing/writing-a-middleware) examples are updated, read those to understand what's going on, although if you used iris before and you know the vocabulary we use you don't have to, the `DoneGlobal` and `Done` are clearly separated.
+
+### Party#Reset
+
+A new `Party#Reset()` function introduced in order to be able to clear parent's Party's begin and done handlers that are registered via `Use` and `Done` at a previous state, nothing crazy about this, it just clears the `middleware` and `doneHandlers` of the current Party instance, see `core/router#APIBuilder` for more.
+
+### Update your codebase
+
+Just replace all existing `.Done(` with `.DoneGlobal(` using a rich code editor (like the [VSCode](https://marketplace.visualstudio.com/items?itemName=kataras2006.iris)) which supports `find and replace all` and you're ready to Go:)
+
+# Tu, 06 February 2018 | v10.1.0
+
+New Features:
+
+- Multi-Level subdomain redirect helper, you can find an example [here](https://github.com/kataras/iris/blob/master/_examples/subdomains/redirect/main.go)
+- Cache middleware which makes use of the `304` status code, request fires from client to server but server respond with a status code, client is responsible to render the cached, you can find an example [here](https://github.com/kataras/iris/blob/master/_examples/cache/client-side/main.go)
+- `websocket/Connection#IsJoined(roomName string)` new method to check if a user is joined to a room. An un-joined connections cannot send messages, this check is optionally.
+
+More:
+
+- update vendor/golang/crypto package to its latest version again, they have a lot of fixes there, as you know we're always following the dependencies for any fixes and meanful updates.
+- [don't force-set content type on gzip response writer's WriteString and Writef if already there](https://github.com/kataras/iris/commit/af79aad11932f1a4fcbf7ebe28274b96675d0000)
+- [new: add websocket/Connection#IsJoined](https://github.com/kataras/iris/commit/cb9e30948c8f1dd099f5168218d110765989992e)
+- [fix #897](https://github.com/kataras/iris/commit/21cb572b638e82711910745cfae3c52d836f01f9)
+- [add context#StatusCodeNotSuccessful variable for customize even the rfc2616-sec10](https://github.com/kataras/iris/commit/c56b7a3f04d953a264dfff15dadd2b4407d62a6f)
+- [fix example comment on routing/dynamic-path/main.go#L101](https://github.com/kataras/iris/commit/0fbf1d45f7893cb1393759b7362444f3d381d182)
+- [new: Cache Middleware `iris.Cache304`](https://github.com/kataras/iris/commit/1722355870174cecbc12f7beff8514b058b3b912)
+- [fix comment on csrf example](https://github.com/kataras/iris/commit/a39e3d7d6cf528e51e6c7e32a884a8d9f2fadc0b)
+- [un-default the Configuration.RemoteAddrHeaders](https://github.com/kataras/iris/commit/47108dc5a147a8b23de61bef86fe9327f0781396)
+- [add vscode extension link and badge](https://github.com/kataras/iris/commit/6f594c0a7c641cc98bd683163fffbf5fa5fc8de6)
+- [add an `app.View` example for parsing and writing templates outside of the HTTP (similar to context#View)](_examples/view/write-to)
+- [new: Support multi-level subdomains redirect](https://github.com/kataras/iris/commit/12d7df113e611a75088c2a72774dab749d2c7685).
+
+# Tu, 16 January 2018 | v10.0.2
+
+## Security | `iris.AutoTLS`
+
+**Every server should be upgraded to this version**, it contains fixes for the _tls-sni challenge disabled_ some days ago by letsencrypt.org which caused almost every https-enabled golang server to be unable to be functional, therefore support for the _http-01 challenge type_ added. Now the server is testing all available letsencrypt challenges.
+
+Read more at:
+
+- https://letsencrypt.status.io/pages/incident/55957a99e800baa4470002da/5a55777ed9a9c1024c00b241
+- https://github.com/golang/crypto/commit/13931e22f9e72ea58bb73048bc752b48c6d4d4ac
+
+# Mo, 15 January 2018 | v10.0.1
 
 Not any serious problems were found to be resolved here but one, the first one which is important for devs that used the [cache](cache) package.
 
@@ -25,6 +84,7 @@ Not any serious problems were found to be resolved here but one, the first one w
 - merge PR https://github.com/kataras/iris/pull/862
 - do not allow concurrent access to the `ExecuteWriter -> Load` when `view#Engine##Reload` was true, as requested at https://github.com/kataras/iris/issues/872
 - badge for open-source projects powered by Iris, learn how to add that badge to your open-source project at [FAQ.md](FAQ.md) file
+- upstream update for `golang/crypto` to apply the fix about the [tls-sni challenge disabled](https://letsencrypt.status.io/pages/incident/55957a99e800baa4470002da/5a55777ed9a9c1024c00b241) https://github.com/golang/crypto/commit/13931e22f9e72ea58bb73048bc752b48c6d4d4ac (**relative to iris.AutoTLS**)
 
 ## New Backers
 
@@ -45,7 +105,7 @@ Not any serious problems were found to be resolved here but one, the first one w
 1. [A Todo MVC Application using Iris and Vue.js](https://hackernoon.com/a-todo-mvc-application-using-iris-and-vue-js-5019ff870064)
 2. [A Hasura starter project with a ready to deploy Golang hello-world web app with IRIS](bit.ly/2lmKaAZ)
 
-# Mo, 01 Jenuary 2018 | v10.0.0
+# Mo, 01 January 2018 | v10.0.0
 
 We must thanks [Mrs. Diana](https://www.instagram.com/merry.dii/) for our awesome new [logo](https://iris-go.com/images/icon.svg)!
 

@@ -114,12 +114,12 @@ type WrapperFunc func(w http.ResponseWriter, r *http.Request, firstNextIsTheRout
 //
 // Before build.
 func (router *Router) WrapRouter(wrapperFunc WrapperFunc) {
-	router.mu.Lock()
-	defer router.mu.Unlock()
-
 	if wrapperFunc == nil {
 		return
 	}
+
+	router.mu.Lock()
+	defer router.mu.Unlock()
 
 	if router.wrapperFunc != nil {
 		// wrap into one function, from bottom to top, end to begin.
@@ -145,6 +145,11 @@ func (router *Router) ServeHTTPC(ctx context.Context) {
 
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	router.mainHandler(w, r)
+}
+
+// RouteExists checks if a route exists
+func (router *Router) RouteExists(method, path string, ctx context.Context) bool {
+	return router.requestHandler.RouteExists(method, path, ctx)
 }
 
 type wrapper struct {

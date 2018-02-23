@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/boltdb/bolt"
+	"github.com/coreos/bbolt"
 	"github.com/teamlint/golog"
 	"github.com/teamlint/iris/core/errors"
 	"github.com/teamlint/iris/sessions"
