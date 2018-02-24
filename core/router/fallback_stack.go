@@ -1,6 +1,6 @@
 package router
 
-import "github.com/kataras/iris/context"
+import "github.com/teamlint/iris/context"
 
 // FallbackStack is a stack (with LIFO calling order) for fallback handlers
 // A fallback handler(s) is(are) called from Fallback stack

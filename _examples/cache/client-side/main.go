@@ -8,7 +8,7 @@ package main
 import (
 	"time"
 
-	"github.com/kataras/iris"
+	"github.com/teamlint/iris"
 )
 
 const refreshEvery = 10 * time.Second
