@@ -22,8 +22,8 @@ type RequestHandler interface {
 	HandleRequest(context.Context)
 	// Build  should builds the handler, it's being called on router's BuildRouter.
 	Build(provider RoutesProvider) error
-	// RouteExists checks if a route exists
-	RouteExists(method, path string, ctx context.Context) bool
+	// RouteExists reports whether a particular route exists.
+	RouteExists(ctx context.Context, method, path string) bool
 }
 
 type tree struct {
@@ -35,14 +35,8 @@ type tree struct {
 }
 
 type routerHandler struct {
-	trees         []*tree
-	hosts         bool // true if at least one route contains a Subdomain.
-	fallbackStack *FallbackStack
-	// on build: true if fallbackStack.Size() > 0,
-	// reduces the checks because fallbackStack is NEVER nil (api_builder.go always initializes it).
-	// If re-checked needed (serve-time fallback handler added)
-	// then a re-build/refresh of the application's router is necessary, as with every handler.
-	hasFallbackHandlers bool
+	trees []*tree
+	hosts bool // true if at least one route contains a Subdomain.
 }
 
 var _ RequestHandler = &routerHandler{}
@@ -90,15 +84,11 @@ func NewDefaultHandler() RequestHandler {
 type RoutesProvider interface { // api builder
 	GetRoutes() []*Route
 	GetRoute(routeName string) *Route
-
-	GetFallBackStack() *FallbackStack
 }
 
 func (h *routerHandler) Build(provider RoutesProvider) error {
 	registeredRoutes := provider.GetRoutes()
 	h.trees = h.trees[0:0] // reset, inneed when rebuilding.
-	h.fallbackStack = provider.GetFallBackStack()
-	h.hasFallbackHandlers = h.fallbackStack.Size() > 0
 
 	// sort, subdomains goes first.
 	sort.Slice(registeredRoutes, func(i, j int) bool {
@@ -171,6 +161,14 @@ func (h *routerHandler) HandleRequest(ctx context.Context) {
 			path = path[:len(path)-1]
 			r.URL.Path = path
 			url := r.URL.String()
+
+			// Fixes https://github.com/kataras/iris/issues/921
+			// This is caused for security reasons, imagine a payment shop,
+			// you can't just permantly redirect a POST request, so just 307 (RFC 7231, 6.4.7).
+			if method == http.MethodPost || method == http.MethodPut {
+				ctx.Redirect(url, http.StatusTemporaryRedirect)
+				return
+			}
 
 			ctx.Redirect(url, http.StatusMovedPermanently)
 
@@ -254,16 +252,12 @@ func (h *routerHandler) HandleRequest(ctx context.Context) {
 		}
 	}
 
-	if h.hasFallbackHandlers {
-		ctx.Do(h.fallbackStack.List())
-		return
-	}
-
 	ctx.StatusCode(http.StatusNotFound)
 }
 
-// RouteExists checks if a route exists
-func (h *routerHandler) RouteExists(method, path string, ctx context.Context) bool {
+// RouteExists reports whether a particular route exists
+// It will search from the current subdomain of context's host, if not inside the root domain.
+func (h *routerHandler) RouteExists(ctx context.Context, method, path string) bool {
 	for i := range h.trees {
 		t := h.trees[i]
 		if method != t.Method {

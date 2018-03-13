@@ -48,6 +48,8 @@ type (
 	//
 	// Note: This is totally optionally, the default decoders
 	// for ReadJSON is the encoding/json and for ReadXML is the encoding/xml.
+	//
+	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-custom-per-type/main.go
 	BodyDecoder interface {
 		Decode(data []byte) error
 	}
@@ -61,6 +63,8 @@ type (
 	// UnmarshalerFunc a shortcut for the Unmarshaler interface
 	//
 	// See 'Unmarshaler' and 'BodyDecoder' for more.
+	//
+	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-custom-via-unmarshaler/main.go
 	UnmarshalerFunc func(data []byte, outPtr interface{}) error
 )
 
@@ -563,6 +567,8 @@ type Context interface {
 	//
 	// The default form's memory maximum size is 32MB, it can be changed by the
 	//  `iris#WithPostMaxMemory` configurator at main configuration passed on `app.Run`'s second argument.
+	//
+	// Example: https://github.com/kataras/iris/tree/master/_examples/http_request/upload-file
 	FormFile(key string) (multipart.File, *multipart.FileHeader, error)
 	// UploadFormFiles uploads any received file(s) from the client
 	// to the system physical location "destDirectory".
@@ -587,6 +593,9 @@ type Context interface {
 	//  `iris#WithPostMaxMemory` configurator at main configuration passed on `app.Run`'s second argument.
 	//
 	// See `FormFile` to a more controlled to receive a file.
+	//
+	//
+	// Example: https://github.com/kataras/iris/tree/master/_examples/http_request/upload-files
 	UploadFormFiles(destDirectory string, before ...func(Context, *multipart.FileHeader)) (n int64, err error)
 
 	//  +------------------------------------------------------------+
@@ -611,13 +620,21 @@ type Context interface {
 
 	// UnmarshalBody reads the request's body and binds it to a value or pointer of any type.
 	// Examples of usage: context.ReadJSON, context.ReadXML.
+	//
+	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-custom-via-unmarshaler/main.go
 	UnmarshalBody(outPtr interface{}, unmarshaler Unmarshaler) error
 	// ReadJSON reads JSON from request's body and binds it to a pointer of a value of any json-valid type.
+	//
+	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-json/main.go
 	ReadJSON(jsonObjectPtr interface{}) error
 	// ReadXML reads XML from request's body and binds it to a pointer of a value of any xml-valid type.
+	//
+	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-xml/main.go
 	ReadXML(xmlObjectPtr interface{}) error
 	// ReadForm binds the formObject  with the form data
 	// it supports any kind of struct.
+	//
+	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-form/main.go
 	ReadForm(formObjectPtr interface{}) error
 
 	//  +------------------------------------------------------------+
@@ -893,7 +910,7 @@ type Context interface {
 	// TransactionsSkipped returns true if the transactions skipped or canceled at all.
 	TransactionsSkipped() bool
 
-	// Exec calls the framewrok's ServeCtx
+	// Exec calls the `context/Application#ServeCtx`
 	// based on this context but with a changed method and path
 	// like it was requested by the user, but it is not.
 	//
@@ -916,10 +933,11 @@ type Context interface {
 	// Context's Values and the Session are kept in order to be able to communicate via the result route.
 	//
 	// It's for extreme use cases, 99% of the times will never be useful for you.
-	Exec(method string, path string)
+	Exec(method, path string)
 
-	// RouteExists checks if a route exists
-	RouteExists(method string, path string) bool
+	// RouteExists reports whether a particular route exists
+	// It will search from the current subdomain of context's host, if not inside the root domain.
+	RouteExists(method, path string) bool
 
 	// Application returns the iris app instance which belongs to this context.
 	// Worth to notice that this function returns an interface
@@ -1932,6 +1950,8 @@ func (ctx *context) PostValues(name string) []string {
 //
 // The default form's memory maximum size is 32MB, it can be changed by the
 // `iris#WithPostMaxMemory` configurator at main configuration passed on `app.Run`'s second argument.
+//
+// Example: https://github.com/kataras/iris/tree/master/_examples/http_request/upload-file
 func (ctx *context) FormFile(key string) (multipart.File, *multipart.FileHeader, error) {
 	// we don't have access to see if the request is body stream
 	// and then the ParseMultipartForm can be useless
@@ -1965,6 +1985,8 @@ func (ctx *context) FormFile(key string) (multipart.File, *multipart.FileHeader,
 //  `iris#WithPostMaxMemory` configurator at main configuration passed on `app.Run`'s second argument.
 //
 // See `FormFile` to a more controlled to receive a file.
+//
+// Example: https://github.com/kataras/iris/tree/master/_examples/http_request/upload-files
 func (ctx *context) UploadFormFiles(destDirectory string, before ...func(Context, *multipart.FileHeader)) (n int64, err error) {
 	err = ctx.request.ParseMultipartForm(ctx.Application().ConfigurationReadOnly().GetPostMaxMemory())
 	if err != nil {
@@ -2056,6 +2078,8 @@ func (ctx *context) SetMaxRequestBodySize(limitOverBytes int64) {
 
 // UnmarshalBody reads the request's body and binds it to a value or pointer of any type
 // Examples of usage: context.ReadJSON, context.ReadXML.
+//
+// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-custom-via-unmarshaler/main.go
 func (ctx *context) UnmarshalBody(outPtr interface{}, unmarshaler Unmarshaler) error {
 	if ctx.request.Body == nil {
 		return errors.New("unmarshal: empty body")
@@ -2096,6 +2120,8 @@ func (ctx *context) shouldOptimize() bool {
 }
 
 // ReadJSON reads JSON from request's body and binds it to a value of any json-valid type.
+//
+// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-json/main.go
 func (ctx *context) ReadJSON(jsonObject interface{}) error {
 	var unmarshaler = json.Unmarshal
 	if ctx.shouldOptimize() {
@@ -2105,6 +2131,8 @@ func (ctx *context) ReadJSON(jsonObject interface{}) error {
 }
 
 // ReadXML reads XML from request's body and binds it to a value of any xml-valid type.
+//
+// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-xml/main.go
 func (ctx *context) ReadXML(xmlObject interface{}) error {
 	return ctx.UnmarshalBody(xmlObject, UnmarshalerFunc(xml.Unmarshal))
 }
@@ -2115,6 +2143,8 @@ var (
 
 // ReadForm binds the formObject  with the form data
 // it supports any kind of struct.
+//
+// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-form/main.go
 func (ctx *context) ReadForm(formObject interface{}) error {
 	values := ctx.FormValues()
 	if values == nil {
@@ -3135,53 +3165,57 @@ func (ctx *context) TransactionsSkipped() bool {
 //
 // It's for extreme use cases, 99% of the times will never be useful for you.
 func (ctx *context) Exec(method string, path string) {
-	if path != "" {
-		if method == "" {
-			method = "GET"
-		}
-
-		// backup the handlers
-		backupHandlers := ctx.Handlers()[0:]
-		backupPos := ctx.HandlerIndex(-1)
-
-		// backup the request path information
-		backupPath := ctx.Path()
-		backupMethod := ctx.Method()
-		// don't backupValues := ctx.Values().ReadOnly()
-
-		// [sessions stays]
-		// [values stays]
-		// reset handlers
-		ctx.SetHandlers(nil)
-
-		req := ctx.Request()
-		// set the request to be align with the 'againstRequestPath'
-		req.RequestURI = path
-		req.URL.Path = path
-		req.Method = method
-		// execute the route from the (internal) context router
-		// this way we keep the sessions and the values
-		ctx.Application().ServeHTTPC(ctx)
-
-		// set back the old handlers and the last known index
-		ctx.SetHandlers(backupHandlers)
-		ctx.HandlerIndex(backupPos)
-		// set the request back to its previous state
-		req.RequestURI = backupPath
-		req.URL.Path = backupPath
-		req.Method = backupMethod
-
-		// don't fill the values in order to be able to communicate from and to.
-		// // fill the values as they were before
-		// backupValues.Visit(func(key string, value interface{}) {
-		// 	ctx.Values().Set(key, value)
-		// })
+	if path == "" {
+		return
 	}
+
+	if method == "" {
+		method = "GET"
+	}
+
+	// backup the handlers
+	backupHandlers := ctx.Handlers()[0:]
+	backupPos := ctx.HandlerIndex(-1)
+
+	// backup the request path information
+	backupPath := ctx.Path()
+	backupMethod := ctx.Method()
+	// don't backupValues := ctx.Values().ReadOnly()
+
+	// [values stays]
+	// reset handlers
+	ctx.SetHandlers(nil)
+
+	req := ctx.Request()
+	// set the request to be align with the 'againstRequestPath'
+	req.RequestURI = path
+	req.URL.Path = path
+	req.Method = method
+	req.Host = req.Host
+
+	// execute the route from the (internal) context router
+	// this way we keep the sessions and the values
+	ctx.Application().ServeHTTPC(ctx)
+
+	// set back the old handlers and the last known index
+	ctx.SetHandlers(backupHandlers)
+	ctx.HandlerIndex(backupPos)
+	// set the request back to its previous state
+	req.RequestURI = backupPath
+	req.URL.Path = backupPath
+	req.Method = backupMethod
+
+	// don't fill the values in order to be able to communicate from and to.
+	// // fill the values as they were before
+	// backupValues.Visit(func(key string, value interface{}) {
+	// 	ctx.Values().Set(key, value)
+	// })
 }
 
-// RouteExists checks if a route exists
-func (ctx *context) RouteExists(method string, path string) bool {
-	return ctx.Application().RouteExists(method, path, ctx)
+// RouteExists reports whether a particular route exists
+// It will search from the current subdomain of context's host, if not inside the root domain.
+func (ctx *context) RouteExists(method, path string) bool {
+	return ctx.Application().RouteExists(ctx, method, path)
 }
 
 // Application returns the iris app instance which belongs to this context.

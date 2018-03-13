@@ -43,10 +43,6 @@
   name = "github.com/teamlint/golog"
 
 [[constraint]]
-  branch = "master"
-  name = "github.com/teamlint/survey"
-
-[[constraint]]
   name = "github.com/klauspost/compress"
   version = "1.2.1"
 
