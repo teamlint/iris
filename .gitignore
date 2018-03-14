@@ -1,3 +1,6 @@
 .vscode
 _authortools
 /_examples/**/node_modules
+*.cache
+*.nuget.g.*
+obj/
