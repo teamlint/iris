@@ -42,6 +42,14 @@ func StaticEmbeddedHandler(vdir string, assetFn func(name string) ([]byte, error
 		if vdir[0] == '/' || vdir[0] == os.PathSeparator { // second check for /something, (or ./something if we had dot on 0 it will be removed
 			vdir = vdir[1:]
 		}
+
+		// check for trailing slashes because new users may be do that by mistake
+		// although all examples are showing the correct way but you never know
+		// i.e "./assets/" is not correct, if was inside "./assets".
+		// remove last "/".
+		if trailingSlashIdx := len(vdir) - 1; vdir[trailingSlashIdx] == '/' {
+			vdir = vdir[0:trailingSlashIdx]
+		}
 	}
 
 	// collect the names we are care for,
@@ -60,7 +68,7 @@ func StaticEmbeddedHandler(vdir string, assetFn func(name string) ([]byte, error
 		names = append(names, path)
 	}
 
-	modtime := time.Now()
+	// modtime := time.Now()
 	h := func(ctx context.Context) {
 
 		reqPath := strings.TrimPrefix(ctx.Request().URL.Path, "/"+vdir)
@@ -92,7 +100,7 @@ func StaticEmbeddedHandler(vdir string, assetFn func(name string) ([]byte, error
 			}
 
 			ctx.ContentType(cType)
-			if _, err := ctx.WriteWithExpiration(buf, modtime); err != nil {
+			if _, err := ctx.Write(buf); err != nil {
 				ctx.StatusCode(http.StatusInternalServerError)
 				ctx.StopExecution()
 			}
@@ -509,8 +517,8 @@ func serveContent(ctx context.Context, name string, modtime time.Time, sizeFunc 
 			}()
 		}
 		ctx.Header("Accept-Ranges", "bytes")
-		if ctx.ResponseWriter().Header().Get(contentEncodingHeaderKey) == "" {
-			ctx.Header(contentLengthHeaderKey, strconv.FormatInt(sendSize, 10))
+		if ctx.ResponseWriter().Header().Get(context.ContentEncodingHeaderKey) == "" {
+			ctx.Header(context.ContentLengthHeaderKey, strconv.FormatInt(sendSize, 10))
 		}
 	}
 
@@ -829,7 +837,7 @@ func serveFile(ctx context.Context, fs http.FileSystem, name string, redirect bo
 
 	// try to find and send the correct content type based on the filename
 	// and the binary data inside "f".
-	// detectOrWriteContentType(ctx, d.Name(), f)
+	detectOrWriteContentType(ctx, d.Name(), f)
 
 	return "", http.StatusOK
 }

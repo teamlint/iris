@@ -549,23 +549,6 @@ func (api *APIBuilder) Any(relativePath string, handlers ...context.Handler) (ro
 	return
 }
 
-// StaticCacheDuration expiration duration for INACTIVE file handlers, it's the only one global configuration
-// which can be changed.
-var StaticCacheDuration = 20 * time.Second
-
-const (
-	lastModifiedHeaderKey       = "Last-Modified"
-	ifModifiedSinceHeaderKey    = "If-Modified-Since"
-	contentDispositionHeaderKey = "Content-Disposition"
-	cacheControlHeaderKey       = "Cache-Control"
-	contentEncodingHeaderKey    = "Content-Encoding"
-	acceptEncodingHeaderKey     = "Accept-Encoding"
-	// contentLengthHeaderKey represents the header["Content-Length"]
-	contentLengthHeaderKey = "Content-Length"
-	contentTypeHeaderKey   = "Content-Type"
-	varyHeaderKey          = "Vary"
-)
-
 func (api *APIBuilder) registerResourceRoute(reqPath string, h context.Handler) *Route {
 	api.Head(reqPath, h)
 	return api.Get(reqPath, h)
@@ -629,7 +612,7 @@ func (api *APIBuilder) StaticContent(reqPath string, cType string, content []byt
 
 // StaticEmbedded  used when files are distributed inside the app executable, using go-bindata mostly
 // First parameter is the request path, the path which the files in the vdir will be served to, for example "/static"
-// Second parameter is the (virtual) directory path, for example "./assets"
+// Second parameter is the (virtual) directory path, for example "./assets" (no trailing slash),
 // Third parameter is the Asset function
 // Forth parameter is the AssetNames function.
 //
@@ -646,6 +629,10 @@ func (api *APIBuilder) StaticEmbedded(requestPath string, vdir string, assetFn f
 // it sends gzip response only, so the client must be aware that is expecting a gzip body
 // (browsers and most modern browsers do that, so you can use it without fair).
 //
+// First parameter is the request path, the path which the files in the vdir will be served to, for example "/static"
+// Second parameter is the (virtual) directory path, for example "./assets" (no trailing slash),
+// Third parameter is the GzipAsset function
+// Forth parameter is the GzipAssetNames function.
 //
 // Example: https://github.com/kataras/iris/tree/master/_examples/file-server/embedding-gziped-files-into-app
 func (api *APIBuilder) StaticEmbeddedGzip(requestPath string, vdir string, gzipAssetFn func(name string) ([]byte, error), gzipNamesFn func() []string) *Route {
