@@ -16,9 +16,14 @@ func main() {
 	// sure that your code is aligned with the Iris' MVC Architecture.
 	app.Logger().SetLevel("debug")
 
-	app.RegisterView(iris.HTML("./views", ".html").Layout("shared/layout.html"))
+	tmp := iris.HTML("./views", ".html").Layout("shared/layout.html")
+	tmp.Reload(true)
+	app.RegisterView(tmp)
 
 	app.StaticWeb("/public", "./public")
+	app.OnErrorCode(400, func(ctx iris.Context) {
+		ctx.Writef("错误截获,错误码:%v, 错误消息:%v", ctx.Values().Get("Title"), ctx.Values().Get("Message"))
+	})
 
 	mvc.Configure(app, configureMVC)
 
@@ -27,7 +32,7 @@ func main() {
 	// http://localhost:8080/user/me
 	// http://localhost:8080/user/logout
 	// http://localhost:8080/user/1
-	app.Run(iris.Addr(":8080"), configure)
+	app.Run(iris.Addr(":8082"), configure)
 }
 
 func configureMVC(app *mvc.Application) {

@@ -6,6 +6,11 @@ go:
   - "go1.9"
   - "go1.10"
 go_import_path: github.com/teamlint/iris
+# we disable test caching via GOCACHE=off
+env:
+  global:
+    - GOCACHE=off
+>>>>>>> upstream/master
 install:
   - go get ./... # for iris-contrib/httpexpect, kataras/golog
 script:

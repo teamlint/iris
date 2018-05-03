@@ -23,7 +23,7 @@ type AuthController struct {
 	// context is auto-binded if struct depends on this,
 	// in this controller we don't we do everything with mvc-style,
 	// and that's neither the 30% of its features.
-	// Ctx iris.Context
+	Ctx iris.Context
 
 	Source  *DataSource
 	Session *sessions.Session
@@ -42,12 +42,48 @@ func (c *AuthController) BeginRequest(ctx iris.Context) {
 // in order to be tell iris to call the `BeginRequest` before the main method.
 func (c *AuthController) EndRequest(ctx iris.Context) {}
 
-func (c *AuthController) fireError(err error) mvc.View {
-	return mvc.View{
-		Code: iris.StatusBadRequest,
-		Name: "shared/error.html",
-		Data: iris.Map{"Title": "User Error", "Message": strings.ToUpper(err.Error())},
+type Resp struct {
+	Success   bool
+	Name      string
+	Content   string
+	Data      interface{}
+	MVCResult mvc.Result `json:"-"`
+}
+
+func (r Resp) Dispatch(ctx iris.Context) {
+	if !r.Success {
+		ctx.StatusCode(iris.StatusBadRequest)
 	}
+	if ctx.IsAjax() {
+		ctx.JSON(r)
+	} else {
+		ctx.Values().Set("Title", "通用错误处理")
+		ctx.Values().Set("Message", r.Content)
+		if r.MVCResult != nil {
+			r.MVCResult.Dispatch(ctx)
+		}
+		// ctx.EndRequest()
+		// ctx.View("shared/error.html")
+		// return mvc.View{
+		// 	Code: iris.StatusBadRequest,
+		// 	Name: "shared/error.html",
+		// 	Data: iris.Map{"Title": "User Error", "Message": strings.ToUpper(err.Error())},
+		// }
+	}
+}
+func (c *AuthController) fireError(err error) mvc.Result {
+	// if c.Ctx.IsAjax() {
+	if err != nil {
+		return &Resp{Name: "请求错误", Content: err.Error(), Data: err}
+	}
+	return Resp{Success: true, Name: "请求成功", Content: err.Error(), Data: err}
+
+	// }
+	// return mvc.View{
+	// 	Code: iris.StatusBadRequest,
+	// 	Name: "shared/error.html",
+	// 	Data: iris.Map{"Title": "User Error", "Message": strings.ToUpper(err.Error())},
+	// }
 }
 
 func (c *AuthController) redirectTo(id int64) mvc.Response {
@@ -88,7 +124,7 @@ func (c *AuthController) verify(username, password string) (user Model, err erro
 	u, found := c.Source.GetByUsername(username)
 	if !found {
 		// if user found with that username not found at all.
-		return user, errors.New("user with that username does not exist")
+		return user, errors.New("用户不存在 user with that username does not exist")
 	}
 
 	if ok, err := ValidatePassword(password, u.HashedPassword); err != nil || !ok {

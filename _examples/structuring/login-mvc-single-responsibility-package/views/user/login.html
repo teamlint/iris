@@ -7,5 +7,24 @@
         <input type="password" placeholder="Enter Password" name="password" required>
 
         <button type="submit">Login</button>
+        <div id="msg">初始数据</div>
     </div>
 </form>
+<script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+    /*
+    $(function(){
+        console.log("jquery init.");
+        $('#msg').text("ajax加载数据中...");
+        $.post("/user/login",{username:"aa",password:"abcd"})
+        .success(function(data){
+            console.log("success:"+data)
+            $('#msg').text(data);
+        }).error(function(xhr){
+            console.log("err:"+xhr.responseJSON.Content)
+            $('#msg').text("出错了:"+xhr.responseJSON.Content);
+        });
+        //alert('aaa');
+    })
+    */
+</script>

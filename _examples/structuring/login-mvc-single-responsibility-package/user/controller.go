@@ -104,12 +104,20 @@ func (c *Controller) PostLogin(form formValue) mvc.Result {
 	)
 
 	user, err := c.verify(username, password)
+	// if err != nil {
+	// 	return c.fireError(err)
+	// }
 	if err != nil {
-		return c.fireError(err)
+		return Resp{Name: "请求失败", Content: err.Error(), Data: user}
 	}
-
 	c.Session.Set(sessionIDKey, user.ID)
-	return pathMyProfile
+	return Resp{Success: true, Name: "请求成功", Content: "用户信息", Data: user, MVCResult: c.GetMe()}
+	// if c.Ctx.IsAjax() {
+	// 	return user
+	// }
+
+	// c.Session.Set(sessionIDKey, user.ID)
+	// return pathMyProfile
 }
 
 // AnyLogout handles any method on path /user/logout.

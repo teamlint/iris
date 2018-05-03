@@ -6,16 +6,14 @@ Iris sessions manager lives on its own [kataras/iris/sessions](https://github.co
 
 Some trivial examples,
 
-- [Overview](https://github.com/teamlint/iris/blob/master/_examples/sessions/overview/main.go)
-- [Standalone](https://github.com/teamlint/iris/blob/master/_examples/sessions/standalone/main.go)
-- [Secure Cookie](https://github.com/teamlint/iris/blob/master/_examples/sessions/securecookie/main.go)
-- [Flash Messages](https://github.com/teamlint/iris/blob/master/_examples/sessions/flash-messages/main.go)
-- [Databases](https://github.com/teamlint/iris/tree/master/_examples/sessions/database)
-    * [BadgerDB](https://github.com/teamlint/iris/blob/master/_examples/sessions/database/badger/main.go) **fastest**
-    * [File](https://github.com/teamlint/iris/blob/master/_examples/sessions/database/file/main.go)
-    * [BoltDB](https://github.com/teamlint/iris/blob/master/_examples/sessions/database/boltdb/main.go)
-    * [LevelDB](https://github.com/teamlint/iris/blob/master/_examples/sessions/database/leveldb/main.go)
-    * [Redis](https://github.com/teamlint/iris/blob/master/_examples/sessions/database/redis/main.go)
+- [Overview](https://github.com/kataras/iris/blob/master/_examples/sessions/overview/main.go)
+- [Standalone](https://github.com/kataras/iris/blob/master/_examples/sessions/standalone/main.go)
+- [Secure Cookie](https://github.com/kataras/iris/blob/master/_examples/sessions/securecookie/main.go)
+- [Flash Messages](https://github.com/kataras/iris/blob/master/_examples/sessions/flash-messages/main.go)
+- [Databases](https://github.com/kataras/iris/tree/master/_examples/sessions/database)
+    * [Badger](https://github.com/kataras/iris/blob/master/_examples/sessions/database/badger/main.go) **fastest**
+    * [BoltDB](https://github.com/kataras/iris/blob/master/_examples/sessions/database/boltdb/main.go)
+    * [Redis](https://github.com/kataras/iris/blob/master/_examples/sessions/database/redis/main.go)
 
 ## Overview
 
