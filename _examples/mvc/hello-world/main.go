@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/teamlint/iris"
 	"github.com/teamlint/iris/mvc"
 
@@ -45,12 +47,13 @@ func newApp() *iris.Application {
 
 func main() {
 	app := newApp()
+	app.Logger().SetLevel("debug")
 
 	// http://localhost:8080
 	// http://localhost:8080/ping
 	// http://localhost:8080/hello
 	// http://localhost:8080/custom_path
-	app.Run(iris.Addr(":8080"))
+	app.Run(iris.Addr(":8081"))
 }
 
 // ExampleController serves the "/", "/ping" and "/hello".
@@ -79,6 +82,13 @@ func (c *ExampleController) GetPing() string {
 func (c *ExampleController) GetHello() interface{} {
 	return map[string]string{"message": "Hello Iris!"}
 }
+func (c *ExampleController) GetRouteByPidByClubBy(pid string, page int, club string) interface{} {
+	id := "abc"
+	age := 23
+	id = pid
+	age = page
+	return fmt.Sprintf("多路由参数测试: id=%v,age=%v,club=%v", id, age, club)
+}
 
 // BeforeActivation called once, before the controller adapted to the main application
 // and of course before the server ran.
@@ -91,7 +101,7 @@ func (c *ExampleController) BeforeActivation(b mvc.BeforeActivation) {
 		ctx.Application().Logger().Warnf("Inside /custom_path")
 		ctx.Next()
 	}
-	b.Handle("GET", "/custom_path", "CustomHandlerWithoutFollowingTheNamingGuide", anyMiddlewareHere)
+	b.Handle("GET", "/custom_path/{pid}/id/{id}", "CustomHandlerWithoutFollowingTheNamingGuide", anyMiddlewareHere)
 
 	// or even add a global middleware based on this controller's router,
 	// which in this example is the root "/":
@@ -101,8 +111,9 @@ func (c *ExampleController) BeforeActivation(b mvc.BeforeActivation) {
 // CustomHandlerWithoutFollowingTheNamingGuide serves
 // Method:   GET
 // Resource: http://localhost:8080/custom_path
-func (c *ExampleController) CustomHandlerWithoutFollowingTheNamingGuide() string {
-	return "hello from the custom handler without following the naming guide"
+func (c *ExampleController) CustomHandlerWithoutFollowingTheNamingGuide(ctx iris.Context) string {
+	params := fmt.Sprintf("route params: pid=%v,id=%v", ctx.Params().Get("pid"), ctx.Params().Get("id"))
+	return "hello from the custom handler without following the naming guide" + params
 }
 
 // GetUserBy serves
