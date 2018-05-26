@@ -23,6 +23,9 @@ type Application interface {
 	// Returns an error on failure, otherwise nil.
 	View(writer io.Writer, filename string, layout string, bindingData interface{}) error
 
+	// ViewResult executes and return the result of a template file.
+	ViewResult(filename string, layout string, bindingData interface{}) string
+
 	// ServeHTTPC is the internal router, it's visible because it can be used for advanced use cases,
 	// i.e: routing within a foreign context.
 	//

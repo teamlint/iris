@@ -15,6 +15,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -31,6 +32,26 @@ import (
 	"github.com/teamlint/iris/core/errors"
 	"github.com/teamlint/iris/core/memstore"
 )
+
+var timeFormat = []string{
+	"2006-01-02",
+	"2006-01-02 15:04:05",
+	time.ANSIC,
+	time.UnixDate,
+	time.RubyDate,
+	time.RFC822,
+	time.RFC822Z,
+	time.RFC850,
+	time.RFC1123,
+	time.RFC1123Z,
+	time.RFC3339,
+	time.RFC3339Nano,
+	time.Kitchen,
+	time.Stamp,
+	time.StampMilli,
+	time.StampMicro,
+	time.StampNano,
+}
 
 type (
 	// BodyDecoder is an interface which any struct can implement in order to customize the decode action
@@ -510,6 +531,11 @@ type Context interface {
 	//
 	// NOTE: A check for nil is necessary.
 	FormValues() map[string][]string
+
+	// FormMap returns the parsed form data, including both the URL
+	// field's query parameters and the POST or PUT form data.
+	// convertName => Convet form name "PostID" to "post_id"
+	FormMap(source interface{}) (map[string]interface{}, error)
 
 	// PostValueDefault returns the parsed form data from POST, PATCH,
 	// or PUT body parameters based on a "name".
@@ -1809,6 +1835,110 @@ func (ctx *context) FormValue(name string) string {
 func (ctx *context) FormValues() map[string][]string {
 	form, _ := ctx.form()
 	return form
+}
+
+// FormMap returns the parsed form data, including both the URL
+// field's query parameters and the POST or PUT form data.
+//
+func (ctx *context) FormMap(source interface{}) (map[string]interface{}, error) {
+	// readform  map
+	outMap := make(map[string]interface{})
+	err := ctx.ReadForm(source)
+	if err != nil {
+		return nil, err
+	}
+	// structs.FillMap(reflect.ValueOf(source).Elem().Interface(), outMap)
+	structs.FillMap(source, outMap)
+	formValues := ctx.FormValues()
+	for k, _ := range outMap {
+		if _, ok := formValues[k]; !ok { // if form field no found
+			delete(outMap, k)
+		}
+		/*
+			itemVal := reflect.ValueOf(v)
+			itemKind := itemVal.Kind()
+			switch itemKind {
+			case reflect.Map:
+				data := make([]string, 0)
+				attrKeys := itemVal.MapKeys()
+				for _, key := range attrKeys {
+					dk := key.Interface()
+					dv := itemVal.MapIndex(key).Interface()
+					data = append(data, fmt.Sprintf("%v:%v", dk, dv))
+				}
+				outMap[k] = strings.Join(data, ",")
+			case reflect.Array, reflect.Slice:
+				len := itemVal.Len()
+				data := make([]string, len)
+				for i := 0; i < len; i++ {
+					dv := itemVal.Index(i).Interface().(string)
+					if dv != "" {
+						data = append(data, dv)
+					}
+				}
+				outMap[k] = strings.Join(data, ",")
+			}
+		*/
+	}
+
+	return outMap, err
+}
+
+func kindProcess(field interface{}, v []string) (interface{}, error) {
+	typ := reflect.TypeOf(field)
+	switch typ.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		val, err := strconv.Atoi(v[0])
+		if err != nil {
+			return nil, errors.New("form map: the value of field \"%v\" should be a valid integer number").Format(v[0])
+		}
+		return val, nil
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		val, err := strconv.ParseUint(v[0], 10, 64)
+		if err != nil {
+			return nil, errors.New("form map: the value of field \"%v\" should be a valid unsigned integer number").Format(v[0])
+		}
+		return val, nil
+	case reflect.Float32, reflect.Float64:
+		val, err := strconv.ParseFloat(v[0], typ.Bits())
+		if err != nil {
+			return nil, errors.New("form map: the value of field \"%v\" should be a valid float number").Format(v[0])
+		}
+		return val, nil
+	case reflect.Bool:
+		var bval bool
+		switch strings.ToLower(v[0]) {
+		case "true", "on", "1":
+			bval = true
+		case "false", "off", "0":
+			bval = false
+		}
+		return bval, nil
+	case reflect.Struct:
+		switch field.(type) {
+		case time.Time:
+			var t time.Time
+			var err error
+			for _, layout := range timeFormat {
+				t, err = time.ParseInLocation(layout, v[0], time.Now().Location())
+				if err == nil {
+					break
+				}
+			}
+			if err != nil {
+				return nil, errors.New("form map: the value of field \"%v\" is not a valid datetime").Format(v[0])
+			}
+			return t, nil
+		default:
+			return nil, nil
+
+		}
+	case reflect.Interface:
+		return interface{}(v[0]), nil
+	// case reflect.Ptr:
+	default:
+		return strings.Join(v, ","), nil
+	}
 }
 
 // Form contains the parsed form data, including both the URL

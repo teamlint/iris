@@ -69,16 +69,16 @@ type DecodeCustomType struct {
 
 // Decoder the main to decode the values
 type Decoder struct {
-	main       reflect.Value
-	formValues url.Values
-	opts       *DecoderOptions
+	main       reflect.Value   // 结构体
+	formValues url.Values      // Form 值集合
+	opts       *DecoderOptions // 解码选项
 
-	curr   reflect.Value
-	value  string
-	values []string
+	curr   reflect.Value // 当前处理的结构体
+	value  string        // Form 指定键的单一值
+	values []string      // Form 指定键的值集合
 
-	path    string
-	field   string
+	path    string // Form 键
+	field   string // Form 键
 	bracket string
 	isKey   bool
 

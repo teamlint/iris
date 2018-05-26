@@ -2,6 +2,7 @@ package iris
 
 import (
 	// std packages
+	"bytes"
 	stdContext "context"
 	"io"
 	"log"
@@ -332,6 +333,15 @@ func (app *Application) View(writer io.Writer, filename string, layout string, b
 		app.Logger().Error(err)
 	}
 	return err
+}
+
+// ViewResult executes and return the result of a template file.
+func (app *Application) ViewResult(filename string, layout string, bindingData interface{}) string {
+	buf := new(bytes.Buffer)
+	if err := app.View(buf, filename, layout, bindingData); err != nil {
+		return ""
+	}
+	return buf.String()
 }
 
 var (
