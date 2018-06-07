@@ -31,7 +31,9 @@ func main() {
 		// same as navigating to "http://localhost:8080/invisible/iris" when /change has being invoked and route state changed
 		// from "offline" to "online"
 		ctx.Values().Set("from", "/execute") // values and session can be shared when calling Exec from a "foreign" context.
-		ctx.Exec("GET", "/invisible/iris")
+		ctx.Exec(iris.MethodNone, "/invisible/iris")
+		body := ctx.Recorder().Body()
+		ctx.WriteString("execute body:" + string(body))
 	})
 
 	app.Run(iris.Addr(":8080"))
