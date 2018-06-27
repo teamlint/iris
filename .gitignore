@@ -4,3 +4,4 @@ _authortools
 *.cache
 *.nuget.g.*
 obj/
+.directory
