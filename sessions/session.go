@@ -57,6 +57,11 @@ func (s *Session) Get(key string) interface{} {
 	return s.provider.db.Get(s.sid, key)
 }
 
+// Read returns a value based on its "key".
+func (s *Session) Read(key string, value interface{}) error {
+	return s.provider.db.Read(s.sid, key, value)
+}
+
 // when running on the session manager removes any 'old' flash messages.
 func (s *Session) runFlashGC() {
 	s.mu.Lock()

@@ -1,9 +1,11 @@
 package sessions
 
 import (
+	"reflect"
 	"sync"
 	"time"
 
+	"github.com/teamlint/iris/core/errors"
 	"github.com/teamlint/iris/core/memstore"
 )
 
@@ -25,6 +27,8 @@ type Database interface {
 	Set(sid string, lifetime LifeTime, key string, value interface{}, immutable bool)
 	// Get retrieves a session value based on the key.
 	Get(sid string, key string) interface{}
+	// Read retrieves a session value based on the key.
+	Read(sid string, key string, value interface{}) error
 	// Visit loops through all session keys and values.
 	Visit(sid string, cb func(key string, value interface{}))
 	// Len returns the length of the session's entries (keys).
@@ -36,6 +40,8 @@ type Database interface {
 	// Release destroys the session, it clears and removes the session entry,
 	// session manager will create a new session ID on the next request after this call.
 	Release(sid string)
+	// Close close database, it may not implement it at all.
+	Close() error
 }
 
 type mem struct {
@@ -69,6 +75,30 @@ func (s *mem) Get(sid string, key string) interface{} {
 	return v
 }
 
+func (s *mem) Read(sid string, key string, value interface{}) error {
+	curr := reflect.ValueOf(value)
+	if curr.Kind() != reflect.Ptr {
+		return errors.New("the value must be pointer type")
+	}
+	val := s.Get(sid, key)
+	if val == nil {
+		return errors.New("session '%s' key '%s' has no value").Format(sid, key)
+	}
+	oldVal := reflect.ValueOf(val)
+	if oldVal.Kind() == reflect.Ptr {
+		curr.Elem().Set(oldVal.Elem())
+	} else {
+		curr.Elem().Set(oldVal)
+	}
+	/*
+		golog.Debugf("mem read struct:%v", curr.Elem().Interface())
+		golog.Debugf("mem old val type:%T,value:%v", val, val)
+		golog.Debugf("mem new value type:%T,value:%v", value, value)
+		golog.Debugf("mem rv type:%v,rv value:%v", curr.Elem().Type(), curr.Elem().Interface())
+	*/
+	return nil
+}
+
 func (s *mem) Visit(sid string, cb func(key string, value interface{})) {
 	s.values[sid].Visit(cb)
 }
@@ -98,4 +128,8 @@ func (s *mem) Release(sid string) {
 	s.mu.Lock()
 	delete(s.values, sid)
 	s.mu.Unlock()
+}
+
+func (s *mem) Close() error {
+	return nil
 }

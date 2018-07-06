@@ -264,6 +264,31 @@ func (db *Database) Get(sid string, key string) (value interface{}) {
 	return
 }
 
+// Read retrieves a session value based on the key.
+func (db *Database) Read(sid string, key string, value interface{}) error {
+	err := db.Service.View(func(tx *bolt.Tx) error {
+		b := db.getBucketForSession(tx, sid)
+		if b == nil {
+			value = nil
+			return errors.New("session '%s' not found").Format(sid)
+		}
+
+		valueBytes := b.Get(makeKey(key))
+		if len(valueBytes) == 0 {
+			value = nil
+			return errors.New("session '%s' key '%s' has no value").Format(sid, key)
+		}
+
+		return sessions.DefaultTranscoder.Unmarshal(valueBytes, &value)
+	})
+
+	if err != nil {
+		golog.Debugf("session '%s' key '%s' not found", sid, key)
+	}
+
+	return err
+}
+
 // Visit loops through all session keys and values.
 func (db *Database) Visit(sid string, cb func(key string, value interface{})) {
 	db.Service.View(func(tx *bolt.Tx) error {

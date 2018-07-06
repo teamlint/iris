@@ -5,6 +5,8 @@ package routes
 import (
 	"errors"
 
+	"github.com/teamlint/iris"
+	"github.com/teamlint/iris/_examples/hero/overview/services"
 	"github.com/teamlint/iris/hero"
 )
 
@@ -37,14 +39,18 @@ var badName = hero.Response{Err: errBadName, Code: 400}
 // Demos:
 // curl -i http://localhost:8080/hello/iris
 // curl -i http://localhost:8080/hello/anything
-func HelloName(name string) hero.Result {
+func HelloName(service services.MovieService, name string) hero.Result {
 	if name != "iris" {
 		return badName
 	}
 
+	movie, _ := service.GetByID(1) // it will throw 404 if not found.
 	// return hero.Response{Text: "Hello " + name} OR:
 	return hero.View{
 		Name: "hello/name.html",
-		Data: name,
+		Data: iris.Map{
+			"Name":  name,
+			"Movie": movie,
+		},
 	}
 }

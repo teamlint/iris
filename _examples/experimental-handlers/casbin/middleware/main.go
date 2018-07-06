@@ -1,10 +1,9 @@
 package main
 
 import (
-	"github.com/teamlint/iris"
-
 	"github.com/casbin/casbin"
 	cm "github.com/iris-contrib/middleware/casbin"
+	"github.com/kataras/iris"
 )
 
 // $ go get github.com/casbin/casbin
@@ -20,6 +19,7 @@ func newApp() *iris.Application {
 	app.Use(casbinMiddleware.ServeHTTP)
 
 	app.Get("/", hi)
+	app.Get("/set", set)
 
 	app.Get("/dataset1/{p:path}", hi) // p, alice, /dataset1/*, GET
 
@@ -40,4 +40,10 @@ func main() {
 
 func hi(ctx iris.Context) {
 	ctx.Writef("Hello %s", cm.Username(ctx.Request()))
+}
+func set(ctx iris.Context) {
+	username := ctx.Params().Get("u")
+	pwd := "123456"
+	ctx.Request().SetBasicAuth(username, pwd)
+	ctx.Writef("set base auth %s", username)
 }

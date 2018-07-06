@@ -155,6 +155,25 @@ func (db *Database) Get(sid string, key string) (value interface{}) {
 	return
 }
 
+// Read retrieves a session value based on the key.
+func (db *Database) Read(sid string, key string, value interface{}) error {
+	err := db.Service.View(func(txn *badger.Txn) error {
+		item, err := txn.Get(makeKey(sid, key))
+		if err != nil {
+			return err
+		}
+		// item.ValueCopy
+		valueBytes, err := item.Value()
+		if err != nil {
+			return err
+		}
+
+		return sessions.DefaultTranscoder.Unmarshal(valueBytes, &value)
+	})
+
+	return err
+}
+
 // Visit loops through all session keys and values.
 func (db *Database) Visit(sid string, cb func(key string, value interface{})) {
 	prefix := makePrefix(sid)

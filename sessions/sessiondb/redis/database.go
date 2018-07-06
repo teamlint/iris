@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/teamlint/golog"
+	"github.com/teamlint/iris/core/errors"
 	"github.com/teamlint/iris/sessions"
 	"github.com/teamlint/iris/sessions/sessiondb/redis/service"
 )
@@ -79,6 +80,22 @@ func (db *Database) Set(sid string, lifetime sessions.LifeTime, key string, valu
 func (db *Database) Get(sid string, key string) (value interface{}) {
 	db.get(makeKey(sid, key), &value)
 	return
+}
+
+// Read retrieves a session value based on the key.
+func (db *Database) Read(sid string, key string, value interface{}) error {
+	rkey := makeKey(sid, key)
+	data, err := db.redis.Get(rkey)
+	if err != nil {
+		golog.Debugf("redis get value of key: '%s': %v", key, data)
+		return errors.New("session '%s' key '%s' has no value").Format(sid, key)
+	}
+
+	if err = sessions.DefaultTranscoder.Unmarshal(data.([]byte), &value); err != nil {
+		golog.Debugf("unable to unmarshal value of key: '%s': %v", key, err)
+		return errors.New("unable to unmarshal value of key: '%s': %v").Format(key, err)
+	}
+	return nil
 }
 
 func (db *Database) get(key string, outPtr interface{}) {
