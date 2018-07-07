@@ -3,6 +3,7 @@ package boltdb
 import (
 	"os"
 	"path/filepath"
+	"reflect"
 	"runtime"
 	"time"
 
@@ -266,6 +267,9 @@ func (db *Database) Get(sid string, key string) (value interface{}) {
 
 // Read retrieves a session value based on the key.
 func (db *Database) Read(sid string, key string, value interface{}) error {
+	if reflect.ValueOf(value).Kind() != reflect.Ptr {
+		return errors.New("the value must be pointer type")
+	}
 	err := db.Service.View(func(tx *bolt.Tx) error {
 		b := db.getBucketForSession(tx, sid)
 		if b == nil {
@@ -279,7 +283,7 @@ func (db *Database) Read(sid string, key string, value interface{}) error {
 			return errors.New("session '%s' key '%s' has no value").Format(sid, key)
 		}
 
-		return sessions.DefaultTranscoder.Unmarshal(valueBytes, &value)
+		return sessions.DefaultTranscoder.Unmarshal(valueBytes, value)
 	})
 
 	if err != nil {

@@ -51,7 +51,7 @@ type mem struct {
 
 var _ Database = (*mem)(nil)
 
-func newMemDB() Database { return &mem{values: make(map[string]*memstore.Store)} }
+func NewMemDB() Database { return &mem{values: make(map[string]*memstore.Store)} }
 
 func (s *mem) Acquire(sid string, expires time.Duration) LifeTime {
 	s.mu.Lock()

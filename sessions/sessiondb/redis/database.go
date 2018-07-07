@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"reflect"
 	"runtime"
 	"time"
 
@@ -84,6 +85,9 @@ func (db *Database) Get(sid string, key string) (value interface{}) {
 
 // Read retrieves a session value based on the key.
 func (db *Database) Read(sid string, key string, value interface{}) error {
+	if reflect.ValueOf(value).Kind() != reflect.Ptr {
+		return errors.New("the value must be pointer type")
+	}
 	rkey := makeKey(sid, key)
 	data, err := db.redis.Get(rkey)
 	if err != nil {
@@ -91,7 +95,7 @@ func (db *Database) Read(sid string, key string, value interface{}) error {
 		return errors.New("session '%s' key '%s' has no value").Format(sid, key)
 	}
 
-	if err = sessions.DefaultTranscoder.Unmarshal(data.([]byte), &value); err != nil {
+	if err = sessions.DefaultTranscoder.Unmarshal(data.([]byte), value); err != nil {
 		golog.Debugf("unable to unmarshal value of key: '%s': %v", key, err)
 		return errors.New("unable to unmarshal value of key: '%s': %v").Format(key, err)
 	}

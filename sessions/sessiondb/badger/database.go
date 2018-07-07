@@ -3,6 +3,7 @@ package badger
 import (
 	"bytes"
 	"os"
+	"reflect"
 	"runtime"
 	"sync/atomic"
 	"time"
@@ -157,6 +158,9 @@ func (db *Database) Get(sid string, key string) (value interface{}) {
 
 // Read retrieves a session value based on the key.
 func (db *Database) Read(sid string, key string, value interface{}) error {
+	if reflect.ValueOf(value).Kind() != reflect.Ptr {
+		return errors.New("the value must be pointer type")
+	}
 	err := db.Service.View(func(txn *badger.Txn) error {
 		item, err := txn.Get(makeKey(sid, key))
 		if err != nil {
@@ -168,7 +172,7 @@ func (db *Database) Read(sid string, key string, value interface{}) error {
 			return err
 		}
 
-		return sessions.DefaultTranscoder.Unmarshal(valueBytes, &value)
+		return sessions.DefaultTranscoder.Unmarshal(valueBytes, value)
 	})
 
 	return err

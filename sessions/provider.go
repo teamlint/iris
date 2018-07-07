@@ -23,7 +23,7 @@ type (
 func newProvider() *provider {
 	return &provider{
 		sessions: make(map[string]*Session, 0),
-		db:       newMemDB(),
+		db:       NewMemDB(),
 	}
 }
 
