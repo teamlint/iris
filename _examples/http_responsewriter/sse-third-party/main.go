@@ -23,7 +23,21 @@ func main() {
 	s.CreateStream("messages")
 
 	app.Any("/events", iris.FromStd(s.HTTPHandler))
+	app.Get("/put", func(ctx iris.Context) {
+		msg := ctx.URLParam("msg")
+		if msg != "" {
+			s.Publish("messages", &sse.Event{Data: []byte(msg)})
+		}
+		ctx.WriteString(msg)
+	})
+	app.Get("/open", func(ctx iris.Context) {
+		s.CreateStream("messages")
+	})
 
+	app.Get("/close", func(ctx iris.Context) {
+		s.RemoveStream("messages")
+		// s.Close()
+	})
 	go func() {
 		// You design when to send messages to the client,
 		// here we just wait 5 seconds to send the first message
