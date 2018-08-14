@@ -27,7 +27,7 @@ func MovieByID(service services.MovieService, id int64) (movie datamodels.Movie,
 
 // UpdateMovieByID updates a movie.
 // Demo:
-// curl -i -X PUT -F "genre=Thriller" -F "poster=@/Users/kataras/Downloads/out.gif" http://localhost:8080/movies/1
+// curl -i -X PUT -F "genre=Thriller" -F "poster=@/Users/teamlint/Downloads/out.gif" http://localhost:8080/movies/1
 func UpdateMovieByID(ctx iris.Context, service services.MovieService, id int64) (datamodels.Movie, error) {
 	// get the request data for poster and genre
 	file, info, err := ctx.FormFile("poster")

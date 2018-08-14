@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/casbin/casbin"
 	cm "github.com/iris-contrib/middleware/casbin"
-	"github.com/kataras/iris"
+	"github.com/teamlint/iris"
 )
 
 // $ go get github.com/casbin/casbin

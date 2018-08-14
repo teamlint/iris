@@ -3,11 +3,11 @@ package main
 import (
 	"time"
 
-	"github.com/kataras/iris"
 	"github.com/r3labs/sse"
+	"github.com/teamlint/iris"
 )
 
-// First of all install the sse third-party package (you can use other if you don't like this approach)
+// First of all install the sse third-party package (you can use other if you don't like this approach or go ahead to the "sse" example)
 // $ go get -u github.com/r3labs/sse
 func main() {
 	app := iris.New()

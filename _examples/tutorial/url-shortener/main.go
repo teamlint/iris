@@ -1,6 +1,6 @@
 // Package main shows how you can create a simple URL Shortener.
 //
-// Article: https://medium.com/@kataras/a-url-shortener-service-using-go-iris-and-bolt-4182f0b00ae7
+// Article: https://medium.com/@teamlint/a-url-shortener-service-using-go-iris-and-bolt-4182f0b00ae7
 //
 // $ go get github.com/coreos/bbolt
 // $ go get github.com/satori/go.uuid

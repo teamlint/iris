@@ -7,7 +7,7 @@ import (
 // NOTE: need different tool than the "embedding-files-into-app" example.
 //
 // Follow these steps first:
-// $ go get -u github.com/kataras/bindata/cmd/bindata
+// $ go get -u github.com/teamlint/bindata/cmd/bindata
 // $ bindata ./assets/...
 // $ go build
 // $ ./embedding-gziped-files-into-app

@@ -216,7 +216,7 @@ func (app *Application) WWW() router.Party {
 // If you need more information about this implementation then you have to navigate through
 // the `core/router#NewSubdomainRedirectWrapper` function instead.
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/subdomains/redirect
+// Example: https://github.com/teamlint/iris/tree/master/_examples/subdomains/redirect
 func (app *Application) SubdomainRedirect(from, to router.Party) router.Party {
 	sd := router.NewSubdomainRedirectWrapper(app.ConfigurationReadOnly().GetVHost, from.GetRelPath(), to.GetRelPath())
 	app.WrapRouter(sd)
@@ -416,7 +416,7 @@ var (
 	// Cache304 sends a `StatusNotModified` (304) whenever
 	// the "If-Modified-Since" request header (time) is before the
 	// time.Now() + expiresEvery (always compared to their UTC values).
-	// Use this, which is a shortcut of the, `chache#Cache304` instead of the "github.com/kataras/iris/cache" or iris.Cache
+	// Use this, which is a shortcut of the, `chache#Cache304` instead of the "github.com/teamlint/iris/cache" or iris.Cache
 	// for better performance.
 	// Clients that are compatible with the http RCF (all browsers are and tools like postman)
 	// will handle the caching.
@@ -459,7 +459,7 @@ var (
 	// Accepts a `context#CookieEncoder` and sets the cookie's value to the encoded value.
 	// Users of that is the `context#SetCookie` and `context#SetCookieKV`.
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/securecookie
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/securecookie
 	//
 	// A shortcut for the `context#CookieEncode`.
 	CookieEncode = context.CookieEncode
@@ -468,7 +468,7 @@ var (
 	// Accepts a `context#CookieDecoder` and sets the cookie's value to the decoded value before return by the `GetCookie`.
 	// User of that is the `context#GetCookie`.
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/securecookie
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/securecookie
 	//
 	// A shortcut for the `context#CookieDecode`.
 	CookieDecode = context.CookieDecode

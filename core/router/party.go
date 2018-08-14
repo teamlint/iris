@@ -96,7 +96,7 @@ type Party interface {
 	//
 	// Returns this Party.
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/mvc/middleware/without-ctx-next
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/mvc/middleware/without-ctx-next
 	SetExecutionRules(executionRules ExecutionRules) Party
 	// Handle registers a route to the server's router.
 	// if empty method is passed then handler(s) are being registered to all methods, same as .Any.
@@ -214,13 +214,13 @@ type Party interface {
 	// Example: https://github.com/teamlint/iris/tree/master/_examples/file-server/embedding-files-into-app
 	StaticEmbedded(requestPath string, vdir string, assetFn func(name string) ([]byte, error), namesFn func() []string) *Route
 	// StaticEmbeddedGzip registers a route which can serve embedded gziped files
-	// that are embedded using the https://github.com/kataras/bindata tool and only.
+	// that are embedded using the https://github.com/teamlint/bindata tool and only.
 	// It's 8 times faster than the `StaticEmbeddedHandler` with `go-bindata` but
 	// it sends gzip response only, so the client must be aware that is expecting a gzip body
 	// (browsers and most modern browsers do that, so you can use it without fair).
 	//
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/file-server/embedding-gziped-files-into-app
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/file-server/embedding-gziped-files-into-app
 	StaticEmbeddedGzip(requestPath string, vdir string, gzipAssetFn func(name string) ([]byte, error), gzipNamesFn func() []string) *Route
 	// Favicon serves static favicon
 	// accepts 2 parameters, second is optional
@@ -266,6 +266,6 @@ type Party interface {
 	// 		ctx.View("page1.html")
 	// 	})
 	//
-	// Examples: https://github.com/kataras/iris/tree/master/_examples/view
+	// Examples: https://github.com/teamlint/iris/tree/master/_examples/view
 	Layout(tmplLayoutFile string) Party
 }

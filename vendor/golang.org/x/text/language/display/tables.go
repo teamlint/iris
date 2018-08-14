@@ -46623,7 +46623,7 @@ const ltRegionStr string = "" + // Size: 3399 bytes
 	"orvegijaNepalasNauruNiujėNaujoji ZelandijaOmanasPanamaPeruPrancūzijos Po" +
 	"linezijaPapua Naujoji GvinėjaFilipinaiPakistanasLenkijaSen Pjeras ir Mik" +
 	"elonasPitkerno salosPuerto RikasPalestinos teritorijaPortugalijaPalauPar" +
-	"agvajusKatarasNuošali OkeanijaReunjonasRumunijaSerbijaRusijaRuandaSaudo " +
+	"agvajusteamlintNuošali OkeanijaReunjonasRumunijaSerbijaRusijaRuandaSaudo " +
 	"ArabijaSaliamono SalosSeišeliaiSudanasŠvedijaSingapūrasŠv. Elenos SalaSl" +
 	"ovėnijaSvalbardas ir Janas MajenasSlovakijaSiera LeonėSan MarinasSenegal" +
 	"asSomalisSurinamasPietų SudanasSan Tomė ir PrinsipėSalvadorasSint Marten" +

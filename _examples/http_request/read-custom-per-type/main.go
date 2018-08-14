@@ -35,7 +35,7 @@ type config struct {
 	ServerName string `yaml:"serverName"`
 }
 
-// Decode implements the `kataras/iris/context#BodyDecoder` optional interface
+// Decode implements the `teamlint/iris/context#BodyDecoder` optional interface
 // that any go type can implement in order to be self-decoded when reading the request's body.
 func (c *config) Decode(body []byte) error {
 	return yaml.Unmarshal(body, c)

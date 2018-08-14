@@ -55,7 +55,7 @@ func main() {
 	}
 
 	app.Get("/insert", func(ctx iris.Context) {
-		user := &User{Username: "kataras", Salt: "hash---", Password: "hashed", CreatedAt: time.Now(), UpdatedAt: time.Now()}
+		user := &User{Username: "teamlint", Salt: "hash---", Password: "hashed", CreatedAt: time.Now(), UpdatedAt: time.Now()}
 		orm.Insert(user)
 
 		ctx.Writef("user inserted: %#v", user)

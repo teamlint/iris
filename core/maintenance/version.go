@@ -13,7 +13,7 @@ import (
 
 const (
 	// Version is the string representation of the current local Iris Web Framework version.
-	Version = "10.6.6"
+	Version = "10.7.0"
 )
 
 // CheckForUpdates checks for any available updates
@@ -55,7 +55,7 @@ func installVersion() {
 	cmd.Stderr = os.Stdout
 
 	if err := cmd.Run(); err != nil {
-		golog.Warnf("unexpected message while trying to go get,\nif you edited the original source code then you've to remove the whole $GOPATH/src/github.com/kataras folder and execute `go get -u github.com/teamlint/iris/...` manually\n%v", err)
+		golog.Warnf("unexpected message while trying to go get,\nif you edited the original source code then you've to remove the whole $GOPATH/src/github.com/teamlint folder and execute `go get -u github.com/teamlint/iris/...` manually\n%v", err)
 		return
 	}
 

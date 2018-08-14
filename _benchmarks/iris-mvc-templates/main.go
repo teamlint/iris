@@ -12,8 +12,8 @@ const (
 	// publicDir is the exactly the same path that .NET Core is using for its templates,
 	// in order to reduce the size in the repository.
 	// Change the "C\\mygopath" to your own GOPATH.
-	// publicDir = "C:\\mygopath\\src\\github.com\\kataras\\iris\\_benchmarks\\netcore-mvc-templates\\wwwroot"
-	publicDir = "/home/kataras/mygopath/src/github.com/teamlint/iris/_benchmarks/netcore-mvc-templates/wwwroot"
+	// publicDir = "C:\\mygopath\\src\\github.com\\teamlint\\iris\\_benchmarks\\netcore-mvc-templates\\wwwroot"
+	publicDir = "/home/teamlint/mygopath/src/github.com/teamlint/iris/_benchmarks/netcore-mvc-templates/wwwroot"
 )
 
 func main() {

@@ -40,7 +40,7 @@ type myBodyDecoder struct{}
 
 var DefaultBodyDecoder = myBodyDecoder{}
 
-// Implements the `kataras/iris/context#Unmarshaler` but at our example
+// Implements the `teamlint/iris/context#Unmarshaler` but at our example
 // we will use the simplest `context#UnmarshalerFunc` to pass just the yaml.Unmarshal.
 //
 // Can be used as: ctx.UnmarshalBody(&c, DefaultBodyDecoder)

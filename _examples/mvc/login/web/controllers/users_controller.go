@@ -58,7 +58,7 @@ func (c *UsersController) GetBy(id int64) (user datamodels.User, found bool) {
 
 // PutBy updates a user.
 // Demo:
-// curl -i -X PUT -u admin:password -F "username=kataras"
+// curl -i -X PUT -u admin:password -F "username=teamlint"
 // -F "password=rawPasswordIsNotSafeIfOrNotHTTPs_You_Should_Use_A_client_side_lib_for_hash_as_well"
 // http://localhost:8080/users/1
 func (c *UsersController) PutBy(id int64) (datamodels.User, error) {

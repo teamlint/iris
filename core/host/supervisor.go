@@ -285,7 +285,7 @@ func (su *Supervisor) ListenAndServeTLS(certFile string, keyFile string) error {
 // If empty, certs will only be cached for the lifetime of the auto tls manager.
 //
 // Note: The domain should be like "iris-go.com www.iris-go.com",
-// the e-mail like "kataras2006@hotmail.com" and the cacheDir like "letscache"
+// the e-mail like "teamlint2006@hotmail.com" and the cacheDir like "letscache"
 // The `ListenAndServeAutoTLS` will start a new server for you,
 // which will redirect all http versions to their https, including subdomains as well.
 func (su *Supervisor) ListenAndServeAutoTLS(domain string, email string, cacheDir string) error {

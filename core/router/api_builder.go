@@ -176,7 +176,7 @@ func (api *APIBuilder) AllowMethods(methods ...string) Party {
 //
 // Returns this Party.
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/mvc/middleware/without-ctx-next
+// Example: https://github.com/teamlint/iris/tree/master/_examples/mvc/middleware/without-ctx-next
 func (api *APIBuilder) SetExecutionRules(executionRules ExecutionRules) Party {
 	api.handlerExecutionRules = executionRules
 	return api
@@ -437,6 +437,7 @@ func (api *APIBuilder) GetRoute(routeName string) *Route {
 // One note: "routeName" should be case-sensitive. Used by the context to get the current route.
 // It returns an interface instead to reduce wrong usage and to keep the decoupled design between
 // the context and the routes.
+// Look `GetRoutesReadOnly` to fetch a list of all registered routes.
 //
 // Look `GetRoute` for more.
 func (api *APIBuilder) GetRouteReadOnly(routeName string) context.RouteReadOnly {
@@ -445,6 +446,24 @@ func (api *APIBuilder) GetRouteReadOnly(routeName string) context.RouteReadOnly 
 		return nil
 	}
 	return routeReadOnlyWrapper{r}
+}
+
+// GetRoutesReadOnly returns the registered routes with "read-only" access,
+// you cannot and you should not change any of these routes' properties on request state,
+// you can use the `GetRoutes()` for that instead.
+//
+// It returns interface-based slice instead of the real ones in order to apply
+// safe fetch between context(request-state) and the builded application.
+//
+// Look `GetRouteReadOnly` too.
+func (api *APIBuilder) GetRoutesReadOnly() []context.RouteReadOnly {
+	routes := api.GetRoutes()
+	readOnlyRoutes := make([]context.RouteReadOnly, len(routes))
+	for i, r := range routes {
+		readOnlyRoutes[i] = routeReadOnlyWrapper{r}
+	}
+
+	return readOnlyRoutes
 }
 
 // Use appends Handler(s) to the current Party's routes and child routes.
@@ -667,13 +686,13 @@ func (api *APIBuilder) StaticContent(reqPath string, cType string, content []byt
 //
 // Returns the GET *Route.
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/file-server/embedding-files-into-app
+// Example: https://github.com/teamlint/iris/tree/master/_examples/file-server/embedding-files-into-app
 func (api *APIBuilder) StaticEmbedded(requestPath string, vdir string, assetFn func(name string) ([]byte, error), namesFn func() []string) *Route {
 	return api.staticEmbedded(requestPath, vdir, assetFn, namesFn, false)
 }
 
 // StaticEmbeddedGzip registers a route which can serve embedded gziped files
-// that are embedded using the https://github.com/kataras/bindata tool and only.
+// that are embedded using the https://github.com/teamlint/bindata tool and only.
 // It's 8 times faster than the `StaticEmbeddedHandler` with `go-bindata` but
 // it sends gzip response only, so the client must be aware that is expecting a gzip body
 // (browsers and most modern browsers do that, so you can use it without fair).
@@ -683,7 +702,7 @@ func (api *APIBuilder) StaticEmbedded(requestPath string, vdir string, assetFn f
 // Third parameter is the GzipAsset function
 // Forth parameter is the GzipAssetNames function.
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/file-server/embedding-gziped-files-into-app
+// Example: https://github.com/teamlint/iris/tree/master/_examples/file-server/embedding-gziped-files-into-app
 func (api *APIBuilder) StaticEmbeddedGzip(requestPath string, vdir string, gzipAssetFn func(name string) ([]byte, error), gzipNamesFn func() []string) *Route {
 	return api.staticEmbedded(requestPath, vdir, gzipAssetFn, gzipNamesFn, true)
 }
@@ -859,7 +878,7 @@ func (api *APIBuilder) FireErrorCode(ctx context.Context) {
 // 		ctx.View("page1.html")
 // 	})
 //
-// Examples: https://github.com/kataras/iris/tree/master/_examples/view
+// Examples: https://github.com/teamlint/iris/tree/master/_examples/view
 func (api *APIBuilder) Layout(tmplLayoutFile string) Party {
 	api.Use(func(ctx context.Context) {
 		ctx.ViewLayout(tmplLayoutFile)

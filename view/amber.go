@@ -59,7 +59,7 @@ func (s *AmberEngine) Binary(assetFn func(name string) ([]byte, error), namesFn 
 //
 // Note that if `true` is passed then only one `View -> ExecuteWriter` will be render each time,
 // no concurrent access across clients, use it only on development status.
-// It's good to be used side by side with the https://github.com/kataras/rizla reloader for go source files.
+// It's good to be used side by side with the https://github.com/teamlint/rizla reloader for go source files.
 func (s *AmberEngine) Reload(developmentMode bool) *AmberEngine {
 	s.reload = developmentMode
 	return s

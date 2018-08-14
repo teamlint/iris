@@ -77,4 +77,4 @@ func writeMarkdown(ctx iris.Context) {
 /* Note that `StaticWeb` does use the browser's disk caching by-default
 therefore, register the cache handler AFTER any StaticWeb calls,
 for a faster solution that server doesn't need to keep track of the response
-navigate to https://github.com/kataras/iris/blob/master/_examples/cache/client-side/main.go */
+navigate to https://github.com/teamlint/iris/blob/master/_examples/cache/client-side/main.go */

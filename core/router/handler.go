@@ -163,7 +163,7 @@ func (h *routerHandler) HandleRequest(ctx context.Context) {
 			r.URL.Path = path
 			url := r.URL.String()
 
-			// Fixes https://github.com/kataras/iris/issues/921
+			// Fixes https://github.com/teamlint/iris/issues/921
 			// This is caused for security reasons, imagine a payment shop,
 			// you can't just permantly redirect a POST request, so just 307 (RFC 7231, 6.4.7).
 			if method == http.MethodPost || method == http.MethodPut {
@@ -238,7 +238,7 @@ func (h *routerHandler) HandleRequest(ctx context.Context) {
 	if ctx.Application().ConfigurationReadOnly().GetFireMethodNotAllowed() {
 		for i := range h.trees {
 			t := h.trees[i]
-			// a bit slower than previous implementation but @kataras let me to apply this change
+			// a bit slower than previous implementation but @teamlint let me to apply this change
 			// because it's more reliable.
 			//
 			// if `Configuration#FireMethodNotAllowed` is kept as defaulted(false) then this function will not

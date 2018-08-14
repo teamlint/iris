@@ -15,13 +15,13 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
 	"sync/atomic"
 	"time"
 
+	"github.com/Shopify/goreferrer"
 	"github.com/fatih/structs"
 	"github.com/json-iterator/go"
 	"github.com/microcosm-cc/bluemonday"
@@ -32,26 +32,6 @@ import (
 	"github.com/teamlint/iris/core/errors"
 	"github.com/teamlint/iris/core/memstore"
 )
-
-var timeFormat = []string{
-	"2006-01-02",
-	"2006-01-02 15:04:05",
-	time.ANSIC,
-	time.UnixDate,
-	time.RubyDate,
-	time.RFC822,
-	time.RFC822Z,
-	time.RFC850,
-	time.RFC1123,
-	time.RFC1123Z,
-	time.RFC3339,
-	time.RFC3339Nano,
-	time.Kitchen,
-	time.Stamp,
-	time.StampMilli,
-	time.StampMicro,
-	time.StampNano,
-}
 
 type (
 	// BodyDecoder is an interface which any struct can implement in order to customize the decode action
@@ -70,7 +50,7 @@ type (
 	// Note: This is totally optionally, the default decoders
 	// for ReadJSON is the encoding/json and for ReadXML is the encoding/xml.
 	//
-	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-custom-per-type/main.go
+	// Example: https://github.com/teamlint/iris/blob/master/_examples/http_request/read-custom-per-type/main.go
 	BodyDecoder interface {
 		Decode(data []byte) error
 	}
@@ -85,7 +65,7 @@ type (
 	//
 	// See 'Unmarshaler' and 'BodyDecoder' for more.
 	//
-	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-custom-via-unmarshaler/main.go
+	// Example: https://github.com/teamlint/iris/blob/master/_examples/http_request/read-custom-via-unmarshaler/main.go
 	UnmarshalerFunc func(data []byte, outPtr interface{}) error
 )
 
@@ -361,6 +341,32 @@ type Context interface {
 	// IsStopped checks and returns true if the current position of the Context is 255,
 	// means that the StopExecution() was called.
 	IsStopped() bool
+	// OnConnectionClose registers the "cb" function which will fire (on its own goroutine, no need to be registered goroutine by the end-dev)
+	// when the underlying connection has gone away.
+	//
+	// This mechanism can be used to cancel long operations on the server
+	// if the client has disconnected before the response is ready.
+	//
+	// It depends on the `http#CloseNotify`.
+	// CloseNotify may wait to notify until Request.Body has been
+	// fully read.
+	//
+	// After the main Handler has returned, there is no guarantee
+	// that the channel receives a value.
+	//
+	// Finally, it reports whether the protocol supports pipelines (HTTP/1.1 with pipelines disabled is not supported).
+	// The "cb" will not fire for sure if the output value is false.
+	//
+	// Note that you can register only one callback for the entire request handler chain/per route.
+	//
+	// Look the `ResponseWriter#CloseNotifier` for more.
+	OnConnectionClose(fnGoroutine func()) bool
+	// OnClose registers the callback function "cb" to the underline connection closing event using the `Context#OnConnectionClose`
+	// and also in the end of the request handler using the `ResponseWriter#SetBeforeFlush`.
+	// Note that you can register only one callback for the entire request handler chain/per route.
+	//
+	// Look the `Context#OnConnectionClose` and `ResponseWriter#SetBeforeFlush` for more.
+	OnClose(cb func())
 
 	//  +------------------------------------------------------------+
 	//  | Current "user/request" storage                             |
@@ -440,8 +446,12 @@ type Context interface {
 	//
 	// Keep note that this checks the "User-Agent" request header.
 	IsMobile() bool
+	// GetReferrer extracts and returns the information from the "Referer" header as specified
+	// in https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+	// or by the URL query parameter "referer".
+	GetReferrer() Referrer
 	//  +------------------------------------------------------------+
-	//  | Response Headers helpers                                   |
+	//  | Headers helpers                                            |
 	//  +------------------------------------------------------------+
 
 	// Header adds a header to the response writer.
@@ -452,16 +462,18 @@ type Context interface {
 	// GetContentType returns the response writer's header value of "Content-Type"
 	// which may, setted before with the 'ContentType'.
 	GetContentType() string
+	// GetContentType returns the request's header value of "Content-Type".
+	GetContentTypeRequested() string
 
 	// GetContentLength returns the request's header value of "Content-Length".
 	// Returns 0 if header was unable to be found or its value was not a valid number.
 	GetContentLength() int64
 
 	// StatusCode sets the status code header to the response.
-	// Look .GetStatusCode too.
+	// Look .`GetStatusCode` too.
 	StatusCode(statusCode int)
 	// GetStatusCode returns the current status code of the response.
-	// Look StatusCode too.
+	// Look `StatusCode` too.
 	GetStatusCode() int
 
 	// Redirect sends a redirect response to the client
@@ -496,6 +508,9 @@ type Context interface {
 	// URLParamIntDefault returns the url query parameter as int value from a request,
 	// if not found or parse failed then "def" is returned.
 	URLParamIntDefault(name string, def int) int
+	// URLParamInt32Default returns the url query parameter as int32 value from a request,
+	// if not found or parse failed then "def" is returned.
+	URLParamInt32Default(name string, def int32) int32
 	// URLParamInt64 returns the url query parameter as int64 value from a request,
 	// returns -1 and an error if parse failed.
 	URLParamInt64(name string) (int64, error)
@@ -594,7 +609,7 @@ type Context interface {
 	// The default form's memory maximum size is 32MB, it can be changed by the
 	//  `iris#WithPostMaxMemory` configurator at main configuration passed on `app.Run`'s second argument.
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/http_request/upload-file
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/http_request/upload-file
 	FormFile(key string) (multipart.File, *multipart.FileHeader, error)
 	// UploadFormFiles uploads any received file(s) from the client
 	// to the system physical location "destDirectory".
@@ -621,7 +636,7 @@ type Context interface {
 	// See `FormFile` to a more controlled to receive a file.
 	//
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/http_request/upload-files
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/http_request/upload-files
 	UploadFormFiles(destDirectory string, before ...func(Context, *multipart.FileHeader)) (n int64, err error)
 
 	//  +------------------------------------------------------------+
@@ -647,20 +662,24 @@ type Context interface {
 	// UnmarshalBody reads the request's body and binds it to a value or pointer of any type.
 	// Examples of usage: context.ReadJSON, context.ReadXML.
 	//
-	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-custom-via-unmarshaler/main.go
+	// Example: https://github.com/teamlint/iris/blob/master/_examples/http_request/read-custom-via-unmarshaler/main.go
+	//
+	// UnmarshalBody does not check about gzipped data.
+	// Do not rely on compressed data incoming to your server. The main reason is: https://en.wikipedia.org/wiki/Zip_bomb
+	// However you are still free to read the `ctx.Request().Body io.Reader` manually.
 	UnmarshalBody(outPtr interface{}, unmarshaler Unmarshaler) error
 	// ReadJSON reads JSON from request's body and binds it to a pointer of a value of any json-valid type.
 	//
-	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-json/main.go
+	// Example: https://github.com/teamlint/iris/blob/master/_examples/http_request/read-json/main.go
 	ReadJSON(jsonObjectPtr interface{}) error
 	// ReadXML reads XML from request's body and binds it to a pointer of a value of any xml-valid type.
 	//
-	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-xml/main.go
+	// Example: https://github.com/teamlint/iris/blob/master/_examples/http_request/read-xml/main.go
 	ReadXML(xmlObjectPtr interface{}) error
 	// ReadForm binds the formObject  with the form data
 	// it supports any kind of struct.
 	//
-	// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-form/main.go
+	// Example: https://github.com/teamlint/iris/blob/master/_examples/http_request/read-form/main.go
 	ReadForm(formObjectPtr interface{}) error
 
 	//  +------------------------------------------------------------+
@@ -883,7 +902,7 @@ type Context interface {
 	// SetCookie adds a cookie.
 	// Use of the "options" is not required, they can be used to amend the "cookie".
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/basic
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/basic
 	SetCookie(cookie *http.Cookie, options ...CookieOption)
 	// SetCookieKV adds a cookie, requires the name(string) and the value(string).
 	//
@@ -900,7 +919,7 @@ type Context interface {
 	//                              iris.CookieExpires(time.Duration)
 	//                              iris.CookieHTTPOnly(false)
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/basic
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/basic
 	SetCookieKV(name, value string, options ...CookieOption)
 	// GetCookie returns cookie's value by it's name
 	// returns empty string if nothing was found.
@@ -908,12 +927,12 @@ type Context interface {
 	// If you want more than the value then:
 	// cookie, err := ctx.Request().Cookie("name")
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/basic
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/basic
 	GetCookie(name string, options ...CookieOption) string
 	// RemoveCookie deletes a cookie by it's name and path = "/".
 	// Tip: change the cookie's path to the current one by: RemoveCookie("name", iris.CookieCleanPath)
 	//
-	// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/basic
+	// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/basic
 	RemoveCookie(name string, options ...CookieOption)
 	// VisitAllCookies takes a visitor which loops
 	// on each (request's) cookies' name and value.
@@ -1293,7 +1312,7 @@ var Next = DefaultNext
 // It can be changed to a customized one if needed (very advanced usage).
 //
 // Developers are free to customize the whole or part of the Context's implementation
-// by implementing a new `context.Context` (see https://github.com/kataras/iris/tree/master/_examples/routing/custom-context)
+// by implementing a new `context.Context` (see https://github.com/teamlint/iris/tree/master/_examples/routing/custom-context)
 // or by just override the `context.Next` package-level field, `context.DefaultNext` is exported
 // in order to be able for developers to merge your customized version one with the default behavior as well.
 func DefaultNext(ctx Context) {
@@ -1379,6 +1398,76 @@ func (ctx *context) StopExecution() {
 // means that the StopExecution() was called.
 func (ctx *context) IsStopped() bool {
 	return ctx.currentHandlerIndex == stopExecutionIndex
+}
+
+// OnConnectionClose registers the "cb" function which will fire (on its own goroutine, no need to be registered goroutine by the end-dev)
+// when the underlying connection has gone away.
+//
+// This mechanism can be used to cancel long operations on the server
+// if the client has disconnected before the response is ready.
+//
+// It depends on the `http#CloseNotify`.
+// CloseNotify may wait to notify until Request.Body has been
+// fully read.
+//
+// After the main Handler has returned, there is no guarantee
+// that the channel receives a value.
+//
+// Finally, it reports whether the protocol supports pipelines (HTTP/1.1 with pipelines disabled is not supported).
+// The "cb" will not fire for sure if the output value is false.
+//
+// Note that you can register only one callback for the entire request handler chain/per route.
+//
+// Look the `ResponseWriter#CloseNotifier` for more.
+func (ctx *context) OnConnectionClose(cb func()) bool {
+	// Note that `ctx.ResponseWriter().CloseNotify()` can already do the same
+	// but it returns a channel which will never fire if it the protocol version is not compatible,
+	// here we don't want to allocate an empty channel, just skip it.
+	notifier, ok := ctx.writer.CloseNotifier()
+	if !ok {
+		return false
+	}
+
+	notify := notifier.CloseNotify()
+	go func() {
+		<-notify
+		if cb != nil {
+			cb()
+		}
+	}()
+
+	return true
+}
+
+// OnClose registers the callback function "cb" to the underline connection closing event using the `Context#OnConnectionClose`
+// and also in the end of the request handler using the `ResponseWriter#SetBeforeFlush`.
+// Note that you can register only one callback for the entire request handler chain/per route.
+//
+// Look the `Context#OnConnectionClose` and `ResponseWriter#SetBeforeFlush` for more.
+func (ctx *context) OnClose(cb func()) {
+	if cb == nil {
+		return
+	}
+
+	// Register the on underline connection close handler first.
+	ctx.OnConnectionClose(cb)
+
+	// Author's notes:
+	// This is fired on `ctx.ResponseWriter().FlushResponse()` which is fired by the framework automatically, internally, on the end of request handler(s),
+	// it is not fired on the underline streaming function of the writer: `ctx.ResponseWriter().Flush()` (which can be fired more than one if streaming is supported by the client).
+	// The `FlushResponse` is called only once, so add the "cb" here, no need to add done request handlers each time `OnClose` is called by the end-dev.
+	//
+	// Don't allow more than one because we don't allow that on `OnConnectionClose` too:
+	// old := ctx.writer.GetBeforeFlush()
+	// if old != nil {
+	// 	ctx.writer.SetBeforeFlush(func() {
+	// 		old()
+	// 		cb()
+	// 	})
+	// 	return
+	// }
+
+	ctx.writer.SetBeforeFlush(cb)
 }
 
 //  +------------------------------------------------------------+
@@ -1608,6 +1697,84 @@ func (ctx *context) IsMobile() bool {
 	return isMobileRegex.MatchString(s)
 }
 
+type (
+	// Referrer contains the extracted information from the `GetReferrer`
+	//
+	// The structure contains struct tags for JSON, form, XML, YAML and TOML.
+	// Look the `GetReferrer() Referrer` and `goreferrer` external package.
+	Referrer struct {
+		Type       ReferrerType             `json:"type" form:"referrer_type" xml:"Type" yaml:"Type" toml:"Type"`
+		Label      string                   `json:"label" form:"referrer_form" xml:"Label" yaml:"Label" toml:"Label"`
+		URL        string                   `json:"url" form:"referrer_url" xml:"URL" yaml:"URL" toml:"URL"`
+		Subdomain  string                   `json:"subdomain" form:"referrer_subdomain" xml:"Subdomain" yaml:"Subdomain" toml:"Subdomain"`
+		Domain     string                   `json:"domain" form:"referrer_domain" xml:"Domain" yaml:"Domain" toml:"Domain"`
+		Tld        string                   `json:"tld" form:"referrer_tld" xml:"Tld" yaml:"Tld" toml:"Tld"`
+		Path       string                   `jsonn:"path" form:"referrer_path" xml:"Path" yaml:"Path" toml:"Path"`
+		Query      string                   `json:"query" form:"referrer_query" xml:"Query" yaml:"Query" toml:"GoogleType"`
+		GoogleType ReferrerGoogleSearchType `json:"googleType" form:"referrer_google_type" xml:"GoogleType" yaml:"GoogleType" toml:"GoogleType"`
+	}
+
+	// ReferrerType is the goreferrer enum for a referrer type (indirect, direct, email, search, social).
+	ReferrerType int
+
+	// ReferrerGoogleSearchType is the goreferrer enum for a google search type (organic, adwords).
+	ReferrerGoogleSearchType int
+)
+
+// Contains the available values of the goreferrer enums.
+const (
+	ReferrerInvalid ReferrerType = iota
+	ReferrerIndirect
+	ReferrerDirect
+	ReferrerEmail
+	ReferrerSearch
+	ReferrerSocial
+
+	ReferrerNotGoogleSearch ReferrerGoogleSearchType = iota
+	ReferrerGoogleOrganicSearch
+	ReferrerGoogleAdwords
+)
+
+func (gs ReferrerGoogleSearchType) String() string {
+	return goreferrer.GoogleSearchType(gs).String()
+}
+
+func (r ReferrerType) String() string {
+	return goreferrer.ReferrerType(r).String()
+}
+
+// unnecessary but good to know the default values upfront.
+var emptyReferrer = Referrer{Type: ReferrerInvalid, GoogleType: ReferrerNotGoogleSearch}
+
+// GetReferrer extracts and returns the information from the "Referer" header as specified
+// in https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+// or by the URL query parameter "referer".
+func (ctx *context) GetReferrer() Referrer {
+	// the underline net/http follows the https://tools.ietf.org/html/rfc7231#section-5.5.2,
+	// so there is nothing special left to do.
+	// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+	refURL := ctx.GetHeader("Referer")
+	if refURL == "" {
+		refURL = ctx.URLParam("referer")
+	}
+
+	if ref := goreferrer.DefaultRules.Parse(refURL); ref.Type > goreferrer.Invalid {
+		return Referrer{
+			Type:       ReferrerType(ref.Type),
+			Label:      ref.Label,
+			URL:        ref.URL,
+			Subdomain:  ref.Subdomain,
+			Domain:     ref.Domain,
+			Tld:        ref.Tld,
+			Path:       ref.Path,
+			Query:      ref.Query,
+			GoogleType: ReferrerGoogleSearchType(ref.GoogleType),
+		}
+	}
+
+	return emptyReferrer
+}
+
 //  +------------------------------------------------------------+
 //  | Response Headers helpers                                   |
 //  +------------------------------------------------------------+
@@ -1648,6 +1815,11 @@ func (ctx *context) ContentType(cType string) {
 // which may, setted before with the 'ContentType'.
 func (ctx *context) GetContentType() string {
 	return ctx.writer.Header().Get(ContentTypeHeaderKey)
+}
+
+// GetContentType returns the request's header value of "Content-Type".
+func (ctx *context) GetContentTypeRequested() string {
+	return ctx.GetHeader(ContentTypeHeaderKey)
 }
 
 // GetContentLength returns the request's header value of "Content-Length".
@@ -1747,6 +1919,21 @@ func (ctx *context) URLParamIntDefault(name string, def int) int {
 	}
 
 	return v
+}
+
+// URLParamInt32Default returns the url query parameter as int32 value from a request,
+// if not found or parse failed then "def" is returned.
+func (ctx *context) URLParamInt32Default(name string, def int32) int32 {
+	if v := ctx.URLParam(name); v != "" {
+		n, err := strconv.ParseInt(v, 10, 32)
+		if err != nil {
+			return def
+		}
+
+		return int32(n)
+	}
+
+	return def
 }
 
 // URLParamInt64 returns the url query parameter as int64 value from a request,
@@ -1877,91 +2064,9 @@ func (ctx *context) FormMap(source interface{}) (map[string]interface{}, error) 
 		if _, ok := formValues[k]; !ok { // if form field no found
 			delete(outMap, k)
 		}
-		/*
-			itemVal := reflect.ValueOf(v)
-			itemKind := itemVal.Kind()
-			switch itemKind {
-			case reflect.Map:
-				data := make([]string, 0)
-				attrKeys := itemVal.MapKeys()
-				for _, key := range attrKeys {
-					dk := key.Interface()
-					dv := itemVal.MapIndex(key).Interface()
-					data = append(data, fmt.Sprintf("%v:%v", dk, dv))
-				}
-				outMap[k] = strings.Join(data, ",")
-			case reflect.Array, reflect.Slice:
-				len := itemVal.Len()
-				data := make([]string, len)
-				for i := 0; i < len; i++ {
-					dv := itemVal.Index(i).Interface().(string)
-					if dv != "" {
-						data = append(data, dv)
-					}
-				}
-				outMap[k] = strings.Join(data, ",")
-			}
-		*/
 	}
 
 	return outMap, err
-}
-
-func kindProcess(field interface{}, v []string) (interface{}, error) {
-	typ := reflect.TypeOf(field)
-	switch typ.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		val, err := strconv.Atoi(v[0])
-		if err != nil {
-			return nil, errors.New("form map: the value of field \"%v\" should be a valid integer number").Format(v[0])
-		}
-		return val, nil
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-		val, err := strconv.ParseUint(v[0], 10, 64)
-		if err != nil {
-			return nil, errors.New("form map: the value of field \"%v\" should be a valid unsigned integer number").Format(v[0])
-		}
-		return val, nil
-	case reflect.Float32, reflect.Float64:
-		val, err := strconv.ParseFloat(v[0], typ.Bits())
-		if err != nil {
-			return nil, errors.New("form map: the value of field \"%v\" should be a valid float number").Format(v[0])
-		}
-		return val, nil
-	case reflect.Bool:
-		var bval bool
-		switch strings.ToLower(v[0]) {
-		case "true", "on", "1":
-			bval = true
-		case "false", "off", "0":
-			bval = false
-		}
-		return bval, nil
-	case reflect.Struct:
-		switch field.(type) {
-		case time.Time:
-			var t time.Time
-			var err error
-			for _, layout := range timeFormat {
-				t, err = time.ParseInLocation(layout, v[0], time.Now().Location())
-				if err == nil {
-					break
-				}
-			}
-			if err != nil {
-				return nil, errors.New("form map: the value of field \"%v\" is not a valid datetime").Format(v[0])
-			}
-			return t, nil
-		default:
-			return nil, nil
-
-		}
-	case reflect.Interface:
-		return interface{}(v[0]), nil
-	// case reflect.Ptr:
-	default:
-		return strings.Join(v, ","), nil
-	}
 }
 
 // Form contains the parsed form data, including both the URL
@@ -2126,7 +2231,7 @@ func (ctx *context) PostValues(name string) []string {
 // The default form's memory maximum size is 32MB, it can be changed by the
 // `iris#WithPostMaxMemory` configurator at main configuration passed on `app.Run`'s second argument.
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/http_request/upload-file
+// Example: https://github.com/teamlint/iris/tree/master/_examples/http_request/upload-file
 func (ctx *context) FormFile(key string) (multipart.File, *multipart.FileHeader, error) {
 	// we don't have access to see if the request is body stream
 	// and then the ParseMultipartForm can be useless
@@ -2164,7 +2269,7 @@ func (ctx *context) FormFile(key string) (multipart.File, *multipart.FileHeader,
 //
 // See `FormFile` to a more controlled to receive a file.
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/http_request/upload-files
+// Example: https://github.com/teamlint/iris/tree/master/_examples/http_request/upload-files
 func (ctx *context) UploadFormFiles(destDirectory string, before ...func(Context, *multipart.FileHeader)) (n int64, err error) {
 	err = ctx.request.ParseMultipartForm(ctx.Application().ConfigurationReadOnly().GetPostMaxMemory())
 	if err != nil {
@@ -2257,7 +2362,11 @@ func (ctx *context) SetMaxRequestBodySize(limitOverBytes int64) {
 // UnmarshalBody reads the request's body and binds it to a value or pointer of any type
 // Examples of usage: context.ReadJSON, context.ReadXML.
 //
-// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-custom-via-unmarshaler/main.go
+// Example: https://github.com/teamlint/iris/blob/master/_examples/http_request/read-custom-via-unmarshaler/main.go
+//
+// UnmarshalBody does not check about gzipped data.
+// Do not rely on compressed data incoming to your server. The main reason is: https://en.wikipedia.org/wiki/Zip_bomb
+// However you are still free to read the `ctx.Request().Body io.Reader` manually.
 func (ctx *context) UnmarshalBody(outPtr interface{}, unmarshaler Unmarshaler) error {
 	if ctx.request.Body == nil {
 		return errors.New("unmarshal: empty body")
@@ -2299,7 +2408,7 @@ func (ctx *context) shouldOptimize() bool {
 
 // ReadJSON reads JSON from request's body and binds it to a value of any json-valid type.
 //
-// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-json/main.go
+// Example: https://github.com/teamlint/iris/blob/master/_examples/http_request/read-json/main.go
 func (ctx *context) ReadJSON(jsonObject interface{}) error {
 	var unmarshaler = json.Unmarshal
 	if ctx.shouldOptimize() {
@@ -2310,7 +2419,7 @@ func (ctx *context) ReadJSON(jsonObject interface{}) error {
 
 // ReadXML reads XML from request's body and binds it to a value of any xml-valid type.
 //
-// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-xml/main.go
+// Example: https://github.com/teamlint/iris/blob/master/_examples/http_request/read-xml/main.go
 func (ctx *context) ReadXML(xmlObject interface{}) error {
 	return ctx.UnmarshalBody(xmlObject, UnmarshalerFunc(xml.Unmarshal))
 }
@@ -2322,7 +2431,7 @@ var (
 // ReadForm binds the formObject  with the form data
 // it supports any kind of struct.
 //
-// Example: https://github.com/kataras/iris/blob/master/_examples/http_request/read-form/main.go
+// Example: https://github.com/teamlint/iris/blob/master/_examples/http_request/read-form/main.go
 func (ctx *context) ReadForm(formObject interface{}) error {
 	values := ctx.FormValues()
 	if values == nil {
@@ -3220,7 +3329,7 @@ type (
 // Accepts a `CookieEncoder` and sets the cookie's value to the encoded value.
 // Users of that is the `SetCookie` and `SetCookieKV`.
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/securecookie
+// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/securecookie
 func CookieEncode(encode CookieEncoder) CookieOption {
 	return func(c *http.Cookie) {
 		newVal, err := encode(c.Name, c.Value)
@@ -3237,7 +3346,7 @@ func CookieEncode(encode CookieEncoder) CookieOption {
 // Accepts a `CookieDecoder` and sets the cookie's value to the decoded value before return by the `GetCookie`.
 // User of that is the `GetCookie`.
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/securecookie
+// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/securecookie
 func CookieDecode(decode CookieDecoder) CookieOption {
 	return func(c *http.Cookie) {
 		if err := decode(c.Name, c.Value, &c.Value); err != nil {
@@ -3249,7 +3358,7 @@ func CookieDecode(decode CookieDecoder) CookieOption {
 // SetCookie adds a cookie.
 // Use of the "options" is not required, they can be used to amend the "cookie".
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/basic
+// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/basic
 func (ctx *context) SetCookie(cookie *http.Cookie, options ...CookieOption) {
 	for _, opt := range options {
 		opt(cookie)
@@ -3274,7 +3383,7 @@ func (ctx *context) SetCookie(cookie *http.Cookie, options ...CookieOption) {
 //                              iris.CookieExpires(time.Duration)
 //                              iris.CookieHTTPOnly(false)
 //
-// Examples: https://github.com/kataras/iris/tree/master/_examples/cookies/basic
+// Examples: https://github.com/teamlint/iris/tree/master/_examples/cookies/basic
 func (ctx *context) SetCookieKV(name, value string, options ...CookieOption) {
 	c := &http.Cookie{}
 	c.Path = "/"
@@ -3292,7 +3401,7 @@ func (ctx *context) SetCookieKV(name, value string, options ...CookieOption) {
 // If you want more than the value then:
 // cookie, err := ctx.Request().Cookie("name")
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/basic
+// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/basic
 func (ctx *context) GetCookie(name string, options ...CookieOption) string {
 	cookie, err := ctx.request.Cookie(name)
 	if err != nil {
@@ -3316,7 +3425,7 @@ var SetCookieKVExpiration = time.Duration(120) * time.Minute
 // RemoveCookie deletes a cookie by it's name and path = "/".
 // Tip: change the cookie's path to the current one by: RemoveCookie("name", iris.CookieCleanPath)
 //
-// Example: https://github.com/kataras/iris/tree/master/_examples/cookies/basic
+// Example: https://github.com/teamlint/iris/tree/master/_examples/cookies/basic
 func (ctx *context) RemoveCookie(name string, options ...CookieOption) {
 	c := &http.Cookie{}
 	c.Name = name

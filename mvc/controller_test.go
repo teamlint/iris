@@ -116,7 +116,7 @@ func TestControllerBeginAndEndRequestFunc(t *testing.T) {
 
 	e := httptest.New(t, app)
 	usernames := []string{
-		"kataras",
+		"teamlint",
 		"makis",
 		"efi",
 		"rg",
@@ -136,7 +136,7 @@ func TestControllerBeginAndEndRequestFunc(t *testing.T) {
 func TestControllerBeginAndEndRequestFuncBindMiddleware(t *testing.T) {
 	app := iris.New()
 	usernames := map[string]bool{
-		"kataras":        true,
+		"teamlint":        true,
 		"makis":          false,
 		"efi":            true,
 		"rg":             false,
@@ -235,7 +235,7 @@ func TestControllerEndRequestAwareness(t *testing.T) {
 
 	e := httptest.New(t, app)
 	usernames := []string{
-		"kataras",
+		"teamlint",
 		"makis",
 	}
 
@@ -396,10 +396,10 @@ func TestControllerRelPathFromFunc(t *testing.T) {
 		Body().Equal("GET:/something/false")
 	e.GET("/something/truee").Expect().Status(iris.StatusNotFound)
 	e.GET("/something/falsee").Expect().Status(iris.StatusNotFound)
-	e.GET("/something/kataras/42").Expect().Status(iris.StatusOK).
-		Body().Equal("GET:/something/kataras/42")
-	e.GET("/something/new/kataras/42").Expect().Status(iris.StatusOK).
-		Body().Equal("GET:/something/new/kataras/42")
+	e.GET("/something/teamlint/42").Expect().Status(iris.StatusOK).
+		Body().Equal("GET:/something/teamlint/42")
+	e.GET("/something/new/teamlint/42").Expect().Status(iris.StatusOK).
+		Body().Equal("GET:/something/new/teamlint/42")
 	e.GET("/something/true/else/this/42").Expect().Status(iris.StatusOK).
 		Body().Equal("GET:/something/true/else/this/42")
 

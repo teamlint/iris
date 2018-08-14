@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	versionURL = "https://raw.githubusercontent.com/kataras/iris/master/VERSION"
+	versionURL = "https://raw.githubusercontent.com/teamlint/iris/master/VERSION"
 )
 
 func fetch() (*version.Version, string) {

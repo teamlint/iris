@@ -88,7 +88,7 @@ func testAppWithHeroHandlers(t *testing.T, h1, h2, h3 iris.Handler) {
 
 	expectedUser := testUserStruct{
 		ID:       42,
-		Username: "kataras",
+		Username: "teamlint",
 	}
 
 	e := httptest.New(t, app)
@@ -122,7 +122,7 @@ func TestBindFunctionAsFunctionInputArgument(t *testing.T) {
 
 	e := httptest.New(t, app)
 
-	expectedUsername := "kataras"
+	expectedUsername := "teamlint"
 	e.POST("/").WithFormField("username", expectedUsername).
 		Expect().Status(iris.StatusOK).Body().Equal(expectedUsername)
 }
