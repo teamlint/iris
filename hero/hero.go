@@ -104,3 +104,12 @@ func (h *Hero) Handler(fn interface{}) context.Handler {
 	}
 	return handler
 }
+
+// MakeHandler use di values make handler
+func MakeHandler(fn interface{}, values di.Values) context.Handler {
+	handler, err := makeHandler(fn, values...)
+	if err != nil {
+		golog.Errorf("hero make handler: %v", err)
+	}
+	return handler
+}

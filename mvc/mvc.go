@@ -192,3 +192,14 @@ func (app *Application) Clone(party router.Party) *Application {
 func (app *Application) Party(relativePath string, middleware ...context.Handler) *Application {
 	return app.Clone(app.Router.Party(relativePath, middleware...))
 }
+
+// Use mvc application inject middleware funs
+func (app *Application) UseFunc(fn ...interface{}) {
+	deps := app.Dependencies.Clone()
+	len := len(fn)
+	handlers := make(context.Handlers, len)
+	for i := 0; i < len; i++ {
+		handlers[i] = hero.MakeHandler(fn[i], deps)
+	}
+	app.Router.Use(handlers...)
+}
