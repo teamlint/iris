@@ -39,8 +39,15 @@ func (c *MovieController) Get() (results []datamodels.Movie) {
 // GetBy returns a movie.
 // Demo:
 // curl -i http://localhost:8080/movies/1
-func (c *MovieController) GetBy(id int64) (movie datamodels.Movie, found bool) {
-	return c.Service.GetByID(id) // it will throw 404 if not found.
+func (c *MovieController) GetBy(id int64) (movie datamodels.Movie, s int) {
+	movie, ok := c.Service.GetByID(id) // it will throw 404 if not found.
+	if ok {
+		return movie, 200
+	}
+	return movie, 400
+}
+func (c *MovieController) GetIntBy(id int64) int {
+	return int(id)
 }
 
 // PutBy updates a movie.
