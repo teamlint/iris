@@ -454,6 +454,8 @@ func (s *HTMLEngine) ExecuteWriter(w io.Writer, name string, layout string, bind
 		if err := s.Load(); err != nil {
 			return err
 		}
+		// fixed runtime middleware fucntions
+		s.runtimeFuncsFor(name, bindingData)
 	}
 
 	layout = getLayout(layout, s.layout)

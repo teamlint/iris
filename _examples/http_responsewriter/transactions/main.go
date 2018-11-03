@@ -7,7 +7,7 @@ import (
 
 func main() {
 	app := iris.New()
-
+	app.Use(TXDemo)
 	// subdomains works with all available routers, like other features too.
 
 	app.Get("/", func(ctx context.Context) {
@@ -51,4 +51,8 @@ func main() {
 	})
 
 	app.Run(iris.Addr(":8080"))
+}
+func TXDemo(ctx iris.Context) {
+	ctx.HTML("中间件HTML")
+	ctx.Next()
 }

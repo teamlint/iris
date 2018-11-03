@@ -848,6 +848,7 @@ type Context interface {
 	//
 	// Examples: https://github.com/teamlint/iris/tree/master/_examples/view
 	View(filename string, optionalViewModel ...interface{}) error
+	ViewResult(filename string, optionalViewModel ...interface{}) string
 
 	// Binary writes out the raw bytes as binary data.
 	Binary(data []byte) (int, error)
@@ -2864,6 +2865,21 @@ func (ctx *context) View(filename string, optionalViewModel ...interface{}) erro
 	}
 
 	return err
+}
+func (ctx *context) ViewResult(filename string, optionalViewModel ...interface{}) string {
+	cfg := ctx.Application().ConfigurationReadOnly()
+
+	layout := ctx.values.GetString(cfg.GetViewLayoutContextKey())
+
+	var bindingData interface{}
+	if len(optionalViewModel) > 0 {
+		// a nil can override the existing data or model sent by `ViewData`.
+		bindingData = optionalViewModel[0]
+	} else {
+		bindingData = ctx.values.Get(cfg.GetViewDataContextKey())
+	}
+
+	return ctx.Application().ViewResult(filename, layout, bindingData)
 }
 
 const (

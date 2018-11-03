@@ -15,7 +15,7 @@ import (
 func newApp() *iris.Application {
 	app := iris.New()
 
-	app.StaticEmbedded("/static", "./assets", Asset, AssetNames)
+	app.StaticEmbedded("/static", "./assets_", Asset, AssetNames)
 
 	return app
 }
