@@ -449,8 +449,8 @@ func (s *HTMLEngine) ExecuteWriter(w io.Writer, name string, layout string, bind
 	if s.reload {
 		// locks to fix #872, it's the simplest solution and the most correct,
 		// to execute writers with "wait list", one at a time.
-		s.rmu.Lock()
-		defer s.rmu.Unlock()
+		// s.rmu.Lock()
+		// defer s.rmu.Unlock()
 		if err := s.Load(); err != nil {
 			return err
 		}
