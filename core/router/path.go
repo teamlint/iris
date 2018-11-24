@@ -7,15 +7,9 @@ import (
 	"strings"
 
 	"github.com/teamlint/iris/core/netutil"
-	"github.com/teamlint/iris/core/router/macro/interpreter/lexer"
-)
-
-const (
-	// ParamStart the character in string representation where the underline router starts its dynamic named parameter.
-	ParamStart = ":"
-	// WildcardParamStart the character in string representation where the underline router starts its dynamic wildcard
-	// path parameter.
-	WildcardParamStart = "*"
+	"github.com/teamlint/iris/macro"
+	"github.com/teamlint/iris/macro/interpreter/ast"
+	"github.com/teamlint/iris/macro/interpreter/lexer"
 )
 
 // Param receives a parameter name prefixed with the ParamStart symbol.
@@ -29,6 +23,26 @@ func WildcardParam(name string) string {
 		return ""
 	}
 	return prefix(name, WildcardParamStart)
+}
+
+func convertMacroTmplToNodePath(tmpl macro.Template) string {
+	routePath := tmpl.Src
+	if len(routePath) > 1 && routePath[len(routePath)-1] == '/' {
+		routePath = routePath[0 : len(routePath)-1] // remove any last "/"
+	}
+
+	// if it has started with {} and it's valid
+	// then the tmpl.Params will be filled,
+	// so no any further check needed.
+	for _, p := range tmpl.Params {
+		if ast.IsTrailing(p.Type) {
+			routePath = strings.Replace(routePath, p.Src, WildcardParam(p.Name), 1)
+		} else {
+			routePath = strings.Replace(routePath, p.Src, Param(p.Name), 1)
+		}
+	}
+
+	return routePath
 }
 
 func prefix(s string, prefix string) string {

@@ -103,6 +103,12 @@ func (db *Database) Acquire(sid string, expires time.Duration) sessions.LifeTime
 	return sessions.LifeTime{} // session manager will handle the rest.
 }
 
+// OnUpdateExpiration not implemented here, yet.
+// Note that this error will not be logged, callers should catch it manually.
+func (db *Database) OnUpdateExpiration(sid string, newExpires time.Duration) error {
+	return sessions.ErrNotImplemented
+}
+
 var delim = byte('_')
 
 func makePrefix(sid string) []byte {
@@ -139,7 +145,13 @@ func (db *Database) Get(sid string, key string) (value interface{}) {
 		if err != nil {
 			return err
 		}
-		// item.ValueCopy
+
+		// return item.Value(func(valueBytes []byte) {
+		// 	if err := sessions.DefaultTranscoder.Unmarshal(valueBytes, &value); err != nil {
+		// 		golog.Error(err)
+		// 	}
+		// })
+
 		valueBytes, err := item.Value()
 		if err != nil {
 			return err
@@ -190,13 +202,25 @@ func (db *Database) Visit(sid string, cb func(key string, value interface{})) {
 
 	for iter.Rewind(); iter.ValidForPrefix(prefix); iter.Next() {
 		item := iter.Item()
+		var value interface{}
+
+		// err := item.Value(func(valueBytes []byte) {
+		// 	if err := sessions.DefaultTranscoder.Unmarshal(valueBytes, &value); err != nil {
+		// 		golog.Error(err)
+		// 	}
+		// })
+
+		// if err != nil {
+		// 	golog.Error(err)
+		// 	continue
+		// }
+
 		valueBytes, err := item.Value()
 		if err != nil {
 			golog.Error(err)
 			continue
 		}
 
-		var value interface{}
 		if err = sessions.DefaultTranscoder.Unmarshal(valueBytes, &value); err != nil {
 			golog.Error(err)
 			continue
