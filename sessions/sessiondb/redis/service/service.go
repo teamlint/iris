@@ -44,7 +44,7 @@ func (r *Service) CloseConnection() error {
 }
 
 // Set sets a key-value to the redis store.
-// The expiration is setted by the MaxAgeSeconds.
+// The expiration is set by the MaxAgeSeconds.
 func (r *Service) Set(key string, value interface{}, secondsLifetime int64) (err error) {
 	c := r.pool.Get()
 	defer c.Close()
@@ -292,7 +292,7 @@ func (r *Service) Connect() {
 		c.Addr = DefaultRedisAddr
 	}
 
-	pool := &redis.Pool{IdleTimeout: DefaultRedisIdleTimeout, MaxIdle: c.MaxIdle, MaxActive: c.MaxActive}
+	pool := &redis.Pool{IdleTimeout: c.IdleTimeout, MaxIdle: c.MaxIdle, MaxActive: c.MaxActive}
 	pool.TestOnBorrow = func(c redis.Conn, t time.Time) error {
 		_, err := c.Do("PING")
 		return err

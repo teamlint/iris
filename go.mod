@@ -22,14 +22,12 @@ require (
 	github.com/hashicorp/go-version v1.0.0
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/iris-contrib/blackfriday v2.0.0+incompatible
-	github.com/iris-contrib/formBinder v0.0.0-20171010160137-ad9fb86c356f
+	github.com/iris-contrib/formBinder v0.0.0-20190104093907-fbd5963f41e1
 	github.com/iris-contrib/go.uuid v2.0.0+incompatible
 	github.com/iris-contrib/httpexpect v0.0.0-20180314041918-ebe99fcebbce
 	github.com/iris-contrib/i18n v0.0.0-20171121225848-987a633949d0
 	github.com/json-iterator/go v1.1.5
 	github.com/juju/errors v0.0.0-20181012004132-a4583d0a56ea // indirect
-	github.com/teamlint/golog v0.0.0-20180321173939-03be10146386
-	github.com/teamlint/pio v0.0.0-20180511174041-a9733b5b6b83 // indirect
 	github.com/klauspost/compress v1.4.1
 	github.com/klauspost/cpuid v1.2.0 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.1
@@ -42,6 +40,8 @@ require (
 	github.com/sergi/go-diff v1.0.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v0.0.0-20170918181015-86672fcb3f95 // indirect
 	github.com/stretchr/testify v1.2.2 // indirect
+	github.com/teamlint/golog v0.0.0-20180321173939-03be10146386
+	github.com/teamlint/pio v0.0.0-20180511174041-a9733b5b6b83 // indirect
 	github.com/valyala/bytebufferpool v1.0.0
 	github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
