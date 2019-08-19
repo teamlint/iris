@@ -1,6 +1,238 @@
 {
 	"comment": "",
 	"ignore": "test",
-	"package": [],
+	"package": [
+		{
+			"checksumSHA1": "eobHTcy65aRvt0rHG7lm8gMGfkA=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/badger/vendor/github.com/dgraph-io/badger/vendor/github.com/AndreasBriese/bbloom",
+			"path": "github.com/AndreasBriese/bbloom",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "IRqv4jJXE48PwUO2rF4tJRlXMOs=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/badger/vendor/github.com/dgraph-io/badger",
+			"path": "github.com/dgraph-io/badger",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "oOuT7ebEiZ1ViHLKdFxKFOvobAQ=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/badger/vendor/github.com/dgraph-io/badger/options",
+			"path": "github.com/dgraph-io/badger/options",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "7NgICZVnT9SDraFKf/74/QLNR68=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/badger/vendor/github.com/dgraph-io/badger/protos",
+			"path": "github.com/dgraph-io/badger/protos",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "DqI3U8ETMkVszOIOSLZZ1U0v3hw=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/badger/vendor/github.com/dgraph-io/badger/skl",
+			"path": "github.com/dgraph-io/badger/skl",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "DwHCagZ+B4zb5IgEsBqK6wd1UAs=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/badger/vendor/github.com/dgraph-io/badger/table",
+			"path": "github.com/dgraph-io/badger/table",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "v2pJQ5NbS034cLP+GM1WLlGnByY=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/badger/vendor/github.com/dgraph-io/badger/y",
+			"path": "github.com/dgraph-io/badger/y",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "S8AGGmj4wSURD0vuy2WFOGK7qDY=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/badger/vendor/github.com/dgraph-io/badger/vendor/github.com/dgryski/go-farm",
+			"path": "github.com/dgryski/go-farm",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "TmViSVsP5MPtQPO7yyO/Sf+NSYU=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/boltdb/vendor/github.com/etcd-io/bbolt",
+			"path": "github.com/etcd-io/bbolt",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "q/AaJa/6c+YxodimOaMK7AMAWNo=",
+			"origin": "github.com/iris-contrib/httpexpect/vendor/github.com/gavv/monotime",
+			"path": "github.com/gavv/monotime",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "JZV+pLo8Z/kIYExrZr1Zu9KSKyU=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/badger/vendor/github.com/dgraph-io/badger/vendor/github.com/golang/protobuf/proto",
+			"path": "github.com/golang/protobuf/proto",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "w3QCCIYHgZzIXQ+xTl7oLfFrXHs=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/redis/service/vendor/github.com/gomodule/redigo/internal",
+			"path": "github.com/gomodule/redigo/internal",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "VE5/6X0XoOb8FL7PLxqaU1MbHcU=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/redis/service/vendor/github.com/gomodule/redigo/redis",
+			"path": "github.com/gomodule/redigo/redis",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "D1c42gkarJrbfSjSEqD12zUVSpo=",
+			"origin": "github.com/teamlint/iris/websocket/vendor/github.com/gorilla/websocket",
+			"path": "github.com/gorilla/websocket",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "sJUCafeNeHLmzeePI5xa//AloZs=",
+			"origin": "github.com/teamlint/iris/versioning/vendor/github.com/hashicorp/go-version",
+			"path": "github.com/hashicorp/go-version",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "WopaV+8dYWdxctEmNPjjo6auEJE=",
+			"path": "github.com/iris-contrib/httpexpect",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "yOaRxEHFjHZgYuEnyQuktsuDNxg=",
+			"origin": "github.com/teamlint/iris/middleware/i18n/vendor/github.com/iris-contrib/i18n",
+			"path": "github.com/iris-contrib/i18n",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "4fiMpzGK0wEWpjd0m/DcARu80Vw=",
+			"origin": "github.com/iris-contrib/httpexpect/vendor/github.com/moul/http2curl",
+			"path": "github.com/moul/http2curl",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "KIjOHW4mY9VxfCtq4HVg7RXni4M=",
+			"origin": "github.com/teamlint/iris/sessions/sessiondb/badger/vendor/github.com/dgraph-io/badger/vendor/github.com/pkg/errors",
+			"path": "github.com/pkg/errors",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "Tutue3nEgM/87jitUcYv6ODwyNE=",
+			"path": "github.com/satori/go.uuid",
+			"revision": "b2ce2384e17bbe0c6d34077efa39dbab3e09123b",
+			"revisionTime": "2018-10-28T12:50:25Z"
+		},
+		{
+			"checksumSHA1": "mGbTYZ8dHVTiPTTJu3ktp+84pPI=",
+			"path": "github.com/stretchr/testify/assert",
+			"revision": "2aa2c176b9dab406a6970f6a55f513e8a8c8b18f",
+			"revisionTime": "2017-08-14T20:04:35Z"
+		},
+		{
+			"checksumSHA1": "P9FJpir2c4G5PA46qEkaWy3l60U=",
+			"origin": "github.com/iris-contrib/httpexpect/vendor/github.com/stretchr/testify/require",
+			"path": "github.com/stretchr/testify/require",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "7ptX7X3jNkkrAkegLUVNo7hPAoc=",
+			"path": "github.com/teamlint/golog",
+			"revision": "0364bc8902c09cae3d8628330e2359b8395eaadd",
+			"revisionTime": "2018-01-14T09:15:37Z"
+		},
+		{
+			"checksumSHA1": "ScpJvJszMpisrAdTypynD7oSWu8=",
+			"path": "github.com/teamlint/pio",
+			"revision": "7e53560ccd0de4c5777d560c4df25c50a523ce94",
+			"revisionTime": "2018-03-13T09:11:22Z"
+		},
+		{
+			"checksumSHA1": "kXaBfPbRxylP+fRPc6FLiQVGZUc=",
+			"path": "github.com/teamlint/pio/terminal",
+			"revision": "7e53560ccd0de4c5777d560c4df25c50a523ce94",
+			"revisionTime": "2018-03-13T09:11:22Z"
+		},
+		{
+			"checksumSHA1": "W9L2eq1TnOzuHCwk+bDVa684WoQ=",
+			"origin": "github.com/teamlint/iris/websocket/vendor/github.com/valyala/bytebufferpool",
+			"path": "github.com/valyala/bytebufferpool",
+			"revision": "fd4b1b0210bd82676b986d94081b879c2c6882f9",
+			"revisionTime": "2019-06-25T10:49:17Z"
+		},
+		{
+			"checksumSHA1": "ssvU/CExHm2dXZ6upDC0vOCaQdU=",
+			"origin": "github.com/iris-contrib/httpexpect/vendor/github.com/xeipuuv/gojsonpointer",
+			"path": "github.com/xeipuuv/gojsonpointer",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "oy0sprKYBmzspHu51nCBbQGGGdo=",
+			"origin": "github.com/iris-contrib/httpexpect/vendor/github.com/xeipuuv/gojsonreference",
+			"path": "github.com/xeipuuv/gojsonreference",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "aAlgjySvvHRtT0sWD2mImQya3sM=",
+			"origin": "github.com/iris-contrib/httpexpect/vendor/github.com/xeipuuv/gojsonschema",
+			"path": "github.com/xeipuuv/gojsonschema",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "Br8riOmPlkHeIRjPyAwGXu50SwA=",
+			"origin": "github.com/iris-contrib/httpexpect/vendor/github.com/yalp/jsonpath",
+			"path": "github.com/yalp/jsonpath",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "KZO8zjK0ZT7jy7zMKQgkzIWG9fA=",
+			"origin": "github.com/iris-contrib/httpexpect/vendor/github.com/yudai/gojsondiff",
+			"path": "github.com/yudai/gojsondiff",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "7/V6fDOOfkmSHQahCK+J5G4Y1uk=",
+			"origin": "github.com/iris-contrib/httpexpect/vendor/github.com/yudai/gojsondiff/formatter",
+			"path": "github.com/yudai/gojsondiff/formatter",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "1ZiZ8YzfAw392HihneTMlmS/AU0=",
+			"origin": "github.com/iris-contrib/httpexpect/vendor/github.com/yudai/golcs",
+			"path": "github.com/yudai/golcs",
+			"revision": "ebe99fcebbcedf6e7916320cce24c3e1832766ac",
+			"revisionTime": "2018-03-14T04:19:18Z"
+		},
+		{
+			"checksumSHA1": "D34ZqOW907kHAGTRU6lmxJs1ToU=",
+			"path": "go4.org/syncutil/singleflight",
+			"revision": "fba789b7e39ba524b9e60c45c37a50fae63a2a09",
+			"revisionTime": "2018-01-03T06:19:21Z"
+		}
+	],
 	"rootPath": "github.com/teamlint/iris"
 }
