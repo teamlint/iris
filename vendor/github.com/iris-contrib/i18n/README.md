@@ -6,7 +6,7 @@ Package i18n is for app Internationalization and Localization.
 
 This package is a fork of the https://github.com/Unknwon/i18n.
 
-It's heavly used inside the https://github.com/teamlint/iris/tree/master/middleware/i18n middleware.
+It's heavly used inside the https://github.com/kataras/iris/tree/master/middleware/i18n middleware.
 
 # Changes
 
@@ -35,4 +35,7 @@ for _, lc := range locales.store {
 
 return "", false
 }
+
+A full Patch by @kataras to support multi languages, look the `localeFiles` new type
+and the `GetKey, Reload` and improvement of `locales.Add` and more.
 ```

@@ -1,5 +1,5 @@
 // Copyright 2013 Unknwon
-// Copyright 2017 Gerasimos (Makis) Maropoulos <https://github.com/@teamlint>
+// Copyright 2017 Gerasimos (Makis) Maropoulos <https://github.com/@kataras>
 //
 // Licensed under the Apache License, Version 2.0 (the "License"): you may
 // not use this file except in compliance with the License. You may obtain
