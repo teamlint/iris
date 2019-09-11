@@ -23,27 +23,35 @@ var writeMethod = func(ctx context.Context) {
 func (c *testController) Get() {
 	writeMethod(c.Ctx)
 }
+
 func (c *testController) Post() {
 	writeMethod(c.Ctx)
 }
+
 func (c *testController) Put() {
 	writeMethod(c.Ctx)
 }
+
 func (c *testController) Delete() {
 	writeMethod(c.Ctx)
 }
+
 func (c *testController) Connect() {
 	writeMethod(c.Ctx)
 }
+
 func (c *testController) Head() {
 	writeMethod(c.Ctx)
 }
+
 func (c *testController) Patch() {
 	writeMethod(c.Ctx)
 }
+
 func (c *testController) Options() {
 	writeMethod(c.Ctx)
 }
+
 func (c *testController) Trace() {
 	writeMethod(c.Ctx)
 }
@@ -272,9 +280,20 @@ type testControllerBindDeep struct {
 	testControllerBindStruct
 }
 
+func (t *testControllerBindDeep) BeforeActivation(b BeforeActivation) {
+	b.Dependencies().Add(func(ctx iris.Context) (v testCustomStruct, err error) {
+		err = ctx.ReadJSON(&v)
+		return
+	})
+}
+
 func (t *testControllerBindDeep) Get() {
 	// 	t.testControllerBindStruct.Get()
 	t.Ctx.Writef(t.TitlePointer.title + t.TitleValue.title + t.Other)
+}
+
+func (t *testControllerBindDeep) Post(v testCustomStruct) string {
+	return v.Name
 }
 
 func TestControllerDependencies(t *testing.T) {
@@ -299,6 +318,12 @@ func TestControllerDependencies(t *testing.T) {
 
 	e.GET("/deep").Expect().Status(iris.StatusOK).
 		Body().Equal(expected)
+
+	e.POST("/deep").WithJSON(iris.Map{"name": "kataras"}).Expect().Status(iris.StatusOK).
+		Body().Equal("kataras")
+
+	e.POST("/deep").Expect().Status(iris.StatusBadRequest).
+		Body().Equal("unexpected end of JSON input")
 }
 
 type testCtrl0 struct {
@@ -316,7 +341,7 @@ func (c *testCtrl0) EndRequest(ctx context.Context) {
 		ctx.Writef(c.TitlePointer.title)
 	}
 
-	//should be the same as `.testCtrl000.testCtrl0000.EndRequest(ctx)`
+	// should be the same as `.testCtrl000.testCtrl0000.EndRequest(ctx)`
 	c.testCtrl00.EndRequest(ctx)
 }
 
@@ -424,7 +449,6 @@ func TestControllerRelPathFromFunc(t *testing.T) {
 		Body().Equal("GET:/42")
 	e.GET("/anything/here").Expect().Status(iris.StatusOK).
 		Body().Equal("GET:/anything/here")
-
 }
 
 type testControllerActivateListener struct {

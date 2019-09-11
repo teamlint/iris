@@ -25,6 +25,15 @@ func WildcardParam(name string) string {
 	return prefix(name, WildcardParamStart)
 }
 
+// WildcardFileParam wraps a named parameter "file" with the trailing "path" macro parameter type.
+// At build state this "file" parameter is prefixed with the request handler's `WildcardParamStart`.
+// Created mostly for routes that serve static files to be visibly collected by
+// the `Application#GetRouteReadOnly` via the `Route.Tmpl().Src` instead of
+// the underline request handler's representation (`Route.Path()`).
+func WildcardFileParam() string {
+	return "{file:path}"
+}
+
 func convertMacroTmplToNodePath(tmpl macro.Template) string {
 	routePath := tmpl.Src
 	if len(routePath) > 1 && routePath[len(routePath)-1] == '/' {
@@ -223,12 +232,32 @@ func splitSubdomainAndPath(fullUnparsedPath string) (subdomain string, path stri
 	}
 
 	slashIdx := strings.IndexByte(s, '/')
-	if slashIdx == 0 {
-		// no subdomain
-		return "", cleanPath(s)
+	if slashIdx > 0 {
+		// has subdomain
+		subdomain = s[0:slashIdx]
 	}
 
-	return s[0:slashIdx], cleanPath(s[slashIdx:]) // return subdomain without slash, path with slash
+	path = s[slashIdx:]
+	if !strings.Contains(path, "{") {
+		path = strings.ReplaceAll(path, "//", "/")
+		path = strings.ReplaceAll(path, "\\", "/")
+	}
+
+	// remove any left trailing slashes, i.e "//api/users".
+	for i := 1; i < len(path); i++ {
+		if path[i] == '/' {
+			path = path[0:i] + path[i+1:]
+		} else {
+			break
+		}
+	}
+
+	// remove last /.
+	path = strings.TrimRight(path, "/")
+
+	// no cleanPath(path) in order
+	// to be able to parse macro function regexp(\\).
+	return // return subdomain without slash, path with slash
 }
 
 // RoutePathReverserOption option signature for the RoutePathReverser.

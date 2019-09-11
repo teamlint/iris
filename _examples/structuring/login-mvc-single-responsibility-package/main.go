@@ -20,10 +20,14 @@ func main() {
 	tmp.Reload(true)
 	app.RegisterView(tmp)
 
+<<<<<<< HEAD
 	app.StaticWeb("/public", "./public")
 	app.OnErrorCode(400, func(ctx iris.Context) {
 		ctx.Writef("错误截获,错误码:%v, 错误消息:%v", ctx.Values().Get("Title"), ctx.Values().Get("Message"))
 	})
+=======
+	app.HandleDir("/public", "./public")
+>>>>>>> upstream/master
 
 	mvc.Configure(app, configureMVC)
 

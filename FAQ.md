@@ -21,8 +21,14 @@ Add a `badge` to your open-source projects powered by [Iris](https://iris-go.com
 ## How to upgrade
 
 ```sh
+<<<<<<< HEAD
 go get -u github.com/teamlint/iris
+=======
+go get github.com/kataras/iris@v11.2.0
+>>>>>>> upstream/master
 ```
+
+Go version 1.12 and above is required.
 
 ## Learning
 
@@ -39,6 +45,7 @@ More than 100 practical examples, tutorials and articles at:
 
 Want to help and join to the greatest community? Describe your skills and push your own sections at: https://github.com/teamlint/build-a-better-web-together/issues/new
 
+<<<<<<< HEAD
 ### common errors that new gophers may meet
 
 #### type aliases
@@ -70,9 +77,11 @@ You can find all type aliases and their original package import statements at th
 
 > Remember; this doesn't mean that you have to use those type aliases, you can still import the original packages as you did with Go version 1.8, it's up to you.
 
+=======
+>>>>>>> upstream/master
 ## Active development mode
 
-Iris may have reached version 10, but we're not stopping there. We have many feature ideas on our board that we're anxious to add and other innovative web development solutions that we're planning to build into Iris.
+Iris may have reached version 11, but we're not stopping there. We have many feature ideas on our board that we're anxious to add and other innovative web development solutions that we're planning to build into Iris.
 
 ## Can I find a job if I learn how to use Iris?
 
@@ -81,6 +90,7 @@ open for Iris-specific developers the time we speak.
 
 Go to our facebook page, like it and receive notifications about new job offers, we already have couple of them stay at the top of the page: https://www.facebook.com/iris.framework
 
+<<<<<<< HEAD
 <!--
 ## Can Iris be used in production after Dubai purchase?
 
@@ -100,14 +110,19 @@ As our first deal was to end this agreement via last-time negotiatations by the 
 agreement ended unofficially at 22 Novemember of 2017 (officially some weeks later, paper work), and after a week I came back to Greece as you may understood from the regularly commits and improvements to the public repository that I pushed.
  -->
 
+=======
+>>>>>>> upstream/master
 ## Do we have a community Chat?
 
 Yes, https://chat.iris-go.com
 
+<<<<<<< HEAD
 https://github.com/teamlint/iris/issues/646
 
+=======
+>>>>>>> upstream/master
 ## How is the development of Iris supported?
 
 By normal people, like you, who help us by donating small or large amounts of money.
 
-Help this project deliver awesome and unique features with the highest possible code quality by donating any amount via [PayPal](https://www.paypal.me/kataras). Your name will be published [here](https://iris-go.com/donate) after your approval via e-mail.
+Help this project deliver awesome and unique features with the highest possible code quality by donating any amount via [PayPal](https://www.paypal.me/kataras). Your name will be published [here](https://iris-go.com) after your approval via e-mail.

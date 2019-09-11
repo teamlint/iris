@@ -4,8 +4,9 @@ import (
 	"github.com/teamlint/iris"
 )
 
-func main() {
+func newApp() *iris.Application {
 	app := iris.New()
+	app.Logger().SetLevel("debug")
 
 	// registers a custom handler for 404 not found http (error) status code,
 	// fires when route not found or manually by ctx.StatusCode(iris.StatusNotFound).
@@ -17,8 +18,13 @@ func main() {
 	//
 	// Third receiver should contains the route's handler(s), they are executed by order.
 	app.Handle("GET", "/", func(ctx iris.Context) {
+<<<<<<< HEAD
 		// navigate to the middle of $GOPATH/src/github.com/teamlint/iris/context/context.go
 		// to overview all context's method (there a lot of them, read that and you will learn how iris works too)
+=======
+		// navigate to the https://github.com/kataras/iris/wiki/Routing-context-methods
+		// to overview all context's method.
+>>>>>>> upstream/master
 		ctx.HTML("Hello from " + ctx.Path()) // Hello from /
 	})
 
@@ -26,12 +32,50 @@ func main() {
 		ctx.Writef(`Same as app.Handle("GET", "/", [...])`)
 	})
 
-	app.Get("/donate", donateHandler, donateFinishHandler)
+	// Different path parameters types in the same path.
+	app.Get("/u/{p:path}", func(ctx iris.Context) {
+		ctx.Writef(":string, :int, :uint, :alphabetical and :path in the same path pattern.")
+	})
+
+	app.Get("/u/{username:string}", func(ctx iris.Context) {
+		ctx.Writef("before username (string), current route name: %s\n", ctx.RouteName())
+		ctx.Next()
+	}, func(ctx iris.Context) {
+		ctx.Writef("username (string): %s", ctx.Params().Get("username"))
+	})
+
+	app.Get("/u/{id:int}", func(ctx iris.Context) {
+		ctx.Writef("before id (int), current route name: %s\n", ctx.RouteName())
+		ctx.Next()
+	}, func(ctx iris.Context) {
+		ctx.Writef("id (int): %d", ctx.Params().GetIntDefault("id", 0))
+	})
+
+	app.Get("/u/{uid:uint}", func(ctx iris.Context) {
+		ctx.Writef("before uid (uint), current route name: %s\n", ctx.RouteName())
+		ctx.Next()
+	}, func(ctx iris.Context) {
+		ctx.Writef("uid (uint): %d", ctx.Params().GetUintDefault("uid", 0))
+	})
+
+	app.Get("/u/{firstname:alphabetical}", func(ctx iris.Context) {
+		ctx.Writef("before firstname (alphabetical), current route name: %s\n", ctx.RouteName())
+		ctx.Next()
+	}, func(ctx iris.Context) {
+		ctx.Writef("firstname (alphabetical): %s", ctx.Params().Get("firstname"))
+	})
+
+	/*
+		/u/some/path/here maps to :path
+		/u/abcd maps to :alphabetical (if :alphabetical registered otherwise :string)
+		/u/42 maps to :uint (if :uint registered otherwise :int)
+		/u/-1 maps to :int (if :int registered otherwise :string)
+		/u/abcd123 maps to :string
+	*/
 
 	// Pssst, don't forget dynamic-path example for more "magic"!
 	app.Get("/api/users/{userid:uint64 min(1)}", func(ctx iris.Context) {
 		userID, err := ctx.Params().GetUint64("userid")
-
 		if err != nil {
 			ctx.Writef("error while trying to parse userid parameter," +
 				"this will never happen if :uint64 is being used because if it's not a valid uint64 it will fire Not Found automatically.")
@@ -92,8 +136,9 @@ func main() {
 	{ // braces are optional, it's just type of style, to group the routes visually.
 
 		// http://v1.localhost:8080
+		// Note: for versioning-specific features checkout the _examples/versioning instead.
 		v1.Get("/", func(ctx iris.Context) {
-			ctx.HTML("Version 1 API. go to <a href='" + ctx.Path() + "/api" + "'>/api/users</a>")
+			ctx.HTML(`Version 1 API. go to <a href="/api/users">/api/users</a>`)
 		})
 
 		usersAPI := v1.Party("/api/users")
@@ -117,9 +162,14 @@ func main() {
 		})
 	}
 
+	return app
+}
+
+func main() {
+	app := newApp()
+
 	// http://localhost:8080
 	// http://localhost:8080/home
-	// http://localhost:8080/donate
 	// http://localhost:8080/api/users/42
 	// http://localhost:8080/admin
 	// http://localhost:8080/admin/login
@@ -127,6 +177,12 @@ func main() {
 	// http://localhost:8080/api/users/0
 	// http://localhost:8080/api/users/blabla
 	// http://localhost:8080/wontfound
+	//
+	// http://localhost:8080/u/abcd
+	// http://localhost:8080/u/42
+	// http://localhost:8080/u/-1
+	// http://localhost:8080/u/abcd123
+	// http://localhost:8080/u/some/path/here
 	//
 	// if hosts edited:
 	//  http://v1.localhost:8080
@@ -141,6 +197,7 @@ func adminMiddleware(ctx iris.Context) {
 	ctx.Next() // to move to the next handler, or don't that if you have any auth logic.
 }
 
+<<<<<<< HEAD
 func donateHandler(ctx iris.Context) {
 	ctx.Writef("Just like an inline handler, but it can be " +
 		"used by other package, anywhere in your project.")
@@ -159,6 +216,8 @@ func donateFinishHandler(ctx iris.Context) {
 	ctx.Writef("\n\nDonate sent(?).")
 }
 
+=======
+>>>>>>> upstream/master
 func notFoundHandler(ctx iris.Context) {
 	ctx.HTML("Custom route for 404 not found http code, here you can render a view, html, json <b>any valid response</b>.")
 }

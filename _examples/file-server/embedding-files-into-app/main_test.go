@@ -54,7 +54,7 @@ func (r resource) loadFromBase(dir string) string {
 	result := string(b)
 
 	if runtime.GOOS != "windows" {
-		// result = strings.Replace(result, "\n", "\r\n", -1)
+		result = strings.Replace(result, "\n", "\r\n", -1)
 	}
 	return result
 }
@@ -66,11 +66,20 @@ var urls = []resource{
 }
 
 // if bindata's values matches with the assets/... contents
-// and secondly if the StaticEmbedded had successfully registered
+// and secondly if the HandleDir had successfully registered
 // the routes and gave the correct response.
 func TestEmbeddingFilesIntoApp(t *testing.T) {
 	app := newApp()
 	e := httptest.New(t, app)
+
+	route := app.GetRouteReadOnly("GET/static/{file:path}")
+	if route == nil {
+		t.Fatalf("expected a route to serve embedded files")
+	}
+
+	if len(route.StaticSites()) > 0 {
+		t.Fatalf("not expected a static site, the ./assets directory or its subdirectories do not contain any index.html")
+	}
 
 	if runtime.GOOS != "windows" {
 		// remove the embedded static favicon for !windows,

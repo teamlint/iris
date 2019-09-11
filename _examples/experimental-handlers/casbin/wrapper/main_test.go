@@ -3,13 +3,17 @@ package main
 import (
 	"testing"
 
+<<<<<<< HEAD
 	"github.com/iris-contrib/httpexpect"
 	"github.com/teamlint/iris/httptest"
+=======
+	"github.com/kataras/iris/httptest"
+>>>>>>> upstream/master
 )
 
 func TestCasbinWrapper(t *testing.T) {
 	app := newApp()
-	e := httptest.New(t, app)
+	e := httptest.New(t, app, httptest.Debug(true))
 
 	type ttcasbin struct {
 		username string
@@ -43,6 +47,7 @@ func TestCasbinWrapper(t *testing.T) {
 		check(e, tt.method, tt.path, tt.username, tt.status)
 	}
 
+	println("ADMIN ROLES")
 	ttAdmin := []ttcasbin{
 		{"cathrin", "/dataset1/item", "GET", 200},
 		{"cathrin", "/dataset1/item", "POST", 200},
@@ -56,6 +61,7 @@ func TestCasbinWrapper(t *testing.T) {
 		check(e, tt.method, tt.path, tt.username, tt.status)
 	}
 
+	println("ADMIN ROLE FOR cathrin DELETED")
 	Enforcer.DeleteRolesForUser("cathrin")
 
 	ttAdminDeleted := []ttcasbin{
@@ -70,9 +76,8 @@ func TestCasbinWrapper(t *testing.T) {
 	for _, tt := range ttAdminDeleted {
 		check(e, tt.method, tt.path, tt.username, tt.status)
 	}
-
 }
 
-func check(e *httpexpect.Expect, method, path, username string, status int) {
+func check(e *httptest.Expect, method, path, username string, status int) {
 	e.Request(method, path).WithBasicAuth(username, "password").Expect().Status(status)
 }

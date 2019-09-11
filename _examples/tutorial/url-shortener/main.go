@@ -3,8 +3,13 @@
 // Article: https://medium.com/@teamlint/a-url-shortener-service-using-go-iris-and-bolt-4182f0b00ae7
 //
 // $ go get github.com/etcd-io/bbolt
+<<<<<<< HEAD
 // $ go get github.com/satori/go.uuid
 // $ cd $GOPATH/src/github.com/teamlint/iris/_examples/tutorial/url-shortener
+=======
+// $ go get github.com/iris-contrib/go.uuid
+// $ cd $GOPATH/src/github.com/kataras/iris/_examples/tutorial/url-shortener
+>>>>>>> upstream/master
 // $ go build
 // $ ./url-shortener
 package main
@@ -49,7 +54,7 @@ func newApp(db *DB) *iris.Application {
 	app.RegisterView(tmpl)
 
 	// Serve static files (css)
-	app.StaticWeb("/static", "./resources")
+	app.HandleDir("/static", "./resources")
 
 	indexHandler := func(ctx iris.Context) {
 		ctx.ViewData("URL_COUNT", db.Len())
@@ -99,7 +104,6 @@ func newApp(db *DB) *iris.Application {
 					ctx.ViewData("FORM_RESULT",
 						template.HTML("<pre><a target='_new' href='"+shortenURL+"'>"+shortenURL+" </a></pre>"))
 				}
-
 			}
 		}
 

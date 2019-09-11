@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Routing
 
 ## Handlers
@@ -1503,3 +1504,6 @@ type Context interface {
     String() string
 }
 ```
+=======
+https://github.com/kataras/iris/wiki/Routing
+>>>>>>> upstream/master

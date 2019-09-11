@@ -13,32 +13,30 @@ import (
 	"time"
 )
 
-type (
-	// HTMLEngine contains the html view engine structure.
-	HTMLEngine struct {
-		// files configuration
-		directory string
-		extension string
-		assetFn   func(name string) ([]byte, error) // for embedded, in combination with directory & extension
-		namesFn   func() []string                   // for embedded, in combination with directory & extension
-		reload    bool                              // if true, each time the ExecuteWriter is called the templates will be reloaded, each ExecuteWriter waits to be finished before writing to a new one.
-		// parser configuration
-		options     []string // text options
-		left        string
-		right       string
-		layout      string
-		rmu         sync.RWMutex // locks for layoutFuncs and funcs
-		layoutFuncs map[string]interface{}
-		funcs       map[string]interface{}
+// HTMLEngine contains the html view engine structure.
+type HTMLEngine struct {
+	// files configuration
+	directory string
+	extension string
+	assetFn   func(name string) ([]byte, error) // for embedded, in combination with directory & extension
+	namesFn   func() []string                   // for embedded, in combination with directory & extension
+	reload    bool                              // if true, each time the ExecuteWriter is called the templates will be reloaded, each ExecuteWriter waits to be finished before writing to a new one.
+	// parser configuration
+	options     []string // text options
+	left        string
+	right       string
+	layout      string
+	rmu         sync.RWMutex // locks for layoutFuncs and funcs
+	layoutFuncs map[string]interface{}
+	funcs       map[string]interface{}
 
-		//
-		middleware func(name string, contents []byte) (string, error)
-		Templates  *template.Template
-		//
-	}
-)
+	//
+	middleware func(name string, contents []byte) (string, error)
+	Templates  *template.Template
+	//
+}
 
-var _ Engine = &HTMLEngine{}
+var _ Engine = (*HTMLEngine)(nil)
 
 var emptyFuncs = template.FuncMap{
 	"yield": func() (string, error) {
@@ -132,8 +130,7 @@ func (s *HTMLEngine) Option(opt ...string) *HTMLEngine {
 }
 
 // Delims sets the action delimiters to the specified strings, to be used in
-// subsequent calls to Parse, ParseFiles, or ParseGlob. Nested template
-// definitions will inherit the settings. An empty delimiter stands for the
+// templates. An empty delimiter stands for the
 // corresponding default: {{ or }}.
 func (s *HTMLEngine) Delims(left, right string) *HTMLEngine {
 	s.left, s.right = left, right
@@ -272,10 +269,10 @@ func (s *HTMLEngine) loadDirectory() error {
 					templateErr = err
 					return err
 				}
-				//s.mu.Lock()
+				// s.mu.Lock()
 				// Add our funcmaps.
 				_, err = tmpl.Funcs(emptyFuncs).Funcs(s.funcs).Parse(contents)
-				//s.mu.Unlock()
+				// s.mu.Unlock()
 				if err != nil {
 					templateErr = err
 					return err
@@ -412,10 +409,10 @@ func (s *HTMLEngine) layoutFuncsFor(name string, binding interface{}) {
 			}
 			return "", nil
 		},
-		//partial related to current page,
-		//it would be easier for adding pages' style/script inline
-		//for example when using partial_r '.script' in layout.html
-		//templates/users/index.html would load templates/users/index.script.html
+		// partial related to current page,
+		// it would be easier for adding pages' style/script inline
+		// for example when using partial_r '.script' in layout.html
+		// templates/users/index.html would load templates/users/index.script.html
 		"partial_r": func(partialName string) (template.HTML, error) {
 			ext := filepath.Ext(name)
 			root := name[:len(name)-len(ext)]

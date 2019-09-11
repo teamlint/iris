@@ -1,13 +1,14 @@
-# Iris Web Framework <a href="README.md"> <img width="20px" src="https://iris-go.com/images/flag-unitedkingdom.svg?v=10" /></a> <a href="README_ZH.md"> <img width="20px" src="https://iris-go.com/images/flag-china.svg?v=10" /></a> <a href="README_RU.md"><img width="20px" src="https://iris-go.com/images/flag-russia.svg?v=10" /></a> <a href="README_ID.md"> <img width="20px" src="https://iris-go.com/images/flag-indonesia.svg?v=10" /></a> <a href="README_PT_BR.md"><img width="20px" src="https://iris-go.com/images/flag-pt-br.svg?v=10" /></a> <a href="README_JPN.md"><img width="20px" src="https://iris-go.com/images/flag-japan.svg?v=10" /></a>
+# Iris <a href="README.md"> <img width="20px" src="https://iris-go.com/images/flag-unitedkingdom.svg?v=10" /></a> <a href="README_ZH.md"><img width="20px" src="https://iris-go.com/images/flag-china.svg?v=10" /></a> <a href="README_ES.md"><img width="20px" src="https://iris-go.com/images/flag-spain.png" /></a> <a href="README_KO.md"><img width="20px" src="https://iris-go.com/images/flag-south-korea.svg" />
 
-<a href="https://iris-go.com"> <img align="right" width="169px" src="https://iris-go.com/images/icon.svg?v=a" title="logo created by @merry.dii" /> </a>
+[![build status](https://img.shields.io/travis/kataras/iris/master.svg?style=for-the-badge)](https://travis-ci.org/kataras/iris) [![report card](https://img.shields.io/badge/report%20card-a%2B-ff3333.svg?style=for-the-badge)](https://goreportcard.com/report/github.com/kataras/iris)<!--[![godocs](https://img.shields.io/badge/go-%20docs-488AC7.svg?style=for-the-badge)](https://godoc.org/github.com/kataras/iris)--> [![view examples](https://img.shields.io/badge/learn%20by-examples-0077b3.svg?style=for-the-badge)](https://github.com/kataras/iris/tree/master/_examples) [![chat](https://img.shields.io/gitter/room/iris_go/community.svg?color=blue&logo=gitter&style=for-the-badge)](https://gitter.im/iris_go/community) [![release](https://img.shields.io/badge/release%20-v11.2-0077b3.svg?style=for-the-badge)](https://github.com/kataras/iris/releases)
 
-[![build status](https://img.shields.io/travis/kataras/iris/master.svg?style=flat-square)](https://travis-ci.org/kataras/iris)<!-- [![release](https://img.shields.io/github/release/kataras/iris.svg?style=flat-square)](https://github.com/kataras/iris/releases)--> [![report card](https://img.shields.io/badge/report%20card-a%2B-ff3333.svg?style=flat-square)](http://goreportcard.com/report/kataras/iris) [![vscode-iris](https://img.shields.io/badge/ext%20-vscode-0c77e3.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=kataras2006.iris)<!--[![github closed issues](https://img.shields.io/github/issues-closed-raw/kataras/iris.svg?style=flat-square)](https://github.com/kataras/iris/issues?q=is%3Aissue+is%3Aclosed)--> [![chat](https://img.shields.io/badge/community-%20chat-00BCD4.svg?style=flat-square)](https://kataras.rocket.chat/channel/iris) [![view examples](https://img.shields.io/badge/learn%20by-examples-0077b3.svg?style=flat-square)](https://github.com/kataras/iris/tree/master/_examples/routing) [![release](https://img.shields.io/badge/release%20-v11.1-0077b3.svg?style=flat-square)](https://github.com/kataras/iris/releases)
+Το Iris είναι ένα γρήγορο, απλό αλλά και πλήρως λειτουργικό και πολύ αποδοτικό web framework για τη Go γλώσσα προγραμματισμού. Παρέχει ένα εκφραστικό και εύχρηστο υπόβαθρο για την επόμενη ιστοσελίδα σας.
 
-Το Iris είναι ένα γρήγορο, απλό αλλά και πλήρως λειτουργικό και πολύ αποδοτικό web framework για τη Go.
+Μάθετε τι [λένε οι άλλοι για το Iris](https://iris-go.com/testimonials/) και δώστε ένα **αστεράκι** στο GitHub.
 
-Το Iris παρέχει ένα όμορφα εκφραστικό και εύχρηστο υπόβαθρο για την επόμενη σας ιστοσελίδα ή API.
+## Μαθαίνοντας το Iris
 
+<<<<<<< HEAD
 Επιτέλους, ένα πραγματικά ισάξιο (και με το παραπάνω) expressjs web framework για τη γλώσσα προγραμματισμού Go.
 
 Μάθετε τι [λένε οι άλλοι για το Iris](#%CE%A5%CF%80%CE%BF%CF%83%CF%84%CE%AE%CF%81%CE%B9%CE%BE%CE%B7) και [δώστε ένα αστέρι](https://github.com/teamlint/iris/stargazers) στο github repository για να μένετε [πάντα ενημερωμένοι](https://facebook.com/iris.framework).
@@ -17,8 +18,15 @@
 Eυχαριστούμε όλους τους υποστηρικτές μας! 🙏 [Γίνετε ένας από αυτούς](https://iris-go.com/donate)
 
 <a href="https://iris-go.com/donate" target="_blank"><img src="https://iris-go.com/backers.svg?v=2"/></a>
+=======
+<details>
+<summary>Γρήγορο ξεκίνημα</summary>
+>>>>>>> upstream/master
 
 ```sh
+# υποθέτοντας ότι ο παρακάτω κώδικας
+# βρίσκεται στο example.go αρχείο
+#
 $ cat example.go
 ```
 
@@ -28,63 +36,26 @@ package main
 import "github.com/teamlint/iris"
 
 func main() {
-    app := iris.New()
-    // Εδώ φορτώνουμε όλα τα templates από τον
-    // φάκελο "./views"
-    // όπου το extension είναι ".html" και αναλύουμε
-    // τα αρχεία αυτά βάση του `html/template` πακέτου.
-    app.RegisterView(iris.HTML("./views", ".html"))
-
-    // Method:    GET
-    // Resource:  http://localhost:8080
-    app.Get("/", func(ctx iris.Context) {
-        // Όπου {{.message}} εμφάνισε "Hello world!"
-        ctx.ViewData("message", "Hello world!")
-        // Εμφάνισε το σχετικό αρχείο "./views/hello.html"
-        ctx.View("hello.html")
+    app := iris.Default()
+    app.Get("/ping", func(ctx iris.Context) {
+        ctx.JSON(iris.Map{
+            "message": "pong",
+        })
     })
 
-    // Method:    GET
-    // Resource:  http://localhost:8080/user/42
-    //
-    // Θέλετε να χρησημοποιήσετε regex expressions;
-    // Εύκολο,
-    // απλά δηλώστε τον τύπο της παραμέτρου ως 'string'
-    // ο οποίος δέχετε κάθε τιμή και κάντε χρήση
-    // της `regexp` macro function, για παράδειγμα:
-    // app.Get("/user/{id:string regexp(^[0-9]+$)}")
-    app.Get("/user/{id:long}", func(ctx iris.Context) {
-        userID, _ := ctx.Params().GetInt64("id")
-        ctx.Writef("User ID: %d", userID)
-    })
-
-    // Εδώ αρχίζουμε τον server χρησιμοποιώντας την
-    // τοπική διεύθυνση δικτύου με πόρτα την 8080.
     app.Run(iris.Addr(":8080"))
 }
 ```
 
-> Μάθετε περισσότερα για τους τύπους παραμέτρων διαδρομής(routing) πατώντας [εδώ](_examples/routing/dynamic-path/main.go#L31)
-
-```html
-<!-- αρχείο: ./views/hello.html -->
-<html>
-<head>
-    <title>Hello Page</title>
-</head>
-<body>
-    <h1>{{.message}}</h1>
-</body>
-</html>
-```
-
 ```sh
+# τρέξτε το example.go και
+# επισκεφτείτε την σελίδα http://localhost:8080/ping
+# στο πρόγραμμα περιήγησης σας
+#
 $ go run example.go
-Now listening on: http://localhost:8080
-Application Started. Press CTRL+C to shut down.
-_
 ```
 
+<<<<<<< HEAD
 ## Εγκατάσταση
 
 Η μόνη απαίτηση είναι η [Go Γλώσσα Προγραμματισμού](https://golang.org/dl/)
@@ -195,45 +166,34 @@ _Η τελευταία ενημέρωση έγινε την [Τρίτη, 21 Νο
 11. [hasura.io: A Hasura starter project with a ready to deploy Golang hello-world web app with IRIS](https://hasura.io/hub/project/hasura/hello-golang-iris)
 
 > Έχετε χτίσει κάτι παρόμοιο; [Ενημέρωσέ μας](https://github.com/teamlint/iris/pulls)!
+=======
+> Η δρομολόγηση τροφοδοτείται από το [muxie](https://github.com/kataras/muxie), το πιο ισχυρό και ταχύτερο λογισμικό βασισμένο σε trie αλγόριθμο που γράφτηκε σε Go.
 
-### Middleware
+</details>
 
-Το Iris έχει μια μεγάλη συλλογή Handlers[[1]](middleware/)[[2]](https://github.com/iris-contrib/middleware) που μπορείτε να χρησιμοποιήσετε μέσα στις εφαρμογές σας. Ωστόσο, δεν περιορίζεστε σε αυτά - είστε ελεύθεροι να χρησιμοποιήσετε οποιοδήποτε μεσαίο λογισμικό τρίτου μέρους που είναι συμβατό με το [net/http](https://golang.org/pkg/net/http/) πακέτο, [_examples/convert-handlers](_examples/convert-handlers) θα σας δείξουν τον δρόμο.
+Το Iris περιέχει εκτενείς και λεπτομερείς **[wiki](https://github.com/kataras/iris/wiki)** καθιστώντας το εύκολο στην εκμάθηση.
+>>>>>>> upstream/master
 
-Το Iris, σε αντίθεση με τα άλλα, είναι 100% συμβατό με τα πρότυπα και γι 'αυτό η πλειοψηφία των μεγάλων εταιρειών που προσαρμόζονται στην Go, όπως ένα πολύ γνωστό τηλεοπτικό δίκτυο των ΗΠΑ, εμπιστεύονται το Iris, και αυτό γιατί είναι πάντα ενημερωμένο και ευθυγραμμισμένο με το πακέτο `net/http` το οποίο εκσυγχρονίζεται από τους συγγραφέες(authors) της Go σε κάθε νέα έκδοση της, για πάντα.
+Για λεπτομερέστερη τεχνική τεκμηρίωση μπορείτε να κατευθυνθείτε προς τα [godocs](https://godoc.org/github.com/kataras/iris) μας. Και για εκτελέσιμο κώδικα μπορείτε πάντα να επισκέπτεστε τα [παραδείγματα](_examples/).
 
-### Articles
+### Σας αρέσει να διαβάζετε ενώ ταξιδεύετε;
 
-* [CRUD REST API in Iris (a framework for golang)](https://medium.com/@jebzmos4/crud-rest-api-in-iris-a-framework-for-golang-a5d33652401e)
-* [A Todo MVC Application using Iris and Vue.js](https://hackernoon.com/a-todo-mvc-application-using-iris-and-vue-js-5019ff870064)
-* [A Hasura starter project with a ready to deploy Golang hello-world web app with IRIS](bit.ly/2lmKaAZ)
-* [Top 6 web frameworks for Go as of 2017](https://blog.usejournal.com/top-6-web-frameworks-for-go-as-of-2017-23270e059c4b)
-* [Iris Go Framework + MongoDB](https://medium.com/go-language/iris-go-framework-mongodb-552e349eab9c)
-* [How to build a file upload form using DropzoneJS and Go](https://hackernoon.com/how-to-build-a-file-upload-form-using-dropzonejs-and-go-8fb9f258a991)
-* [How to display existing files on server using DropzoneJS and Go](https://hackernoon.com/how-to-display-existing-files-on-server-using-dropzonejs-and-go-53e24b57ba19)
-* [Iris, a modular web framework](https://medium.com/@corebreaker/iris-web-cd684b4685c7)
-* [Go vs .NET Core in terms of HTTP performance](https://medium.com/@kataras/go-vs-net-core-in-terms-of-http-performance-7535a61b67b8)
-* [Iris Go vs .NET Core Kestrel in terms of HTTP performance](https://hackernoon.com/iris-go-vs-net-core-kestrel-in-terms-of-http-performance-806195dc93d5)
-* [How to Turn an Android Device into a Web Server](https://twitter.com/ThePracticalDev/status/892022594031017988)
-* [Deploying a Iris Golang app in hasura](https://medium.com/@HasuraHQ/deploy-an-iris-golang-app-with-backend-apis-in-minutes-25a559bf530b)
-* [A URL Shortener Service using Go, Iris and Bolt](https://medium.com/@kataras/a-url-shortener-service-using-go-iris-and-bolt-4182f0b00ae7)
+Μπορείτε να [ζητήσετε](https://bit.ly/iris-req-book) σήμερα την PDF έκδοση και την online πρόσβαση στο Ηλεκτρονικό μας **Βιβλίο(E-Book)** και να συμμετάσχετε στην ανάπτυξη του Iris.
 
-### Εκμάθηση μέσω video
+[![https://iris-go.com/images/iris-book-overview.png](https://iris-go.com/images/iris-book-overview.png)](https://bit.ly/iris-req-book)
 
-* [Daily Coding - Web Framework Golang: Iris Framework]( https://www.youtube.com/watch?v=BmOLFQ29J3s) από WarnabiruTV, πηγή: youtube, κόστος: **ΔΩΡΕΑΝ**
-* [Tutorial Golang MVC dengan Iris Framework & Mongo DB](https://www.youtube.com/watch?v=uXiNYhJqh2I&list=PLMrwI6jIZn-1tzskocnh1pptKhVmWdcbS) (19 videos ως τωρα) από Musobar Media, πηγή: youtube, κόστος: **ΔΩΡΕΑΝ**
-* [Go/Golang 27 - Iris framework : Routage de base](https://www.youtube.com/watch?v=rQxRoN6ub78) από stephgdesign, πηγή: youtube, κόστος: **ΔΩΡΕΑΝ**
-* [Go/Golang 28 - Iris framework : Templating](https://www.youtube.com/watch?v=nOKYV073S2Y) από stephgdesignn, πηγή: youtube, κόστος: **ΔΩΡΕΑΝ**
-* [Go/Golang 29 - Iris framework : Paramètres](https://www.youtube.com/watch?v=K2FsprfXs1E) από stephgdesign, πηγή: youtube, κόστος: **ΔΩΡΕΑΝ**
-* [Go/Golang 30 - Iris framework : Les middelwares](https://www.youtube.com/watch?v=BLPy1So6bhE) από stephgdesign, πηγή: youtube, κόστος: **ΔΩΡΕΑΝ**
-* [Go/Golang 31 - Iris framework : Les sessions](https://www.youtube.com/watch?v=RnBwUrwgEZ8) από stephgdesign, πηγή: youtube, κόστος: **ΔΩΡΕΑΝ**
+## Συνεισφορά
 
-### Προσληφθείτε
+Θα θέλαμε να δούμε τη συμβολή σας στο Iris Web Framework! Για περισσότερες πληροφορίες σχετικά με το πως μπορείτε να συμβάλετε, δείτε το [CONTRIBUTING.md](CONTRIBUTING.md) αρχείο.
 
-Υπάρχουν πολλές νεοσύστατες εταιρείες που αναζητούν Go web developers με εμπειρία Iris ως απαίτηση, ψάχνουμε καθημερινά και δημοσιεύουμε αυτές τις πληροφορίες μέσω της [σελίδας μας στο facebook](https://www.facebook.com/iris.framework), κάντε like για να λαμβάνετε ειδοποιήσεις, έχουμε ήδη δημοσιεύσει ορισμένες από αυτές(τις θέσεις εργασίας).
+[Κατάλογος όλων των συνεισφορών](https://github.com/kataras/iris/graphs/contributors).
 
-## License
+## Αδυναμίες Ασφάλειας
 
-Το Iris διαθέτει άδεια βάσει του [3-Clause BSD License](LICENSE). Το Iris είναι 100% δωρεάν και  ανοιχτού κώδικα λογισμικό.
+Εάν εντοπίσετε κάποια αδυναμία ασφαλείας του Iris, στείλτε ένα μήνυμα ηλεκτρονικού ταχυδρομείου στο [iris-go@outlook.com](mailto:iris-go@outlook.com). Όλες οι τυχών αδυναμίες ασφαλείας θα αντιμετωπιστούν άμεσα.
 
-Για τυχόν ερωτήσεις σχετικά με την άδεια παρακαλώ στείλτε [e-mail](mailto:kataras2006@hotmail.com?subject=Iris%20License).
+## Άδεια Χρήσης
+
+Το όνομα "Iris" εμπνεύστηκε από την ελληνική μυθολογία, από την θεά Ίριδα.
+
+Το Iris Web Framework είναι δωρεάν λογισμικό ανοιχτού λογισμικού με άδεια χρήσης [3-Clause BSD](LICENSE).

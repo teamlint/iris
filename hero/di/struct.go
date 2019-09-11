@@ -3,6 +3,7 @@ package di
 import (
 	"fmt"
 	"reflect"
+	"sort"
 )
 
 // Scope is the struct injector's struct value scope/permant state.
@@ -20,10 +21,28 @@ const (
 	Singleton
 )
 
+// read-only on runtime.
+var scopeNames = map[Scope]string{
+	Stateless: "Stateless",
+	Singleton: "Singleton",
+}
+
+// Return "Stateless" for 0  or "Singleton" for 1.
+func (scope Scope) String() string {
+	name, ok := scopeNames[scope]
+	if !ok {
+		return "Unknown"
+	}
+
+	return name
+}
+
 type (
 	targetStructField struct {
 		Object     *BindObject
 		FieldIndex []int
+		// ValueIndex is used mostly for debugging, it's the order of the registered binded value targets to that field.
+		ValueIndex int
 	}
 
 	// StructInjector keeps the data that are needed in order to do the binding injection
@@ -52,21 +71,71 @@ func (s *StructInjector) countBindType(typ BindType) (n int) {
 	return
 }
 
+// Sorter is the type for sort customization of a struct's fields
+// and its available bindable values.
+//
+// Sorting applies only when a field can accept more than one registered value.
+type Sorter func(t1 reflect.Type, t2 reflect.Type) bool
+
+// SortByNumMethods is a builtin sorter to sort fields and values
+// based on their type and its number of methods, highest number of methods goes first.
+//
+// It is the default sorter on package-level struct injector function `Struct`.
+var SortByNumMethods Sorter = func(t1 reflect.Type, t2 reflect.Type) bool {
+	if t1.Kind() != t2.Kind() {
+		return true
+	}
+
+	if k := t1.Kind(); k == reflect.Interface || k == reflect.Struct {
+		return t1.NumMethod() > t2.NumMethod()
+	} else if k != reflect.Struct {
+		return false // non-structs goes last.
+	}
+
+	return true
+}
+
 // MakeStructInjector returns a new struct injector, which will be the object
 // that the caller should use to bind exported fields or
 // embedded unexported fields that contain exported fields
 // of the "v" struct value or pointer.
 //
 // The hijack and the goodFunc are optional, the "values" is the dependencies collection.
-func MakeStructInjector(v reflect.Value, hijack Hijacker, goodFunc TypeChecker, values ...reflect.Value) *StructInjector {
+func MakeStructInjector(v reflect.Value, hijack Hijacker, goodFunc TypeChecker, sorter Sorter, values ...reflect.Value) *StructInjector {
 	s := &StructInjector{
 		initRef:        v,
 		initRefAsSlice: []reflect.Value{v},
 		elemType:       IndirectType(v.Type()),
 	}
 
+	// Optionally check and keep good values only here,
+	// but not required because they are already checked by users of this function.
+	//
+	// for i, v := range values {
+	// 	if !goodVal(v) || IsZero(v) {
+	// 		if last := len(values) - 1; last > i {
+	// 			values = append(values[:i], values[i+1:]...)
+	// 		} else {
+	// 			values = values[0:last]
+	// 		}
+	// 	}
+	// }
+
+	visited := make(map[int]struct{}, 0) // add a visited to not add twice a single value (09-Jul-2019).
 	fields := lookupFields(s.elemType, true, nil)
+
+	// for idx, val := range values {
+	// 	  fmt.Printf("[%d] value type [%s] value name [%s]\n", idx, val.Type().String(), val.String())
+	// }
+
+	if len(fields) > 1 && sorter != nil {
+		sort.Slice(fields, func(i, j int) bool {
+			return sorter(fields[i].Type, fields[j].Type)
+		})
+	}
+
 	for _, f := range fields {
+		// fmt.Printf("[%d] field type [%s] value name [%s]\n", idx, f.Type.String(), f.Name)
 		if hijack != nil {
 			if b, ok := hijack(f.Type); ok && b != nil {
 				s.fields = append(s.fields, &targetStructField{
@@ -78,23 +147,47 @@ func MakeStructInjector(v reflect.Value, hijack Hijacker, goodFunc TypeChecker, 
 			}
 		}
 
-		for _, val := range values {
+		var possibleValues []*targetStructField
+
+		for idx, val := range values {
+			if _, alreadySet := visited[idx]; alreadySet {
+				continue
+			}
+
 			// the binded values to the struct's fields.
 			b, err := MakeBindObject(val, goodFunc)
-
 			if err != nil {
 				return s // if error stop here.
 			}
 
 			if b.IsAssignable(f.Type) {
-				// fmt.Printf("bind the object to the field: %s at index: %#v and type: %s\n", f.Name, f.Index, f.Type.String())
-				s.fields = append(s.fields, &targetStructField{
+				possibleValues = append(possibleValues, &targetStructField{
+					ValueIndex: idx,
 					FieldIndex: f.Index,
 					Object:     &b,
 				})
-				break
 			}
 		}
+
+		if l := len(possibleValues); l == 0 {
+			continue
+		} else if l > 1 && sorter != nil {
+			sort.Slice(possibleValues, func(i, j int) bool {
+				// if first.Object.BindType != second.Object.BindType {
+				// 	return true
+				// }
+
+				// if first.Object.BindType != Static { // dynamic goes last.
+				// 	return false
+				// }
+				return sorter(possibleValues[i].Object.Type, possibleValues[j].Object.Type)
+			})
+		}
+
+		tf := possibleValues[0]
+		visited[tf.ValueIndex] = struct{}{}
+		// fmt.Printf("bind the object to the field: %s at index: %#v and type: %s\n", f.Name, f.Index, f.Type.String())
+		s.fields = append(s.fields, tf)
 	}
 
 	s.Has = len(s.fields) > 0
@@ -126,13 +219,14 @@ func (s *StructInjector) setState() {
 	// if so then set the temp staticBindingsFieldsLength to that number, so for example:
 	// if static binding length is 0
 	// but an unexported field is set-ed then act that as singleton.
+
 	if allStructFieldsLength > staticBindingsFieldsLength {
 		structFieldsUnexportedNonZero := LookupNonZeroFieldsValues(s.initRef, false)
 		staticBindingsFieldsLength = len(structFieldsUnexportedNonZero)
 	}
 
-	// println("staticBindingsFieldsLength: ", staticBindingsFieldsLength)
 	// println("allStructFieldsLength: ", allStructFieldsLength)
+	// println("staticBindingsFieldsLength: ", staticBindingsFieldsLength)
 
 	// if the number of static values binded is equal to the
 	// total struct's fields(including unexported fields this time) then set as singleton.
@@ -169,9 +263,23 @@ func (s *StructInjector) fillStruct() {
 func (s *StructInjector) String() (trace string) {
 	for i, f := range s.fields {
 		elemField := s.elemType.FieldByIndex(f.FieldIndex)
-		trace += fmt.Sprintf("[%d] %s binding: '%s' for field '%s %s'\n",
-			i+1, bindTypeString(f.Object.BindType), f.Object.Type.String(),
-			elemField.Name, elemField.Type.String())
+
+		format := "\t[%d] %s binding: %#+v for field '%s %s'"
+		if len(s.fields) > i+1 {
+			format += "\n"
+		}
+
+		if !f.Object.Value.IsValid() {
+			continue // probably a Context.
+		}
+
+		valuePresent := f.Object.Value.Interface()
+
+		if f.Object.BindType == Dynamic {
+			valuePresent = f.Object.Type.String()
+		}
+
+		trace += fmt.Sprintf(format, i+1, bindTypeString(f.Object.BindType), valuePresent, elemField.Name, elemField.Type.String())
 	}
 
 	return

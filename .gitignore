@@ -4,5 +4,10 @@ _authortools
 *.cache
 *.nuget.g.*
 obj/
+.DS_Store
 .directory
 /sessions/testdb/
+node_modules
+package-lock.json
+_benchmarks/benchmarker/benchmarker.exe
+_benchmarks/benchmarker/platforms

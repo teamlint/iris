@@ -14,11 +14,12 @@ func newApp() *iris.Application {
 		Languages: map[string]string{
 			"en-US": "./locales/locale_en-US.ini",
 			"el-GR": "./locales/locale_el-GR.ini",
-			"zh-CN": "./locales/locale_zh-CN.ini"}})
+			"zh-CN": "./locales/locale_zh-CN.ini",
+		},
+	})
 	app.Use(globalLocale)
 
 	app.Get("/", func(ctx iris.Context) {
-
 		// it tries to find the language by:
 		// ctx.Values().GetString("language")
 		// if that was empty then
@@ -47,7 +48,9 @@ func newApp() *iris.Application {
 		URLParameter: "lang",
 		Languages: map[string]string{
 			"en-US": "./locales/locale_multi_first_en-US.ini, ./locales/locale_multi_second_en-US.ini",
-			"el-GR": "./locales/locale_multi_first_el-GR.ini, ./locales/locale_multi_second_el-GR.ini"}})
+			"el-GR": "./locales/locale_multi_first_el-GR.ini, ./locales/locale_multi_second_el-GR.ini",
+		},
+	})
 
 	app.Get("/multi", multiLocale, func(ctx iris.Context) {
 		language := ctx.Values().GetString(ctx.Application().ConfigurationReadOnly().GetTranslateLanguageContextKey())
@@ -58,6 +61,19 @@ func newApp() *iris.Application {
 			language, "key1", fromFirstFileValue,
 			"key2", fromSecondFileValue)
 	})
+
+	// using in inside your templates:
+	view := iris.HTML("./templates", ".html")
+	app.RegisterView(view)
+
+	app.Get("/templates", func(ctx iris.Context) {
+		ctx.View("index.html", iris.Map{
+			"tr": ctx.Translate,
+		})
+		// it will return "hello, iris"
+		// when {{call .tr "hi" "iris"}}
+	})
+	//
 
 	return app
 }

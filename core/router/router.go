@@ -42,7 +42,6 @@ func (router *Router) RefreshRouter() error {
 //
 // Use of RefreshRouter to re-build the router if needed.
 func (router *Router) BuildRouter(cPool *context.Pool, requestHandler RequestHandler, routesProvider RoutesProvider, force bool) error {
-
 	if requestHandler == nil {
 		return errors.New("router: request handler is nil")
 	}
@@ -81,6 +80,8 @@ func (router *Router) BuildRouter(cPool *context.Pool, requestHandler RequestHan
 	// the important
 	router.mainHandler = func(w http.ResponseWriter, r *http.Request) {
 		ctx := cPool.Acquire(w, r)
+		// Note: we can't get all r.Context().Value key-value pairs
+		// and save them to ctx.values.
 		router.requestHandler.HandleRequest(ctx)
 		cPool.Release(ctx)
 	}
@@ -93,7 +94,7 @@ func (router *Router) BuildRouter(cPool *context.Pool, requestHandler RequestHan
 }
 
 // Downgrade "downgrades", alters the router supervisor service(Router.mainHandler)
-//  algorithm to a custom one,
+// algorithm to a custom one,
 // be aware to change the global variables of 'ParamStart' and 'ParamWildcardStart'.
 // can be used to implement a custom proxy or
 // a custom router which should work with raw ResponseWriter, *Request

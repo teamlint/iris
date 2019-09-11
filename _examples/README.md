@@ -2,56 +2,42 @@
 
 Please do learn how [net/http](https://golang.org/pkg/net/http/) std package works, first.
 
+<<<<<<< HEAD
 This folder provides easy to understand code snippets on how to get started with [iris](https://github.com/teamlint/iris) micro web framework.
+=======
+This folder provides easy to understand code snippets on how to get started with [iris](https://github.com/kataras/iris) web framework.
+>>>>>>> upstream/master
 
 It doesn't always contain the "best ways" but it does cover each important feature that will make you so excited to GO with iris!
 
 ## Running the examples
 
-1. Install the Go Programming Language, version 1.9+ from [here](https://golang.org/dl).
-2. Install Iris: `go get -u github.com/kataras/iris`
+1. Install the Go Programming Language, version 1.12+ from https://golang.org/dl.
+2. [Install Iris](https://github.com/kataras/iris/wiki/installation)
 3. Install any external packages that required by the examples
 
 <details>
 <summary>External packages</summary>
 
-```bash
+```sh
 cd _examples && go get ./...
-# or
-go get github.com/iris-contrib/middleware/...
-go get github.com/betacraft/yaag/irisyaag
-go get github.com/markbates/goth/...
-go get github.com/casbin/casbin
-go get github.com/aws/aws-sdk-go/...
-go get github.com/getsentry/raven-go/...
-go get github.com/prometheus/client_golang/...
-go get github.com/didip/tollbooth
-go get github.com/valyala/quicktemplate
-go get github.com/shiyanhui/hero
-go get github.com/go-xorm/xorm
-go get github.com/nfnt/resize
-go get github.com/dgrijalva/jwt-go
-go get github.com/newrelic/go-agent
-go get github.com/valyala/tcplisten
-go get github.com/kataras/bindata/cmd/bindata
-go get github.com/jmespath/go-jmespath
 ```
 
 </details>
 
-And execute
+And run each example you wanna see, e.g.
 
 ```sh
 $ cd $GOPATH/src/github.com/kataras/iris/_examples/overview
 $ go run main.go
 ```
 
-> Test the examples by opening a terminal window and execute: `GOCACHE=off && cd _examples && go test -v ./...`
+> Test the examples by opening a terminal window and execute: `go test -v ./...`
 
 ### Overview
 
 - [Hello world!](hello-world/main.go)
-- [Hello WebAssemply!](webassembly/basic/main.go) **NEW**
+- [Hello WebAssemply!](webassembly/basic/main.go)
 - [Glimpse](overview/main.go)
 - [Tutorial: Online Visitors](tutorial/online-visitors/main.go)
 - [Tutorial: A Todo MVC Application using Iris and Vue.js](https://hackernoon.com/a-todo-mvc-application-using-iris-and-vue-js-5019ff870064)
@@ -62,7 +48,7 @@ $ go run main.go
 - [Tutorial: DropzoneJS Uploader](tutorial/dropzonejs)
 - [Tutorial: Caddy](tutorial/caddy)
 - [Tutorial:Iris Go Framework + MongoDB](https://medium.com/go-language/iris-go-framework-mongodb-552e349eab9c)
-- [Tutorial: API for Apache Kafka](tutorial/api-for-apache-kafka) **NEW**
+- [Tutorial: API for Apache Kafka](tutorial/api-for-apache-kafka)
 
 ### Structuring
 
@@ -78,6 +64,7 @@ Structuring depends on your own needs. We can't tell you how to design your own 
 ### HTTP Listening
 
 - [Common, with address](http-listening/listen-addr/main.go)
+    * [public domain address](http-listening/listen-addr-public/main.go) **NEW**
     * [omit server errors](http-listening/listen-addr/omit-server-errors/main.go)
 - [UNIX socket file](http-listening/listen-unix/main.go)
 - [TLS](http-listening/listen-tls/main.go)
@@ -87,6 +74,7 @@ Structuring depends on your own needs. We can't tell you how to design your own 
     * [common net.Listener](http-listening/custom-listener/main.go)
     * [SO_REUSEPORT for unix systems](http-listening/custom-listener/unix-reuseport/main.go)
 - Custom HTTP Server
+    * [HTTP/3 Quic](http-listening/http3-quic) **NEW**
     * [easy way](http-listening/custom-httpserver/easy-way/main.go)
     * [std way](http-listening/custom-httpserver/std-way/main.go)
     * [multi server instances](http-listening/custom-httpserver/multi/main.go)
@@ -146,10 +134,10 @@ Navigate through examples for a better understanding.
 - [Custom HTTP Errors](routing/http-errors/main.go)
 - [Dynamic Path](routing/dynamic-path/main.go)
     * [root level wildcard path](routing/dynamic-path/root-wildcard/main.go)
-- [Write your own custom parameter types](routing/macros/main.go) **NEW**
+- [Write your own custom parameter types](routing/macros/main.go)
 - [Reverse routing](routing/reverse/main.go)
-- [Custom Router (high-level)](routing/custom-high-level-router/main.go) **NEW**
-- [Custom Wrapper](routing/custom-wrapper/main.go)
+- [Custom Router (high-level)](routing/custom-high-level-router/main.go)
+- [Custom Wrapper](routing/custom-wrapper/main.go) **UPDATED**
 - Custom Context
     * [method overriding](routing/custom-context/method-overriding/main.go)
     * [new implementation](routing/custom-context/new-implementation/main.go)
@@ -163,15 +151,16 @@ Navigate through examples for a better understanding.
 - [How it works](https://github.com/kataras/iris/blob/master/versioning/README.md)
 - [Example](versioning/main.go)
 
-### hero
+### Dependency Injection
 
 - [Basic](hero/basic/main.go)
 - [Overview](hero/overview)
-- [Sessions](hero/sessions) **NEW**
+- [Sessions](hero/sessions)
 - [Yet another dependency injection example and good practises at general](hero/smart-contract/main.go) **NEW**
 
 ### MVC
 
+<<<<<<< HEAD
 ![](mvc/web_mvc_diagram.png)
 
 Iris has **first-class support for the MVC (Model View Controller) pattern**, you'll not find
@@ -314,6 +303,17 @@ Follow the examples below,
 - [Websocket Controller](mvc/websocket) **NEW**
 - [Register Middleware](mvc/middleware) **NEW**
 - [Vue.js Todo MVC](tutorial/vuejs-todo-mvc) **NEW**
+=======
+- [Hello world](mvc/hello-world/main.go)
+- [Regexp](mvc/regexp/main.go) **NEW**
+- [Session Controller](mvc/session-controller/main.go)
+- [Overview - Plus Repository and Service layers](mvc/overview)
+- [Login showcase - Plus Repository and Service layers](mvc/login)
+- [Singleton](mvc/singleton)
+- [Websocket Controller](mvc/websocket) **UPDATED**
+- [Register Middleware](mvc/middleware)
+- [Vue.js Todo MVC](tutorial/vuejs-todo-mvc)
+>>>>>>> upstream/master
 
 ### Subdomains
 
@@ -331,14 +331,6 @@ Follow the examples below,
 
 ### View
 
-| Engine | Declaration |
-| -----------|-------------|
-| template/html | `iris.HTML(...)`       |
-| django        | `iris.Django(...)`     |
-| handlebars    | `iris.Handlebars(...)` |
-| amber         | `iris.Amber(...)`      |
-| pug(jade)     | `iris.Pug(...)`        |
-
 - [Overview](view/overview/main.go)
 - [Hi](view/template_html_0/main.go)
 - [A simple Layout](view/template_html_1/main.go)
@@ -352,6 +344,8 @@ Follow the examples below,
 - [Pug (Jade) Actions`](view/template_pug_1)
 - [Pug (Jade) Includes`](view/template_pug_2)
 - [Pug (Jade) Extends`](view/template_pug_3)
+- [Jet](/view/template_jet_0) **NEW**
+- [Jet Embedded](view/template_jet_1_embedded) **NEW**
 
 You can serve [quicktemplate](https://github.com/valyala/quicktemplate) and [hero templates](https://github.com/shiyanhui/hero/hero) files too, simply by using the `context#ResponseWriter`, take a look at the [http_responsewriter/quicktemplate](http_responsewriter/quicktemplate) and [http_responsewriter/herotemplate](http_responsewriter/herotemplate) examples.
 
@@ -359,44 +353,48 @@ You can serve [quicktemplate](https://github.com/valyala/quicktemplate) and [her
 
 - [Basic Authentication](authentication/basicauth/main.go)
 - [OAUth2](authentication/oauth2/main.go)
-- [JWT](experimental-handlers/jwt/main.go)
+- [Request Auth(JWT)](experimental-handlers/jwt/main.go)
 - [Sessions](#sessions)
 
 ### File Server
 
 - [Favicon](file-server/favicon/main.go)
-- [Basic](file-server/basic/main.go)
-- [Embedding Files Into App Executable File](file-server/embedding-files-into-app/main.go)
-- [Embedding Gziped Files Into App Executable File](file-server/embedding-gziped-files-into-app/main.go) **NEW**
+- [Basic](file-server/basic/main.go) **UPDATED**
+- [Embedding Files Into App Executable File](file-server/embedding-files-into-app/main.go) **UPDATED**
+- [Embedding Gziped Files Into App Executable File](file-server/embedding-gziped-files-into-app/main.go) **UPDATED**
 - [Send/Force-Download Files](file-server/send-files/main.go)
 - Single Page Applications
-    * [single Page Application](file-server/single-page-application/basic/main.go)
-    * [embedded Single Page Application](file-server/single-page-application/embedded-single-page-application/main.go)
-    * [embedded Single Page Application with other routes](file-server/single-page-application/embedded-single-page-application-with-other-routes/main.go)
+    * [single Page Application](file-server/single-page-application/basic/main.go) **UPDATED**
+    * [embedded Single Page Application](file-server/single-page-application/embedded-single-page-application/main.go) **UPDATED**
+    * [embedded Single Page Application with other routes](file-server/single-page-application/embedded-single-page-application-with-other-routes/main.go) **UPDATED**
 
 ### How to Read from `context.Request() *http.Request`
 
 - [Read JSON](http_request/read-json/main.go)
     * [Struct Validation](http_request/read-json-struct-validation/main.go)
 - [Read XML](http_request/read-xml/main.go)
+- [Read YAML](http_request/read-yaml/main.go) **NEW**
 - [Read Form](http_request/read-form/main.go)
+- [Read Query](http_request/read-query/main.go) **NEW**
 - [Read Custom per type](http_request/read-custom-per-type/main.go)
 - [Read Custom via Unmarshaler](http_request/read-custom-via-unmarshaler/main.go)
+- [Read Many times](http_request/read-many/main.go)
 - [Upload/Read File](http_request/upload-file/main.go)
 - [Upload multiple files with an easy way](http_request/upload-files/main.go)
-- [Extract referrer from "referer" header or URL query parameter](http_request/extract-referer/main.go) **NEW**
+- [Extract referrer from "referer" header or URL query parameter](http_request/extract-referer/main.go)
 
 > The `context.Request()` returns the same *http.Request you already know, these examples show some places where the  Context uses this object. Besides that you can use it as you did before iris.
 
 ### How to Write to `context.ResponseWriter() http.ResponseWriter`
 
+- [Content Negotiation](http_responsewriter/content-negotiation) **NEW**
 - [Write `valyala/quicktemplate` templates](http_responsewriter/quicktemplate)
 - [Write `shiyanhui/hero` templates](http_responsewriter/herotemplate)
 - [Text, Markdown, HTML, JSON, JSONP, XML, Binary](http_responsewriter/write-rest/main.go)
 - [Write Gzip](http_responsewriter/write-gzip/main.go)
 - [Stream Writer](http_responsewriter/stream-writer/main.go)
 - [Transactions](http_responsewriter/transactions/main.go)
-- [SSE](http_responsewriter/sse/main.go) **NEW**
+- [SSE](http_responsewriter/sse/main.go)
 - [SSE (third-party package usage for server sent events)](http_responsewriter/sse-third-party/main.go)
 
 > The `context/context#ResponseWriter()` returns an enchament version of a http.ResponseWriter, these examples show some places where the Context uses this object. Besides that you can use it as you did before iris.
@@ -404,9 +402,11 @@ You can serve [quicktemplate](https://github.com/valyala/quicktemplate) and [her
 ### ORM
 
 - [Using xorm(Mysql, MyMysql, Postgres, Tidb, **SQLite**, MsSql, MsSql, Oracle)](orm/xorm/main.go)
+- [Using gorm](orm/gorm/main.go)
 
 ### Miscellaneous
 
+- [HTTP Method Override](https://github.com/kataras/iris/blob/master/middleware/methodoverride/methodoverride_test.go) **NEW**
 - [Request Logger](http_request/request-logger/main.go)
     * [log requests to a file](http_request/request-logger/request-logger-file/main.go)
 - [Localization and Internationalization](miscellaneous/i18n/main.go)
@@ -461,7 +461,7 @@ iris cache library lives on its own [package](https://github.com/teamlint/iris/t
 iris session manager lives on its own [package](https://github.com/teamlint/iris/tree/master/sessions).
 
 - [Overview](sessions/overview/main.go)
-- [Standalone](sessions/standalone/main.go)
+- [Middleware](sessions/middleware/main.go)
 - [Secure Cookie](sessions/securecookie/main.go)
 - [Flash Messages](sessions/flash-messages/main.go)
 - [Databases](sessions/database)
@@ -473,6 +473,7 @@ iris session manager lives on its own [package](https://github.com/teamlint/iris
 
 ### Websockets
 
+<<<<<<< HEAD
 iris websocket library lives on its own [package](https://github.com/teamlint/iris/tree/master/websocket).
 
 The package is designed to work with raw websockets although its API is similar to the famous [socket.io](https://socket.io). I have read an article recently and I felt very contented about my decision to design a **fast** websocket-**only** package for Iris and not a backwards socket.io-like package. You can read that article by following this link: https://medium.com/@ivanderbyl/why-you-don-t-need-socket-io-6848f1c871cd.
@@ -484,6 +485,15 @@ The package is designed to work with raw websockets although its API is similar 
 - [Custom Raw Go Client](websocket/custom-go-client/main.go)
 
 > You're free to use your own favourite websockets package if you'd like so.
+=======
+- [Basic](websocket/basic) **NEW**
+    * [Server](websocket/basic/server.go)
+    * [Go Client](websocket/basic/go-client/client.go)
+    * [Browser Client](websocket/basic/browser/index.html)
+    * [Browser NPM Client (browserify)](websocket/basic/browserify/app.js)
+- [Native Messages](websocket/native-messages/main.go) **UPDATED**
+- [TLS Enabled](websocket/secure/README.md)
+>>>>>>> upstream/master
 
 ### Typescript Automation Tools
 

@@ -1,7 +1,6 @@
 package router
 
 import (
-	"html"
 	"net/http"
 	"sort"
 	"strings"
@@ -11,6 +10,7 @@ import (
 	"github.com/teamlint/iris/context"
 	"github.com/teamlint/iris/core/errors"
 	"github.com/teamlint/iris/core/netutil"
+	macroHandler "github.com/teamlint/iris/macro/handler"
 )
 
 // RequestHandler the middle man between acquiring a context and releasing it.
@@ -76,13 +76,23 @@ func NewDefaultHandler() RequestHandler {
 type RoutesProvider interface { // api builder
 	GetRoutes() []*Route
 	GetRoute(routeName string) *Route
+	// GetStaticSites() []*StaticSite
+	// Macros() *macro.Macros
 }
 
 func (h *routerHandler) Build(provider RoutesProvider) error {
-	registeredRoutes := provider.GetRoutes()
 	h.trees = h.trees[0:0] // reset, inneed when rebuilding.
+	rp := errors.NewReporter()
+	registeredRoutes := provider.GetRoutes()
 
-	// sort, subdomains goes first.
+	// before sort.
+	for _, r := range registeredRoutes {
+		if r.topLink != nil {
+			bindMultiParamTypesHandler(r.topLink, r)
+		}
+	}
+
+	// sort, subdomains go first.
 	sort.Slice(registeredRoutes, func(i, j int) bool {
 		first, second := registeredRoutes[i], registeredRoutes[j]
 		lsub1 := len(first.Subdomain)
@@ -111,39 +121,64 @@ func (h *routerHandler) Build(provider RoutesProvider) error {
 
 		// the rest are handled inside the node
 		return lsub1 > lsub2
-
 	})
 
-	rp := errors.NewReporter()
-
 	for _, r := range registeredRoutes {
-		// build the r.Handlers based on begin and done handlers, if any.
-		r.BuildHandlers()
-
 		if r.Subdomain != "" {
 			h.hosts = true
 		}
 
-		// the only "bad" with this is if the user made an error
-		// on route, it will be stacked shown in this build state
-		// and no in the lines of the user's action, they should read
-		// the docs better. Or TODO: add a link here in order to help new users.
-		if err := h.addRoute(r); err != nil {
-			// node errors:
-			rp.Add("%v -> %s", err, r.String())
-			continue
+		if r.topLink == nil {
+			// build the r.Handlers based on begin and done handlers, if any.
+			r.BuildHandlers()
+
+			// the only "bad" with this is if the user made an error
+			// on route, it will be stacked shown in this build state
+			// and no in the lines of the user's action, they should read
+			// the docs better. Or TODO: add a link here in order to help new users.
+			if err := h.addRoute(r); err != nil {
+				// node errors:
+				rp.Add("%v -> %s", err, r.String())
+				continue
+			}
 		}
-		golog.Debugf(r.Trace())
+
+		golog.Debugf(r.Trace()) // keep log different parameter types in the same path as different routes.
 	}
 
 	return rp.Return()
+}
+
+func bindMultiParamTypesHandler(top *Route, r *Route) {
+	r.BuildHandlers()
+
+	h := r.Handlers[1:] // remove the macro evaluator handler as we manually check below.
+	f := macroHandler.MakeFilter(r.tmpl)
+	if f == nil {
+		return // should never happen, previous checks made to set the top link.
+	}
+
+	decisionHandler := func(ctx context.Context) {
+		currentRouteName := ctx.RouteName()
+		if f(ctx) {
+			ctx.SetCurrentRouteName(r.Name)
+			ctx.HandlerIndex(0)
+			ctx.Do(h)
+			return
+		}
+
+		ctx.SetCurrentRouteName(currentRouteName)
+		ctx.StatusCode(http.StatusOK)
+		ctx.Next()
+	}
+
+	r.topLink.beginHandlers = append(context.Handlers{decisionHandler}, r.topLink.beginHandlers...)
 }
 
 func (h *routerHandler) HandleRequest(ctx context.Context) {
 	method := ctx.Method()
 	path := ctx.Path()
 	if !ctx.Application().ConfigurationReadOnly().GetDisablePathCorrection() {
-
 		if len(path) > 1 && strings.HasSuffix(path, "/") {
 			// Remove trailing slash and client-permanent rule for redirection,
 			// if confgiuration allows that and path has an extra slash.
@@ -167,17 +202,6 @@ func (h *routerHandler) HandleRequest(ctx context.Context) {
 				}
 
 				ctx.Redirect(url, http.StatusMovedPermanently)
-
-				// RFC2616 recommends that a short note "SHOULD" be included in the
-				// response because older user agents may not understand 301/307.
-				// Shouldn't send the response for POST or HEAD; that leaves GET.
-				if method == http.MethodGet {
-					note := "<a href=\"" +
-						html.EscapeString(url) +
-						"\">Moved Permanently</a>.\n"
-
-					ctx.ResponseWriter().WriteString(note)
-				}
 				return
 			}
 

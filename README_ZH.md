@@ -1,24 +1,26 @@
-# Iris Web Framework <a href="README.md"> <img width="20px" src="https://iris-go.com/images/flag-unitedkingdom.svg?v=10" /></a> <a href="README_RU.md"><img width="20px" src="https://iris-go.com/images/flag-russia.svg?v=10" /></a> <a href="README_ID.md"> <img width="20px" src="https://iris-go.com/images/flag-indonesia.svg?v=10" /></a> <a href="README_GR.md"><img width="20px" src="https://iris-go.com/images/flag-greece.svg?v=10" /></a> <a href="README_PT_BR.md"><img width="20px" src="https://iris-go.com/images/flag-pt-br.svg?v=10" /></a> <a href="README_JPN.md"><img width="20px" src="https://iris-go.com/images/flag-japan.svg?v=10" /></a>
+<!-- # Iris Web Framework <a href="README_ZH.md"> <img width="20px" src="https://iris-go.com/images/flag-china.svg?v=10" /></a> <a href="README_RU.md"><img width="20px" src="https://iris-go.com/images/flag-russia.svg?v=10" /></a> <a href="README_ID.md"> <img width="20px" src="https://iris-go.com/images/flag-indonesia.svg?v=10" /></a> <a href="README_GR.md"><img width="20px" src="https://iris-go.com/images/flag-greece.svg?v=10" /></a> <a href="README_PT_BR.md"><img width="20px" src="https://iris-go.com/images/flag-pt-br.svg?v=10" /></a> <a href="README_JPN.md"><img width="20px" src="https://iris-go.com/images/flag-japan.svg?v=10" /></a> -->
 
-<a href="https://iris-go.com"> <img align="right" width="169px" src="https://iris-go.com/images/icon.svg?v=a" title="logo created by @merry.dii" /> </a>
+# Iris <a href="README.md"> <img width="20px" src="https://iris-go.com/images/flag-unitedkingdom.svg?v=10" /></a> <a href="README_GR.md"><img width="20px" src="https://iris-go.com/images/flag-greece.svg?v=10" /></a> <a href="README_ES.md"><img width="20px" src="https://iris-go.com/images/flag-spain.png" /></a> <a href="README_KO.md"><img width="20px" src=""https://iris-go.com/images/flag-south-korea.svg" />
 
-[![build status](https://img.shields.io/travis/kataras/iris/master.svg?style=flat-square)](https://travis-ci.org/kataras/iris)<!-- [![release](https://img.shields.io/github/release/kataras/iris.svg?style=flat-square)](https://github.com/kataras/iris/releases)--> [![report card](https://img.shields.io/badge/report%20card-a%2B-ff3333.svg?style=flat-square)](http://goreportcard.com/report/kataras/iris) [![vscode-iris](https://img.shields.io/badge/ext%20-vscode-0c77e3.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=kataras2006.iris)<!--[![github closed issues](https://img.shields.io/github/issues-closed-raw/kataras/iris.svg?style=flat-square)](https://github.com/kataras/iris/issues?q=is%3Aissue+is%3Aclosed)--> [![chat](https://img.shields.io/badge/community-%20chat-00BCD4.svg?style=flat-square)](https://kataras.rocket.chat/channel/iris) [![view examples](https://img.shields.io/badge/learn%20by-examples-0077b3.svg?style=flat-square)](https://github.com/kataras/iris/tree/master/_examples/routing) [![release](https://img.shields.io/badge/release%20-v11.1-0077b3.svg?style=flat-square)](https://github.com/kataras/iris/releases)
+[![build status](https://img.shields.io/travis/kataras/iris/master.svg?style=for-the-badge)](https://travis-ci.org/kataras/iris) [![report card](https://img.shields.io/badge/report%20card-a%2B-ff3333.svg?style=for-the-badge)](https://goreportcard.com/report/github.com/kataras/iris)<!--[![godocs](https://img.shields.io/badge/go-%20docs-488AC7.svg?style=for-the-badge)](https://godoc.org/github.com/kataras/iris)--> [![view examples](https://img.shields.io/badge/learn%20by-examples-0077b3.svg?style=for-the-badge)](https://github.com/kataras/iris/tree/master/_examples) [![chat](https://img.shields.io/gitter/room/iris_go/community.svg?color=blue&logo=gitter&style=for-the-badge)](https://gitter.im/iris_go/community) [![release](https://img.shields.io/badge/release%20-v11.2-0077b3.svg?style=for-the-badge)](https://github.com/kataras/iris/releases)
 
-Iris 是一款超快、简洁高效的 Go 语言 Web开发框架。
+Iris 是基于 Go 编写的一个快速，简单但功能齐全且非常高效的 Web 框架。 它为您的下一个网站或 API 提供了一个非常富有表现力且易于使用的基础。
 
-Iris 功能强大、使用简单，它将会是你下一个网站、API 服务或者分布式应用基础框架的不二之选。
+看看 [其他人如何评价 Iris](https://iris-go.com/testimonials/)，同时欢迎各位点亮 **star**。
 
-总之，是一款与 express.js 旗鼓相当的 Go 语言框架。
+> 新版本 11.2 发布! [散布消息](https://www.facebook.com/iris.framework/posts/3276606095684693).
 
+<<<<<<< HEAD
 看看[别人是如何评价 Iris](#support)，同时欢迎各位点亮 Iris [Star](https://github.com/teamlint/iris/stargazers)，或者关注 [Iris facebook 主页](https://facebook.com/iris.framework)。
+=======
+## 学习 Iris
+>>>>>>> upstream/master
 
-## 支持者
-
-感谢所有的支持者! 🙏 [支持我们](https://iris-go.com/donate)
-
-<a href="https://iris-go.com/donate" target="_blank"><img src="https://iris-go.com/backers.svg?v=2"/></a>
+<details>
+<summary>快速入门</summary>
 
 ```sh
+# 假设文件已经存在
 $ cat example.go
 ```
 
@@ -28,80 +30,50 @@ package main
 import "github.com/teamlint/iris"
 
 func main() {
-    app := iris.New()
-    // 从 "./views" 目录加载HTML模板
-    // 模板解析 html 后缀文件
-    // 此方式使用 `html/template` 标准包 (Iris 的模板引擎)
-    app.RegisterView(iris.HTML("./views", ".html"))
-
-    // 方法：GET
-    // 路径：http://localhost:8080
-    app.Get("/", func(ctx iris.Context) {
-        // {{.message}} 和 "Hello world!" 字符串变量绑定
-        ctx.ViewData("message", "Hello world!")
-        // 映射 HTML 模板文件路径 ./views/hello.html
-        ctx.View("hello.html")
+    app := iris.Default()
+    app.Get("/ping", func(ctx iris.Context) {
+        ctx.JSON(iris.Map{
+            "message": "pong",
+        })
     })
 
-    //方法：GET
-    //路径：http://localhost:8080/user/42
-    //
-    // 使用正则表达式必须设置参数类型为 string
-    // app.Get("/user/{id:string regexp(^[0-9]+$)}")
-    app.Get("/user/{id:long}", func(ctx iris.Context) {
-        userID, _ := ctx.Params().GetInt64("id")
-        ctx.Writef("User ID: %d", userID)
-    })
-
-    // 绑定端口并启动服务.
     app.Run(iris.Addr(":8080"))
 }
 ```
 
-> 想要了解更多关于路径参数配置，戳[这里](_examples/routing/dynamic-path/main.go#L31)。
-
-```html
-<!-- file: ./views/hello.html -->
-<html>
-<head>
-    <title>Hello Page</title>
-</head>
-<body>
-    <h1>{{.message}}</h1>
-</body>
-</html>
-```
-
 ```sh
+# 运行 example.go
+# 在浏览器中访问 http://localhost:8080/ping
 $ go run example.go
-Now listening on: http://localhost:8080
-Application Started. Press CTRL+C to shut down.
-_
 ```
 
-## 安装
-
-请确保安装 [Go Programming Language](https://golang.org/dl/)
-
-```sh
-$ go get -u github.com/teamlint/iris
-```
-
-Iris 使用 [vendor](https://docs.google.com/document/d/1Bz5-UB7g2uPBdOx-rw5t9MxJwkfpx90cqG9AFL0JAYo) 包依赖管理方式。vendor 包管理的方式可以有效处理包依赖更新问题
-
-[![Iris vs .NET Core(C#) vs Node.js (Express)](https://iris-go.com/images/benchmark-new-gray.png)](_benchmarks/README_UNIX.md)
-
-_更新于: [2017年11月21日星期二](_benchmarks/README_UNIX.md)_
-
-<details>
-<summary>来自第三方的其他网络框架的基准测试</summary>
-
-![Comparison with other frameworks](https://raw.githubusercontent.com/smallnest/go-web-framework-benchmark/4db507a22c964c9bc9774c5b31afdc199a0fe8b7/benchmark.png)
+> 路由由 [muxie](https://github.com/kataras/muxie) 提供支持，muxie 是基于 Go 编写的最强大最快速的基于 trie 的路由
 
 </details>
 
-## 支持
+<<<<<<< HEAD
+```sh
+$ go get -u github.com/teamlint/iris
+```
+=======
+Iris 包含详细而完整的 **[文档](https://github.com/kataras/iris/wiki)**，使你很容易开始使用该框架。
+>>>>>>> upstream/master
 
+要了解更多详细的技术文档，可以访问我们的 [godocs](https://godoc.org/github.com/kataras/iris)。对于可执行代码，可以随时访问示例代码，在仓库的 [_examples](_examples/)  目录下。
+
+### 你喜欢在旅行中看书吗？
+
+你现在可以 [获取](https://bit.ly/iris-req-book) PDF版本和在线访问我们的 **电子书** 并参与 Iris 的开发。
+
+[![https://iris-go.com/images/iris-book-overview.png](https://iris-go.com/images/iris-book-overview.png)](https://bit.ly/iris-req-book)
+
+## 贡献
+
+我们很高兴看到你对 Iris Web 框架的贡献！有关为 Iris 做出贡献的更多信息，请查看 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+[所有贡献者名单](https://github.com/kataras/iris/graphs/contributors)
+
+<<<<<<< HEAD
 - [更新记录](HISTORY_ZH.md#fr-11-january-2019--v1111) 是您最好的朋友，它包含有关最新功能和更改的信息
 - 你碰巧找到了一个错误？ 请提交 [github issues](https://github.com/kataras/iris/issues)
 - 您是否有任何疑问或需要与有经验的人士交谈以实时解决问题？ [加入我们的聊天](https://chat.iris-go.com)
@@ -220,11 +192,14 @@ Iris 拥有大量的中间件 [[1]](middleware/)[[2]](https://github.com/iris-co
 * [Go/Golang 31 - Iris framework : Les sessions](https://www.youtube.com/watch?v=RnBwUrwgEZ8) by stephgdesign
 
 ### 工作机会
+=======
+## 安全漏洞
+>>>>>>> upstream/master
 
-有很多公司都在寻找具有 Iris 经验的 Go 网站开发者，我们通过 [facebook page](https://www.facebook.com/iris.framework) 发布这些招聘信息。
+如果你发现在 Iris 存在安全漏洞，请发送电子邮件至 [iris-go@outlook.com](mailto:iris-go@outlook.com)，所有安全漏洞都会被及时解决。
 
 ## 授权协议
 
-Iris 授权基于 [3-Clause BSD License](LICENSE). Iris 是 100％ 免费和开源软件。
+项目名称 "Iris" 的灵感来自于希腊神话。
 
-有关授权的任何问题，[请发送电子邮件](mailto:kataras2006@hotmail.com?subject=Iris%20License)。
+Iris Web 框架授权基于 [3-Clause BSD License](LICENSE) 许可的免费开源软件。

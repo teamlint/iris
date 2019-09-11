@@ -7,11 +7,6 @@ import (
 func main() {
 	app := iris.New()
 
-	// - standard html  | iris.HTML(...)
-	// - django         | iris.Django(...)
-	// - pug(jade)      | iris.Pug(...)
-	// - handlebars     | iris.Handlebars(...)
-	// - amber          | iris.Amber(...)
 	// with default template funcs:
 	//
 	// - {{ urlpath "mynamedroute" "pathParameter_ifneeded" }}
@@ -21,11 +16,9 @@ func main() {
 	// - {{ current }}
 	app.RegisterView(iris.HTML("./templates", ".html"))
 	app.Get("/", func(ctx iris.Context) {
-
 		ctx.ViewData("Name", "iris") // the .Name inside the ./templates/hi.html
 		ctx.Gzip(true)               // enable gzip for big files
 		ctx.View("hi.html")          // render the template with the file name relative to the './templates'
-
 	})
 
 	// http://localhost:8080/

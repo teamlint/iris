@@ -11,7 +11,6 @@ import (
 	"github.com/teamlint/iris/sessions/sessiondb/badger"
 	"github.com/teamlint/iris/sessions/sessiondb/boltdb"
 	"github.com/teamlint/iris/sessions/sessiondb/redis"
-	"github.com/teamlint/iris/sessions/sessiondb/redis/service"
 )
 
 func TestDatabase(t *testing.T) {
@@ -21,12 +20,11 @@ func TestDatabase(t *testing.T) {
 	logTitle(t, "MemDB")
 	testInterfacer(t, db)
 	testGet(t, db)
-	// Badger
+	// // Badger
 	logTitle(t, "BadgerDB")
 	db, _ = badger.New("./testdb/badger")
 	testInterfacer(t, db)
 	testGet(t, db)
-	// Badger
 	// boltdb
 	logTitle(t, "BoltDB")
 	db, _ = boltdb.New("./testdb/bolt.db", 0600)
@@ -34,15 +32,14 @@ func TestDatabase(t *testing.T) {
 	testGet(t, db)
 	// Redis
 	logTitle(t, "RedisDB")
-	db = redis.New(service.Config{
-		Network:     service.DefaultRedisNetwork,
-		Addr:        service.DefaultRedisAddr,
-		Password:    "",
-		Database:    "",
-		MaxIdle:     0,
-		MaxActive:   0,
-		IdleTimeout: service.DefaultRedisIdleTimeout,
-		Prefix:      "",
+	db = redis.New(redis.Config{
+		Network:   redis.DefaultRedisNetwork,
+		Addr:      redis.DefaultRedisAddr,
+		Password:  "",
+		Database:  "",
+		MaxActive: 0,
+		Timeout:   redis.DefaultRedisTimeout,
+		Prefix:    "",
 	})
 	testInterfacer(t, db)
 	testGet(t, db)
