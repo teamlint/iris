@@ -5,6 +5,7 @@ _authortools
 *.nuget.g.*
 obj/
 .DS_Store
+dg.md
 .directory
 /sessions/testdb/
 node_modules
